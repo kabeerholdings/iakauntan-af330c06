@@ -44,6 +44,12 @@ import StockTakePage from "./pages/stocktake/StockTakePage";
 import WellnessPOSPage from "./pages/wellness/WellnessPOSPage";
 import AICloudPage from "./pages/cloud/AICloudPage";
 import CustomizationPage from "./pages/customization/CustomizationPage";
+import CommissionPage from "./pages/dashboard/CommissionPage";
+import BatchMessagesPage from "./pages/dashboard/BatchMessagesPage";
+import SecurityLockPage from "./pages/dashboard/SecurityLockPage";
+import InventoryReportsPage from "./pages/dashboard/InventoryReportsPage";
+import AdvancedReportsPage from "./pages/dashboard/AdvancedReportsPage";
+import DocumentTemplatesPage from "./pages/dashboard/DocumentTemplatesPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -95,6 +101,12 @@ const App = () => (
               <Route path="wellness-pos" element={<WellnessPOSPage />} />
               <Route path="ai-cloud" element={<AICloudPage />} />
               <Route path="customization" element={<CustomizationPage />} />
+              <Route path="commission" element={<CommissionPage />} />
+              <Route path="batch-messages" element={<BatchMessagesPage />} />
+              <Route path="security-lock" element={<SecurityLockPage />} />
+              <Route path="inventory-reports" element={<InventoryReportsPage />} />
+              <Route path="advanced-reports" element={<AdvancedReportsPage />} />
+              <Route path="document-templates" element={<DocumentTemplatesPage />} />
             </Route>
             <Route path="/admin" element={<DashboardLayout />}>
               <Route index element={<AdminPage />} />

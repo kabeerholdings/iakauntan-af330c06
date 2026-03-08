@@ -2,7 +2,7 @@ import {
   LayoutDashboard, FileText, Receipt, BookOpen, Users, Globe, Settings, Building2, LogOut,
   ChevronDown, BarChart3, CreditCard, Package, ShoppingCart, Truck, Wallet, FolderKanban, DollarSign,
   UserCheck, Calculator, CalendarDays, ClipboardList, Zap, Landmark, Paperclip, Factory, Layers, Hammer, PieChart,
-  Store, ScanBarcode, Brain, Sparkles, Heart, Cloud, Puzzle
+  Store, ScanBarcode, Brain, Sparkles, Heart, Cloud, Puzzle, Mail, Shield, Palette, TrendingUp
 } from 'lucide-react';
 import { NavLink } from '@/components/NavLink';
 import { useAuth } from '@/contexts/AuthContext';
@@ -29,6 +29,7 @@ const salesItems = [
 
 const stockItems = [
   { title: 'Stock / Inventory', url: '/dashboard/stock', icon: Package },
+  { title: 'Inventory Reports', url: '/dashboard/inventory-reports', icon: BarChart3 },
   { title: 'Stock Take', url: '/dashboard/stock-take', icon: ClipboardList },
 ];
 
@@ -67,11 +68,16 @@ const managementItems = [
   { title: 'Expenses', url: '/dashboard/expenses', icon: CreditCard },
   { title: 'Projects', url: '/dashboard/projects', icon: FolderKanban },
   { title: 'Currency Rates', url: '/dashboard/currency-rates', icon: DollarSign },
+  { title: 'Commission', url: '/dashboard/commission', icon: Calculator },
+  { title: 'Advanced Reports', url: '/dashboard/advanced-reports', icon: TrendingUp },
 ];
 
 const otherItems = [
   { title: 'AI Cloud Backup', url: '/dashboard/ai-cloud', icon: Cloud },
   { title: 'Customization', url: '/dashboard/customization', icon: Puzzle },
+  { title: 'Doc Templates', url: '/dashboard/document-templates', icon: Palette },
+  { title: 'Batch Messages', url: '/dashboard/batch-messages', icon: Mail },
+  { title: 'Security Lock', url: '/dashboard/security-lock', icon: Shield },
   { title: 'e-Invoice', url: '/dashboard/einvoice', icon: Globe },
   { title: 'Settings', url: '/dashboard/settings', icon: Settings },
 ];
