@@ -189,10 +189,10 @@ const CustomizationPage = () => {
               <h2 className="text-lg font-semibold">DIY Custom Fields</h2>
               <p className="text-sm text-muted-foreground">Create unlimited custom data fields for any document or entity — text, date, memo, dropdown & more.</p>
             </div>
-            <Dialog open={fieldOpen} onOpenChange={setFieldOpen}>
+            <Dialog open={fieldOpen} onOpenChange={(v) => { if (!v) closeFieldDialog(); else setFieldOpen(true); }}>
               <DialogTrigger asChild><Button><Plus className="mr-2 h-4 w-4" />Add Field</Button></DialogTrigger>
               <DialogContent>
-                <DialogHeader><DialogTitle>Create Custom Field</DialogTitle></DialogHeader>
+                <DialogHeader><DialogTitle>{editingFieldId ? 'Edit Custom Field' : 'Create Custom Field'}</DialogTitle></DialogHeader>
                 <div className="space-y-4">
                   <div><Label>Entity / Document</Label>
                     <Select value={fieldForm.entity_type} onValueChange={v => setFieldForm({ ...fieldForm, entity_type: v })}>
