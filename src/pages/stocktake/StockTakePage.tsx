@@ -123,27 +123,33 @@ const StockTakePage = () => {
         return;
       }
 
-      const adjNumber = `ADJ-${selectedTake.take_number}`;
+      // Use existing stock_adjustments schema (reference, description instead of adjustment_number, reason)
+      const adjRef = `ADJ-${selectedTake.take_number}`;
       const { data: adj, error: adjErr } = await supabase.from('stock_adjustments').insert({
         company_id: selectedCompany.id,
-        stock_take_id: selectedTake.id,
-        adjustment_number: adjNumber,
-        reason: `Auto-generated from stock take ${selectedTake.take_number}`,
+        reference: adjRef,
+        description: `Auto-generated from stock take ${selectedTake.take_number}. Total variance: RM ${totalVariance.toFixed(2)}`,
         status: 'posted',
-        total_value: totalVariance,
         created_by: user?.id,
       }).select().single();
 
       if (adjErr) throw adjErr;
 
+      // Use existing stock_adjustment_lines schema (quantity, warehouse_id required)
+      const defaultWarehouseId = selectedTake.warehouse_id || warehouses[0]?.id;
+      if (!defaultWarehouseId) {
+        toast.error('No warehouse found. Please create a warehouse first.');
+        setSyncing(false);
+        return;
+      }
+
       const lines = varianceLines.map(l => ({
         adjustment_id: adj.id,
         stock_item_id: l.stock_item_id,
-        system_qty: l.system_qty,
-        adjusted_qty: l.counted_qty,
-        variance: l.variance,
+        quantity: l.variance, // variance is the adjustment quantity
         unit_cost: l.unit_cost || 0,
-        variance_value: l.variance_value || 0,
+        warehouse_id: defaultWarehouseId,
+        description: `System: ${l.system_qty}, Counted: ${l.counted_qty}`,
       }));
 
       const { error: lineErr } = await supabase.from('stock_adjustment_lines').insert(lines);
@@ -153,17 +159,7 @@ const StockTakePage = () => {
       await supabase.from('stock_takes').update({ status: 'synced' }).eq('id', selectedTake.id);
       setSelectedTake({ ...selectedTake, status: 'synced' });
 
-      // Update stock item quantities
-      for (const l of varianceLines) {
-        const item = stockItems.find(i => i.id === l.stock_item_id);
-        if (item) {
-          await supabase.from('stock_items').update({
-            quantity_on_hand: l.counted_qty,
-          }).eq('id', l.stock_item_id);
-        }
-      }
-
-      toast.success(`Stock adjustment ${adjNumber} created & synced. ${varianceLines.length} items adjusted.`);
+      toast.success(`Stock adjustment ${adjRef} created & synced. ${varianceLines.length} items adjusted.`);
       fetchAll();
     } catch (err: any) {
       toast.error(err.message || 'Sync failed');
