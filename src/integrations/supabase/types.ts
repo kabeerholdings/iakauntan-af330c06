@@ -698,6 +698,7 @@ export type Database = {
       }
       companies: {
         Row: {
+          actual_data_start_date: string | null
           address_line1: string | null
           address_line2: string | null
           base_currency: string | null
@@ -708,7 +709,9 @@ export type Database = {
           einvoice_tin: string | null
           email: string | null
           fiscal_year_start: number | null
+          fiscal_year_start_date: string | null
           id: string
+          inventory_system: string | null
           logo_url: string | null
           msic_code: string | null
           name: string
@@ -716,12 +719,15 @@ export type Database = {
           phone: string | null
           postcode: string | null
           registration_no: string | null
+          sample_coa: string | null
           state: string | null
           tax_id: string | null
+          tax_system: string | null
           updated_at: string
           website: string | null
         }
         Insert: {
+          actual_data_start_date?: string | null
           address_line1?: string | null
           address_line2?: string | null
           base_currency?: string | null
@@ -732,7 +738,9 @@ export type Database = {
           einvoice_tin?: string | null
           email?: string | null
           fiscal_year_start?: number | null
+          fiscal_year_start_date?: string | null
           id?: string
+          inventory_system?: string | null
           logo_url?: string | null
           msic_code?: string | null
           name: string
@@ -740,12 +748,15 @@ export type Database = {
           phone?: string | null
           postcode?: string | null
           registration_no?: string | null
+          sample_coa?: string | null
           state?: string | null
           tax_id?: string | null
+          tax_system?: string | null
           updated_at?: string
           website?: string | null
         }
         Update: {
+          actual_data_start_date?: string | null
           address_line1?: string | null
           address_line2?: string | null
           base_currency?: string | null
@@ -756,7 +767,9 @@ export type Database = {
           einvoice_tin?: string | null
           email?: string | null
           fiscal_year_start?: number | null
+          fiscal_year_start_date?: string | null
           id?: string
+          inventory_system?: string | null
           logo_url?: string | null
           msic_code?: string | null
           name?: string
@@ -764,8 +777,10 @@ export type Database = {
           phone?: string | null
           postcode?: string | null
           registration_no?: string | null
+          sample_coa?: string | null
           state?: string | null
           tax_id?: string | null
+          tax_system?: string | null
           updated_at?: string
           website?: string | null
         }
