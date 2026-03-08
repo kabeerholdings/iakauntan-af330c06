@@ -358,7 +358,7 @@ const PurchaseDocumentsPage = () => {
           taxAmount={Number(previewDoc.tax_amount)}
           totalAmount={Number(previewDoc.total_amount)}
           notes={previewDoc.notes}
-          currency={previewDoc.currency === 'MYR' ? 'RM' : previewDoc.currency}
+          currency={symbol}
           template={selectedTemplate}
           templates={templates}
           company={selectedCompany}

@@ -228,8 +228,8 @@ const StockItemsPage = () => {
                       <TableCell className="font-medium">{i.name}</TableCell>
                       <TableCell>{i.stock_categories?.name || '—'}</TableCell>
                       <TableCell>{i.base_uom}</TableCell>
-                      <TableCell className="text-right">RM {Number(i.purchase_price).toFixed(2)}</TableCell>
-                      <TableCell className="text-right">RM {Number(i.selling_price).toFixed(2)}</TableCell>
+                      <TableCell className="text-right">{fmt(Number(i.purchase_price))}</TableCell>
+                      <TableCell className="text-right">{fmt(Number(i.selling_price))}</TableCell>
                       <TableCell className="text-right font-medium">{getBalance(i.id)}</TableCell>
                       <TableCell>{i.is_active ? <Badge>Active</Badge> : <Badge variant="secondary">Inactive</Badge>}</TableCell>
                     </TableRow>
