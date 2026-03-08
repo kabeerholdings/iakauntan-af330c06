@@ -9,6 +9,7 @@ interface Props {
 }
 
 const JournalListingTab = ({ journalEntries, journalLines, accounts }: Props) => {
+  const { fmt } = useCurrency();
   const accountMap = new Map(accounts.map(a => [a.id, a]));
 
   return (

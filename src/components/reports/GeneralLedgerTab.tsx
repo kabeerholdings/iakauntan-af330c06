@@ -9,7 +9,9 @@ interface Props {
   accounts: any[];
 }
 
-const GeneralLedgerTab = ({ balances, journalLines, accounts }: Props) => (
+const GeneralLedgerTab = ({ balances, journalLines, accounts }: Props) => {
+  const { fmt } = useCurrency();
+  return (
   <Card>
     <CardHeader><CardTitle>General Ledger</CardTitle></CardHeader>
     <CardContent className="space-y-6">
