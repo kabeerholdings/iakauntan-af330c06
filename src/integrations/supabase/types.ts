@@ -505,6 +505,44 @@ export type Database = {
           },
         ]
       }
+      lhdn_credentials: {
+        Row: {
+          client_id: string
+          client_secret: string
+          company_id: string
+          created_at: string
+          environment: string
+          id: string
+          updated_at: string
+        }
+        Insert: {
+          client_id: string
+          client_secret: string
+          company_id: string
+          created_at?: string
+          environment?: string
+          id?: string
+          updated_at?: string
+        }
+        Update: {
+          client_id?: string
+          client_secret?: string
+          company_id?: string
+          created_at?: string
+          environment?: string
+          id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "lhdn_credentials_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: true
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
           account_type: string

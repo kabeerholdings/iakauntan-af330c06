@@ -1,1 +1,4 @@
 project_id = "tqsrqvcmisiiutnaowzo"
+
+[functions.lhdn-myinvois]
+verify_jwt = false
