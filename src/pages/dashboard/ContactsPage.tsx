@@ -40,7 +40,7 @@ const ContactsPage = () => {
 
   const handleCreate = async () => {
     if (!selectedCompany || !form.name) { toast.error('Name is required'); return; }
-    const { error } = await supabase.from('contacts').insert({
+    const payload = {
       company_id: selectedCompany.id, name: form.name, email: form.email || null,
       phone: form.phone || null, type: form.type, tax_id: form.tax_id || null,
       address: form.address || null, city: form.city || null, state: form.state || null,
@@ -48,11 +48,45 @@ const ContactsPage = () => {
       credit_limit: +form.credit_limit || 0, credit_terms: +form.credit_terms || 30,
       overdue_limit: +form.overdue_limit || 0, bank_name: form.bank_name || null,
       bank_account_no: form.bank_account_no || null,
-    });
-    if (error) { toast.error(error.message); return; }
-    toast.success('Contact added');
+    };
+
+    if (editingId) {
+      const { error } = await supabase.from('contacts').update(payload).eq('id', editingId);
+      if (error) { toast.error(error.message); return; }
+      toast.success('Contact updated');
+    } else {
+      const { error } = await supabase.from('contacts').insert(payload);
+      if (error) { toast.error(error.message); return; }
+      toast.success('Contact added');
+    }
+    closeDialog();
+    fetchData();
+  };
+
+  const closeDialog = () => {
     setOpen(false);
-    setForm({ name: '', email: '', phone: '', type: 'customer', tax_id: '', address: '', city: '', state: '', postcode: '', country: 'Malaysia', credit_limit: '', credit_terms: '30', overdue_limit: '', bank_name: '', bank_account_no: '' });
+    setEditingId(null);
+    setForm({ ...emptyForm });
+  };
+
+  const openEdit = (c: any) => {
+    setEditingId(c.id);
+    setForm({
+      name: c.name || '', email: c.email || '', phone: c.phone || '',
+      type: c.type || 'customer', tax_id: c.tax_id || '',
+      address: c.address || '', city: c.city || '', state: c.state || '',
+      postcode: c.postcode || '', country: c.country || 'Malaysia',
+      credit_limit: c.credit_limit?.toString() || '', credit_terms: c.credit_terms?.toString() || '30',
+      overdue_limit: c.overdue_limit?.toString() || '',
+      bank_name: c.bank_name || '', bank_account_no: c.bank_account_no || '',
+    });
+    setOpen(true);
+  };
+
+  const handleDelete = async (id: string) => {
+    const { error } = await supabase.from('contacts').delete().eq('id', id);
+    if (error) { toast.error(error.message); return; }
+    toast.success('Contact deleted');
     fetchData();
   };
 
