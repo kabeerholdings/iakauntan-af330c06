@@ -189,7 +189,7 @@ const WellnessPOSPage = () => {
                   <div><Label>Service</Label>
                     <Select value={apptForm.service_id} onValueChange={v => setApptForm({ ...apptForm, service_id: v })}>
                       <SelectTrigger><SelectValue placeholder="Select service" /></SelectTrigger>
-                      <SelectContent>{services.map(s => <SelectItem key={s.id} value={s.id}>{s.name} (RM {s.price})</SelectItem>)}</SelectContent>
+                      <SelectContent>{services.map(s => <SelectItem key={s.id} value={s.id}>{s.name} ({fmt(s.price)})</SelectItem>)}</SelectContent>
                     </Select>
                   </div>
                   <div><Label>Therapist / Staff</Label>
