@@ -19,6 +19,12 @@ import JournalEntriesPage from "./pages/dashboard/JournalEntriesPage";
 import ReportsPage from "./pages/dashboard/ReportsPage";
 import EInvoicePage from "./pages/dashboard/EInvoicePage";
 import SettingsPage from "./pages/dashboard/SettingsPage";
+import StockItemsPage from "./pages/dashboard/StockItemsPage";
+import SalesDocumentsPage from "./pages/dashboard/SalesDocumentsPage";
+import PurchaseDocumentsPage from "./pages/dashboard/PurchaseDocumentsPage";
+import PaymentsPage from "./pages/dashboard/PaymentsPage";
+import ProjectsPage from "./pages/dashboard/ProjectsPage";
+import CurrencyRatesPage from "./pages/dashboard/CurrencyRatesPage";
 import AdminPage from "./pages/admin/AdminPage";
 import NotFound from "./pages/NotFound";
 
@@ -47,6 +53,12 @@ const App = () => (
               <Route path="reports" element={<ReportsPage />} />
               <Route path="einvoice" element={<EInvoicePage />} />
               <Route path="settings" element={<SettingsPage />} />
+              <Route path="stock" element={<StockItemsPage />} />
+              <Route path="sales" element={<SalesDocumentsPage />} />
+              <Route path="purchase" element={<PurchaseDocumentsPage />} />
+              <Route path="payments" element={<PaymentsPage />} />
+              <Route path="projects" element={<ProjectsPage />} />
+              <Route path="currency-rates" element={<CurrencyRatesPage />} />
             </Route>
             <Route path="/admin" element={<DashboardLayout />}>
               <Route index element={<AdminPage />} />

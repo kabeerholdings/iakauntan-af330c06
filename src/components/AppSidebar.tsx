@@ -1,9 +1,8 @@
 import {
   LayoutDashboard, FileText, Receipt, BookOpen, Users, Globe, Settings, Building2, LogOut,
-  ChevronDown, BarChart3, CreditCard
+  ChevronDown, BarChart3, CreditCard, Package, ShoppingCart, Truck, Wallet, FolderKanban, DollarSign
 } from 'lucide-react';
 import { NavLink } from '@/components/NavLink';
-import { useLocation } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { useCompany } from '@/contexts/CompanyContext';
 import {
@@ -17,15 +16,30 @@ import logoImg from '@/assets/logo.png';
 
 const mainItems = [
   { title: 'Dashboard', url: '/dashboard', icon: LayoutDashboard },
+];
+
+const salesItems = [
+  { title: 'Sales', url: '/dashboard/sales', icon: ShoppingCart },
   { title: 'Invoices', url: '/dashboard/invoices', icon: FileText },
-  { title: 'Expenses', url: '/dashboard/expenses', icon: CreditCard },
-  { title: 'Contacts', url: '/dashboard/contacts', icon: Users },
+  { title: 'Purchase', url: '/dashboard/purchase', icon: Truck },
+  { title: 'Payments', url: '/dashboard/payments', icon: Wallet },
+];
+
+const stockItems = [
+  { title: 'Stock / Inventory', url: '/dashboard/stock', icon: Package },
 ];
 
 const accountingItems = [
   { title: 'Chart of Accounts', url: '/dashboard/chart-of-accounts', icon: BookOpen },
   { title: 'Journal Entries', url: '/dashboard/journal-entries', icon: Receipt },
   { title: 'Reports', url: '/dashboard/reports', icon: BarChart3 },
+];
+
+const managementItems = [
+  { title: 'Contacts', url: '/dashboard/contacts', icon: Users },
+  { title: 'Expenses', url: '/dashboard/expenses', icon: CreditCard },
+  { title: 'Projects', url: '/dashboard/projects', icon: FolderKanban },
+  { title: 'Currency Rates', url: '/dashboard/currency-rates', icon: DollarSign },
 ];
 
 const otherItems = [
@@ -39,7 +53,7 @@ export function AppSidebar() {
   const { signOut } = useAuth();
   const { companies, selectedCompany, setSelectedCompany } = useCompany();
 
-  const renderItems = (items: typeof mainItems) => (
+  const renderItems = (items: { title: string; url: string; icon: any }[]) => (
     <SidebarMenu>
       {items.map((item) => (
         <SidebarMenuItem key={item.title}>
@@ -61,7 +75,6 @@ export function AppSidebar() {
         {!collapsed && <span className="font-display text-lg font-bold text-sidebar-foreground">iAkauntan</span>}
       </div>
 
-      {/* Company Selector */}
       {!collapsed && companies.length > 0 && (
         <div className="px-3 mb-2">
           <DropdownMenu>
@@ -87,8 +100,20 @@ export function AppSidebar() {
           <SidebarGroupContent>{renderItems(mainItems)}</SidebarGroupContent>
         </SidebarGroup>
         <SidebarGroup>
+          <SidebarGroupLabel>Sales & Purchase</SidebarGroupLabel>
+          <SidebarGroupContent>{renderItems(salesItems)}</SidebarGroupContent>
+        </SidebarGroup>
+        <SidebarGroup>
+          <SidebarGroupLabel>Stock</SidebarGroupLabel>
+          <SidebarGroupContent>{renderItems(stockItems)}</SidebarGroupContent>
+        </SidebarGroup>
+        <SidebarGroup>
           <SidebarGroupLabel>Accounting</SidebarGroupLabel>
           <SidebarGroupContent>{renderItems(accountingItems)}</SidebarGroupContent>
+        </SidebarGroup>
+        <SidebarGroup>
+          <SidebarGroupLabel>Management</SidebarGroupLabel>
+          <SidebarGroupContent>{renderItems(managementItems)}</SidebarGroupContent>
         </SidebarGroup>
         <SidebarGroup>
           <SidebarGroupLabel>More</SidebarGroupLabel>
