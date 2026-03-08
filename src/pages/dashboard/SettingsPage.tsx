@@ -11,8 +11,9 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
-import { Plus, Shield, Eye, EyeOff } from 'lucide-react';
+import { Plus, Shield, Eye, EyeOff, Pencil } from 'lucide-react';
 import { toast } from 'sonner';
+import EditCompanyDialog from '@/components/EditCompanyDialog';
 
 const SettingsPage = () => {
   const { profile } = useAuth();
