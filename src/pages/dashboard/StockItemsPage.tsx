@@ -12,7 +12,7 @@ import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Plus, Search, Package } from 'lucide-react';
 import { toast } from 'sonner';
-import CustomFieldsSection, { saveCustomFieldValues } from '@/components/CustomFieldsSection';
+import { useCustomFields, saveCustomFieldValues } from '@/components/CustomFieldsSection';
 
 const StockItemsPage = () => {
   const { selectedCompany } = useCompany();
