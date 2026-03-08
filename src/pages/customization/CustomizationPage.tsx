@@ -191,7 +191,7 @@ const CustomizationPage = () => {
   const closeFieldDialog = () => {
     setFieldOpen(false);
     setEditingFieldId(null);
-    setFieldForm({ entity_type: 'customer', field_name: '', field_label: '', field_type: 'text', is_required: false, field_options: '[]' });
+    setFieldForm({ entity_type: 'customer', field_name: '', field_label: '', field_type: 'text', is_required: false, field_options: '[]', position_reference: '', position_placement: 'after' });
   };
 
   const openEditField = (f: any) => {
