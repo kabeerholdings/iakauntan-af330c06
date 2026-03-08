@@ -14,6 +14,7 @@ interface Props {
 }
 
 const CreditorStatementTab = ({ invoices, contacts, payments, dateFrom, dateTo }: Props) => {
+  const { fmt } = useCurrency();
   const suppliers = useMemo(() => contacts.filter(c => c.type === 'supplier' || c.type === 'both'), [contacts]);
   const [selectedContact, setSelectedContact] = useState<string>('all');
 
