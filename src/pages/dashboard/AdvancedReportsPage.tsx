@@ -38,7 +38,7 @@ const AdvancedReportsPage = () => {
 
   useEffect(() => { fetchData(); }, [selectedCompany, dateFrom, dateTo]);
 
-  const fmt = (n: number) => `RM ${Number(n).toLocaleString('en-MY', { minimumFractionDigits: 2 })}`;
+  const { fmt } = useCurrency();
 
   // Yearly Sales Analysis
   const yearlySalesData = useMemo(() => {

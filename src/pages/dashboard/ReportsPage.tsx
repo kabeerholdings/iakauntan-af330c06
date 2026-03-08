@@ -318,9 +318,9 @@ const LedgerReport = ({ companyId, dateFrom, dateTo }: { companyId: string; date
                   <TableCell>{(l.journal_entries as any)?.entry_date}</TableCell>
                   <TableCell className="font-medium">{(l.journal_entries as any)?.reference || '—'}</TableCell>
                   <TableCell>{l.description || (l.journal_entries as any)?.description || '—'}</TableCell>
-                  <TableCell className="text-right">{+l.debit > 0 ? `RM ${Number(l.debit).toFixed(2)}` : '—'}</TableCell>
-                  <TableCell className="text-right">{+l.credit > 0 ? `RM ${Number(l.credit).toFixed(2)}` : '—'}</TableCell>
-                  <TableCell className="text-right font-medium">RM {runningBalance.toFixed(2)}</TableCell>
+                  <TableCell className="text-right">{+l.debit > 0 ? fmt(Number(l.debit)) : '—'}</TableCell>
+                  <TableCell className="text-right">{+l.credit > 0 ? fmt(Number(l.credit)) : '—'}</TableCell>
+                  <TableCell className="text-right font-medium">{fmt(runningBalance)}</TableCell>
                 </TableRow>
               );
             })}

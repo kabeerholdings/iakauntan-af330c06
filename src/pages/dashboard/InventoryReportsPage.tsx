@@ -47,7 +47,7 @@ const InventoryReportsPage = () => {
 
   useEffect(() => { fetchData(); }, [selectedCompany, dateFrom, dateTo]);
 
-  const fmt = (n: number) => `RM ${Number(n).toLocaleString('en-MY', { minimumFractionDigits: 2 })}`;
+  const { fmt } = useCurrency();
 
   // Stock Card data
   const stockCards = useMemo(() => {

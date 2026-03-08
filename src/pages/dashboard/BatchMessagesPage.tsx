@@ -102,7 +102,7 @@ const BatchMessagesPage = () => {
     c.email?.toLowerCase().includes(searchFilter.toLowerCase())
   );
 
-  const fmt = (n: number) => `RM ${Number(n).toLocaleString('en-MY', { minimumFractionDigits: 2 })}`;
+  const { fmt } = useCurrency();
 
   if (!selectedCompany) return <p className="text-muted-foreground">Select a company first.</p>;
 

@@ -155,7 +155,7 @@ const SalesReportsPage = () => {
                       <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
                       <XAxis dataKey="month" className="text-xs" />
                       <YAxis className="text-xs" />
-                      <Tooltip formatter={(val: number) => `RM ${val.toFixed(2)}`} />
+                      <Tooltip formatter={(val: number) => fmt(val)} />
                       <Legend />
                       <Bar dataKey="sales" name="Sales" fill="hsl(var(--primary))" radius={[4, 4, 0, 0]} />
                       <Bar dataKey="tax" name="Tax" fill="hsl(var(--muted-foreground))" radius={[4, 4, 0, 0]} />

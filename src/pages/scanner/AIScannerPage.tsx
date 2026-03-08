@@ -220,8 +220,8 @@ const AIScannerPage = () => {
                 <div><Label className="text-muted-foreground">Document #</Label><p className="font-medium">{selectedDoc.document_number || '-'}</p></div>
                 <div><Label className="text-muted-foreground">Supplier</Label><p className="font-medium">{selectedDoc.supplier_name || '-'}</p></div>
                 <div><Label className="text-muted-foreground">Date</Label><p className="font-medium">{selectedDoc.document_date || '-'}</p></div>
-                <div><Label className="text-muted-foreground">Total Amount</Label><p className="font-medium">{selectedDoc.total_amount ? `RM ${Number(selectedDoc.total_amount).toFixed(2)}` : '-'}</p></div>
-                <div><Label className="text-muted-foreground">Tax</Label><p className="font-medium">{selectedDoc.tax_amount ? `RM ${Number(selectedDoc.tax_amount).toFixed(2)}` : '-'}</p></div>
+                <div><Label className="text-muted-foreground">Total Amount</Label><p className="font-medium">{selectedDoc.total_amount ? fmt(Number(selectedDoc.total_amount)) : '-'}</p></div>
+                <div><Label className="text-muted-foreground">Tax</Label><p className="font-medium">{selectedDoc.tax_amount ? fmt(Number(selectedDoc.tax_amount)) : '-'}</p></div>
                 <div className="col-span-2"><Label className="text-muted-foreground">Description</Label><p className="font-medium">{selectedDoc.description || '-'}</p></div>
                 <div className="col-span-2"><Label className="text-muted-foreground">Category</Label><p className="font-medium">{selectedDoc.category || '-'}</p></div>
               </div>

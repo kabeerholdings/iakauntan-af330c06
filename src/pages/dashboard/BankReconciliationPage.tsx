@@ -172,7 +172,8 @@ const BankReconciliationPage = () => {
     fetchData();
   };
 
-  const fmt = (n: number) => n > 0 ? `RM ${n.toLocaleString('en-MY', { minimumFractionDigits: 2 })}` : '—';
+  const { fmt: fmtCurrency } = useCurrency();
+  const fmt = (n: number) => n > 0 ? fmtCurrency(n) : '—';
 
   const reconciledCount = statements.filter(s => s.is_reconciled).length;
   const unreconciledCount = statements.filter(s => !s.is_reconciled).length;
