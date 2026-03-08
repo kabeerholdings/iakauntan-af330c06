@@ -304,7 +304,7 @@ const EInvoicePage = () => {
                       <TableRow key={inv.id}>
                         <TableCell className="font-medium">{inv.invoice_number}</TableCell>
                         <TableCell>{(inv.contacts as any)?.name || '—'}</TableCell>
-                        <TableCell>RM {Number(inv.total_amount).toFixed(2)}</TableCell>
+                        <TableCell>{fmt(Number(inv.total_amount))}</TableCell>
                         <TableCell><Badge variant={statusBadge(inv.einvoice_status)}>{inv.einvoice_status}</Badge></TableCell>
                         <TableCell>
                           {countdown && !countdown.expired ? (
