@@ -12,6 +12,7 @@ import { Badge } from '@/components/ui/badge';
 import { Plus, Eye, Palette, Printer } from 'lucide-react';
 import { toast } from 'sonner';
 import { useNavigate } from 'react-router-dom';
+import CustomFieldsSection, { saveCustomFieldValues } from '@/components/CustomFieldsSection';
 
 const InvoicesPage = () => {
   const { selectedCompany } = useCompany();
