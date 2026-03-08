@@ -51,6 +51,13 @@ import InventoryReportsPage from "./pages/dashboard/InventoryReportsPage";
 import AdvancedReportsPage from "./pages/dashboard/AdvancedReportsPage";
 import DocumentTemplatesPage from "./pages/dashboard/DocumentTemplatesPage";
 import PaymentMethodsPage from "./pages/dashboard/PaymentMethodsPage";
+import CashBookPage from "./pages/dashboard/CashBookPage";
+import QuotationsPage from "./pages/dashboard/QuotationsPage";
+import CreditNotesPage from "./pages/dashboard/CreditNotesPage";
+import StockAdjustmentPage from "./pages/dashboard/StockAdjustmentPage";
+import StockTransferPage from "./pages/dashboard/StockTransferPage";
+import FinancialReportsPage from "./pages/dashboard/FinancialReportsPage";
+import KnockOffPage from "./pages/dashboard/KnockOffPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -109,6 +116,13 @@ const App = () => (
               <Route path="advanced-reports" element={<AdvancedReportsPage />} />
               <Route path="document-templates" element={<DocumentTemplatesPage />} />
               <Route path="payment-methods" element={<PaymentMethodsPage />} />
+              <Route path="cash-book" element={<CashBookPage />} />
+              <Route path="quotations" element={<QuotationsPage />} />
+              <Route path="credit-notes" element={<CreditNotesPage />} />
+              <Route path="stock-adjustment" element={<StockAdjustmentPage />} />
+              <Route path="stock-transfer" element={<StockTransferPage />} />
+              <Route path="financial-reports" element={<FinancialReportsPage />} />
+              <Route path="knock-off" element={<KnockOffPage />} />
             </Route>
             <Route path="/admin" element={<DashboardLayout />}>
               <Route index element={<AdminPage />} />
