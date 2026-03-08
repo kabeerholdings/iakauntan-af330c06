@@ -27,6 +27,7 @@ interface CartItem {
 
 const POSPage = () => {
   const { selectedCompany } = useCompany();
+  const { fmt, symbol } = useCurrency();
   const { user } = useAuth();
   const [items, setItems] = useState<any[]>([]);
   const [cart, setCart] = useState<CartItem[]>([]);

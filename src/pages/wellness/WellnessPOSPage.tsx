@@ -18,6 +18,7 @@ const APPT_STATUSES = ['scheduled', 'confirmed', 'in_progress', 'completed', 'ca
 
 const WellnessPOSPage = () => {
   const { selectedCompany } = useCompany();
+  const { fmt } = useCurrency();
   const [services, setServices] = useState<any[]>([]);
   const [packages, setPackages] = useState<any[]>([]);
   const [memberships, setMemberships] = useState<any[]>([]);

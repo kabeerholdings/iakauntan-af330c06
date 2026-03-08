@@ -19,6 +19,7 @@ const DOC_TYPES = ['invoice', 'receipt', 'voucher', 'bill'];
 
 const AIScannerPage = () => {
   const { selectedCompany } = useCompany();
+  const { fmt } = useCurrency();
   const { user } = useAuth();
   const [documents, setDocuments] = useState<any[]>([]);
   const [selectedDoc, setSelectedDoc] = useState<any>(null);

@@ -17,6 +17,7 @@ import { toast } from 'sonner';
 
 const StockTakePage = () => {
   const { selectedCompany } = useCompany();
+  const { fmt } = useCurrency();
   const { user } = useAuth();
   const [stockTakes, setStockTakes] = useState<any[]>([]);
   const [warehouses, setWarehouses] = useState<any[]>([]);
