@@ -337,19 +337,27 @@ const CustomizationPage = () => {
           </div>
 
           <Card><Table>
-            <TableHeader><TableRow><TableHead>Entity</TableHead><TableHead>Label</TableHead><TableHead>Field Name</TableHead><TableHead>Type</TableHead><TableHead>Required</TableHead><TableHead>Actions</TableHead></TableRow></TableHeader>
+            <TableHeader><TableRow><TableHead>Entity</TableHead><TableHead>Label</TableHead><TableHead>Field Name</TableHead><TableHead>Type</TableHead><TableHead>Position</TableHead><TableHead>Required</TableHead><TableHead>Actions</TableHead></TableRow></TableHeader>
             <TableBody>
-              {customFields.map(f => (
-                <TableRow key={f.id}>
-                  <TableCell><Badge variant="outline">{f.entity_type}</Badge></TableCell>
-                  <TableCell className="font-medium">{f.field_label}</TableCell>
-                  <TableCell className="font-mono text-xs">{f.field_name}</TableCell>
-                  <TableCell><Badge variant="secondary">{f.field_type}</Badge></TableCell>
-                  <TableCell>{f.is_required ? '✓' : '-'}</TableCell>
-                  <TableCell><div className="flex gap-1"><Button size="sm" variant="ghost" onClick={() => openEditField(f)}><Edit className="h-3 w-3" /></Button><Button size="sm" variant="ghost" onClick={() => deleteField(f.id)}><Trash2 className="h-3 w-3" /></Button></div></TableCell>
-                </TableRow>
-              ))}
-              {customFields.length === 0 && <TableRow><TableCell colSpan={6} className="text-center text-muted-foreground py-8">No custom fields. Create your first DIY field.</TableCell></TableRow>}
+              {customFields.map(f => {
+                const refLabel = f.position_reference
+                  ? f.position_reference === '__start' ? 'Start of form'
+                  : f.position_reference === '__end' ? 'End of form'
+                  : (NATIVE_FIELDS[f.entity_type] || []).find((nf: any) => nf.value === f.position_reference)?.label || f.position_reference
+                  : 'Default';
+                return (
+                  <TableRow key={f.id}>
+                    <TableCell><Badge variant="outline">{f.entity_type}</Badge></TableCell>
+                    <TableCell className="font-medium">{f.field_label}</TableCell>
+                    <TableCell className="font-mono text-xs">{f.field_name}</TableCell>
+                    <TableCell><Badge variant="secondary">{f.field_type}</Badge></TableCell>
+                    <TableCell className="text-xs text-muted-foreground">{f.position_placement === 'before' ? 'Before' : 'After'} {refLabel}</TableCell>
+                    <TableCell>{f.is_required ? '✓' : '-'}</TableCell>
+                    <TableCell><div className="flex gap-1"><Button size="sm" variant="ghost" onClick={() => openEditField(f)}><Edit className="h-3 w-3" /></Button><Button size="sm" variant="ghost" onClick={() => deleteField(f.id)}><Trash2 className="h-3 w-3" /></Button></div></TableCell>
+                  </TableRow>
+                );
+              })}
+              {customFields.length === 0 && <TableRow><TableCell colSpan={7} className="text-center text-muted-foreground py-8">No custom fields. Create your first DIY field.</TableCell></TableRow>}
             </TableBody>
           </Table></Card>
         </TabsContent>
