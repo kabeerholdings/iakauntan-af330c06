@@ -2,12 +2,11 @@ import { useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Building2, Plus, LogOut } from 'lucide-react';
 import { toast } from 'sonner';
+import CreateCompanyForm, { type CreateCompanyFormData } from '@/components/CreateCompanyForm';
 import logoImg from '@/assets/logo.png';
 
 interface Company {
@@ -27,9 +26,8 @@ const SelectCompanyPage = ({ companies, onSelect, onCompanyCreated }: SelectComp
   const { user, signOut } = useAuth();
   const [showCreate, setShowCreate] = useState(false);
   const [creating, setCreating] = useState(false);
-  const [form, setForm] = useState({ name: '', registration_no: '', tax_id: '' });
 
-  const handleCreate = async () => {
+  const handleCreate = async (form: CreateCompanyFormData) => {
     if (!form.name.trim()) { toast.error('Company name is required'); return; }
     if (!user) return;
     setCreating(true);
@@ -37,13 +35,18 @@ const SelectCompanyPage = ({ companies, onSelect, onCompanyCreated }: SelectComp
       name: form.name.trim(),
       registration_no: form.registration_no.trim() || null,
       tax_id: form.tax_id.trim() || null,
+      tax_system: form.tax_system,
+      fiscal_year_start_date: form.fiscal_year_start_date || null,
+      actual_data_start_date: form.actual_data_start_date || null,
+      base_currency: form.base_currency,
+      inventory_system: form.inventory_system,
+      sample_coa: form.sample_coa,
       owner_id: user.id,
     });
     setCreating(false);
     if (error) { toast.error(error.message); return; }
     toast.success('Company created');
     setShowCreate(false);
-    setForm({ name: '', registration_no: '', tax_id: '' });
     await onCompanyCreated();
   };
 
@@ -100,27 +103,11 @@ const SelectCompanyPage = ({ companies, onSelect, onCompanyCreated }: SelectComp
         </div>
 
         <Dialog open={showCreate} onOpenChange={setShowCreate}>
-          <DialogContent>
+          <DialogContent className="max-w-lg max-h-[85vh] overflow-y-auto">
             <DialogHeader>
               <DialogTitle className="font-display">Add New Company</DialogTitle>
             </DialogHeader>
-            <div className="space-y-4">
-              <div>
-                <Label>Company Name *</Label>
-                <Input value={form.name} onChange={e => setForm(f => ({ ...f, name: e.target.value }))} placeholder="My Business Sdn Bhd" />
-              </div>
-              <div>
-                <Label>SSM Registration No.</Label>
-                <Input value={form.registration_no} onChange={e => setForm(f => ({ ...f, registration_no: e.target.value }))} placeholder="202301012345" />
-              </div>
-              <div>
-                <Label>Tax Identification No. (TIN)</Label>
-                <Input value={form.tax_id} onChange={e => setForm(f => ({ ...f, tax_id: e.target.value }))} placeholder="C12345678" />
-              </div>
-              <Button onClick={handleCreate} disabled={creating} className="w-full">
-                {creating ? 'Creating...' : 'Create Company'}
-              </Button>
-            </div>
+            <CreateCompanyForm onSubmit={handleCreate} loading={creating} />
           </DialogContent>
         </Dialog>
       </div>

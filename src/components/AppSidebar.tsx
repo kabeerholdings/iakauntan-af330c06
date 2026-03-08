@@ -9,6 +9,7 @@ import { NavLink } from '@/components/NavLink';
 import { useAuth } from '@/contexts/AuthContext';
 import { useCompany } from '@/contexts/CompanyContext';
 import { supabase } from '@/integrations/supabase/client';
+import CreateCompanyForm, { type CreateCompanyFormData } from '@/components/CreateCompanyForm';
 import {
   Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent, SidebarGroupLabel,
   SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarFooter, useSidebar,
@@ -18,8 +19,6 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import { toast } from 'sonner';
 import EditCompanyDialog from '@/components/EditCompanyDialog';
 import logoImg from '@/assets/logo.png';
@@ -97,25 +96,29 @@ export function AppSidebar() {
   const { companies, selectedCompany, setSelectedCompany, refetchCompanies } = useCompany();
   const [showCreateCompany, setShowCreateCompany] = useState(false);
   const [showEditCompany, setShowEditCompany] = useState(false);
-  const [newCompany, setNewCompany] = useState({ name: '', registration_no: '', tax_id: '' });
   const [creating, setCreating] = useState(false);
 
-  const handleCreateCompany = async () => {
-    if (!newCompany.name.trim()) { toast.error('Company name is required'); return; }
+  const handleCreateCompany = async (form: CreateCompanyFormData) => {
+    if (!form.name.trim()) { toast.error('Company name is required'); return; }
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) return;
     setCreating(true);
     const { error } = await supabase.from('companies').insert({
-      name: newCompany.name.trim(),
-      registration_no: newCompany.registration_no.trim() || null,
-      tax_id: newCompany.tax_id.trim() || null,
+      name: form.name.trim(),
+      registration_no: form.registration_no.trim() || null,
+      tax_id: form.tax_id.trim() || null,
+      tax_system: form.tax_system,
+      fiscal_year_start_date: form.fiscal_year_start_date || null,
+      actual_data_start_date: form.actual_data_start_date || null,
+      base_currency: form.base_currency,
+      inventory_system: form.inventory_system,
+      sample_coa: form.sample_coa,
       owner_id: user.id,
     });
     setCreating(false);
     if (error) { toast.error(error.message); return; }
     toast.success('Company created');
     setShowCreateCompany(false);
-    setNewCompany({ name: '', registration_no: '', tax_id: '' });
     await refetchCompanies();
   };
 
@@ -224,27 +227,11 @@ export function AppSidebar() {
     </Sidebar>
 
     <Dialog open={showCreateCompany} onOpenChange={setShowCreateCompany}>
-      <DialogContent>
+      <DialogContent className="max-w-lg max-h-[85vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="font-display">Add New Company</DialogTitle>
         </DialogHeader>
-        <div className="space-y-4">
-          <div>
-            <Label>Company Name *</Label>
-            <Input value={newCompany.name} onChange={e => setNewCompany(f => ({ ...f, name: e.target.value }))} placeholder="My Business Sdn Bhd" />
-          </div>
-          <div>
-            <Label>SSM Registration No.</Label>
-            <Input value={newCompany.registration_no} onChange={e => setNewCompany(f => ({ ...f, registration_no: e.target.value }))} placeholder="202301012345" />
-          </div>
-          <div>
-            <Label>Tax Identification No. (TIN)</Label>
-            <Input value={newCompany.tax_id} onChange={e => setNewCompany(f => ({ ...f, tax_id: e.target.value }))} placeholder="C12345678" />
-          </div>
-          <Button onClick={handleCreateCompany} disabled={creating} className="w-full">
-            {creating ? 'Creating...' : 'Create Company'}
-          </Button>
-        </div>
+        <CreateCompanyForm onSubmit={handleCreateCompany} loading={creating} />
       </DialogContent>
     </Dialog>
 
