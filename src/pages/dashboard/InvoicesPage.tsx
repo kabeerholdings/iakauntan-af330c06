@@ -184,6 +184,8 @@ const InvoicesPage = () => {
                   </div>
                   <Button onClick={handleCreate}>Create Invoice</Button>
                 </div>
+
+                <CustomFieldsSection entityType="invoice" values={customValues} onChange={setCustomValues} />
               </div>
             </DialogContent>
           </Dialog>
