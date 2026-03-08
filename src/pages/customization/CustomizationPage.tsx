@@ -78,12 +78,11 @@ const CustomizationPage = () => {
 
   useEffect(() => { fetchAll(); }, [selectedCompany]);
 
-  // DIY Fields CRUD
-  const createField = async () => {
+  const saveField = async () => {
     if (!selectedCompany || !fieldForm.field_name || !fieldForm.field_label) return;
     let options: any[] = [];
     try { options = JSON.parse(fieldForm.field_options); } catch { options = []; }
-    const { error } = await supabase.from('custom_fields').insert({
+    const payload = {
       company_id: selectedCompany.id,
       entity_type: fieldForm.entity_type,
       field_name: fieldForm.field_name.toLowerCase().replace(/\s+/g, '_'),
@@ -91,12 +90,38 @@ const CustomizationPage = () => {
       field_type: fieldForm.field_type,
       is_required: fieldForm.is_required,
       field_options: options,
-    });
-    if (error) { toast.error(error.message); return; }
-    toast.success('Custom field created');
-    setFieldOpen(false);
-    setFieldForm({ entity_type: 'customer', field_name: '', field_label: '', field_type: 'text', is_required: false, field_options: '[]' });
+    };
+
+    if (editingFieldId) {
+      const { error } = await supabase.from('custom_fields').update(payload).eq('id', editingFieldId);
+      if (error) { toast.error(error.message); return; }
+      toast.success('Custom field updated');
+    } else {
+      const { error } = await supabase.from('custom_fields').insert(payload);
+      if (error) { toast.error(error.message); return; }
+      toast.success('Custom field created');
+    }
+    closeFieldDialog();
     fetchAll();
+  };
+
+  const closeFieldDialog = () => {
+    setFieldOpen(false);
+    setEditingFieldId(null);
+    setFieldForm({ entity_type: 'customer', field_name: '', field_label: '', field_type: 'text', is_required: false, field_options: '[]' });
+  };
+
+  const openEditField = (f: any) => {
+    setEditingFieldId(f.id);
+    setFieldForm({
+      entity_type: f.entity_type,
+      field_name: f.field_name,
+      field_label: f.field_label,
+      field_type: f.field_type,
+      is_required: f.is_required || false,
+      field_options: JSON.stringify(f.field_options || []),
+    });
+    setFieldOpen(true);
   };
 
   const deleteField = async (id: string) => {
