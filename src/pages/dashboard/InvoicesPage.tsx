@@ -206,7 +206,7 @@ const InvoicesPage = () => {
               <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
               <XAxis dataKey="month" tick={{ fontSize: 10 }} />
               <YAxis tick={{ fontSize: 10 }} />
-              <Tooltip formatter={(v: number) => `RM ${v.toFixed(2)}`} />
+              <Tooltip formatter={(v: number) => fmt(v)} />
               <Bar dataKey="paid" stackId="a" fill="hsl(var(--primary))" name="Paid" />
               <Bar dataKey="unpaid" stackId="a" fill="hsl(var(--muted-foreground))" name="Unpaid" />
               <Bar dataKey="partial" stackId="a" fill="hsl(var(--accent-foreground))" name="Partial" />
