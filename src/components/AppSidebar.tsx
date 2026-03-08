@@ -104,6 +104,7 @@ const managementItems = [
 ];
 
 const otherItems = [
+  { title: 'API Integration', url: '/dashboard/api-integration', icon: Link2 },
   { title: 'AI Cloud Backup', url: '/dashboard/ai-cloud', icon: Cloud },
   { title: 'Customization', url: '/dashboard/customization', icon: Puzzle },
   { title: 'Doc Templates', url: '/dashboard/document-templates', icon: Palette },

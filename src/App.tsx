@@ -126,6 +126,7 @@ const App = () => (
               <Route path="financial-reports" element={<FinancialReportsPage />} />
               <Route path="knock-off" element={<KnockOffPage />} />
               <Route path="sales-reports" element={<SalesReportsPage />} />
+              <Route path="api-integration" element={<ApiIntegrationPage />} />
             </Route>
             <Route path="/admin" element={<DashboardLayout />}>
               <Route index element={<AdminPage />} />
