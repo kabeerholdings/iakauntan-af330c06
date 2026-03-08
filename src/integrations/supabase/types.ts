@@ -2379,6 +2379,69 @@ export type Database = {
           },
         ]
       }
+      payment_methods: {
+        Row: {
+          account_id: string | null
+          account_number: string | null
+          bank_name: string | null
+          code: string
+          company_id: string
+          created_at: string
+          id: string
+          is_active: boolean | null
+          is_default: boolean | null
+          name: string
+          notes: string | null
+          type: string
+          updated_at: string
+        }
+        Insert: {
+          account_id?: string | null
+          account_number?: string | null
+          bank_name?: string | null
+          code: string
+          company_id: string
+          created_at?: string
+          id?: string
+          is_active?: boolean | null
+          is_default?: boolean | null
+          name: string
+          notes?: string | null
+          type?: string
+          updated_at?: string
+        }
+        Update: {
+          account_id?: string | null
+          account_number?: string | null
+          bank_name?: string | null
+          code?: string
+          company_id?: string
+          created_at?: string
+          id?: string
+          is_active?: boolean | null
+          is_default?: boolean | null
+          name?: string
+          notes?: string | null
+          type?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "payment_methods_account_id_fkey"
+            columns: ["account_id"]
+            isOneToOne: false
+            referencedRelation: "chart_of_accounts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "payment_methods_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       payments: {
         Row: {
           amount: number
