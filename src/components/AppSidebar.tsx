@@ -126,6 +126,10 @@ export function AppSidebar() {
           <SidebarGroupContent>{renderItems(stockItems)}</SidebarGroupContent>
         </SidebarGroup>
         <SidebarGroup>
+          <SidebarGroupLabel>Manufacturing</SidebarGroupLabel>
+          <SidebarGroupContent>{renderItems(manufacturingItems)}</SidebarGroupContent>
+        </SidebarGroup>
+        <SidebarGroup>
           <SidebarGroupLabel>Accounting</SidebarGroupLabel>
           <SidebarGroupContent>{renderItems(accountingItems)}</SidebarGroupContent>
         </SidebarGroup>
