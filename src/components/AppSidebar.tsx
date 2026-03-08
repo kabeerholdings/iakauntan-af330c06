@@ -1,7 +1,8 @@
 import {
   LayoutDashboard, FileText, Receipt, BookOpen, Users, Globe, Settings, Building2, LogOut,
   ChevronDown, BarChart3, CreditCard, Package, ShoppingCart, Truck, Wallet, FolderKanban, DollarSign,
-  UserCheck, Calculator, CalendarDays, ClipboardList, Zap, Landmark, Paperclip, Factory, Layers, Hammer, PieChart
+  UserCheck, Calculator, CalendarDays, ClipboardList, Zap, Landmark, Paperclip, Factory, Layers, Hammer, PieChart,
+  Store, ScanBarcode, Brain, Sparkles, Heart
 } from 'lucide-react';
 import { NavLink } from '@/components/NavLink';
 import { useAuth } from '@/contexts/AuthContext';
@@ -28,6 +29,13 @@ const salesItems = [
 
 const stockItems = [
   { title: 'Stock / Inventory', url: '/dashboard/stock', icon: Package },
+  { title: 'Stock Take', url: '/dashboard/stock-take', icon: ClipboardList },
+];
+
+const ecommerceItems = [
+  { title: 'X-Store', url: '/dashboard/xstore', icon: Store },
+  { title: 'POS', url: '/dashboard/pos', icon: ScanBarcode },
+  { title: 'Wellness POS', url: '/dashboard/wellness-pos', icon: Heart },
 ];
 
 const manufacturingItems = [
@@ -44,6 +52,7 @@ const accountingItems = [
   { title: 'Bank Reconciliation', url: '/dashboard/bank-reconciliation', icon: Landmark },
   { title: 'Reports', url: '/dashboard/reports', icon: BarChart3 },
   { title: 'Documents', url: '/dashboard/documents', icon: Paperclip },
+  { title: 'AI Easy Scan', url: '/dashboard/ai-scanner', icon: Brain },
 ];
 
 const payrollItems = [
@@ -124,6 +133,10 @@ export function AppSidebar() {
         <SidebarGroup>
           <SidebarGroupLabel>Stock</SidebarGroupLabel>
           <SidebarGroupContent>{renderItems(stockItems)}</SidebarGroupContent>
+        </SidebarGroup>
+        <SidebarGroup>
+          <SidebarGroupLabel>E-Commerce & POS</SidebarGroupLabel>
+          <SidebarGroupContent>{renderItems(ecommerceItems)}</SidebarGroupContent>
         </SidebarGroup>
         <SidebarGroup>
           <SidebarGroupLabel>Manufacturing</SidebarGroupLabel>

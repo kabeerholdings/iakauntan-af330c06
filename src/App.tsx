@@ -37,6 +37,11 @@ import JobOrdersPage from "./pages/manufacturing/JobOrdersPage";
 import AssemblyPage from "./pages/manufacturing/AssemblyPage";
 import MRPReportsPage from "./pages/manufacturing/MRPReportsPage";
 import AdminPage from "./pages/admin/AdminPage";
+import XStoreDashboard from "./pages/ecommerce/XStoreDashboard";
+import POSPage from "./pages/pos/POSPage";
+import AIScannerPage from "./pages/scanner/AIScannerPage";
+import StockTakePage from "./pages/stocktake/StockTakePage";
+import WellnessPOSPage from "./pages/wellness/WellnessPOSPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -81,6 +86,11 @@ const App = () => (
               <Route path="job-orders" element={<JobOrdersPage />} />
               <Route path="assembly" element={<AssemblyPage />} />
               <Route path="mrp-reports" element={<MRPReportsPage />} />
+              <Route path="xstore" element={<XStoreDashboard />} />
+              <Route path="pos" element={<POSPage />} />
+              <Route path="ai-scanner" element={<AIScannerPage />} />
+              <Route path="stock-take" element={<StockTakePage />} />
+              <Route path="wellness-pos" element={<WellnessPOSPage />} />
             </Route>
             <Route path="/admin" element={<DashboardLayout />}>
               <Route index element={<AdminPage />} />
