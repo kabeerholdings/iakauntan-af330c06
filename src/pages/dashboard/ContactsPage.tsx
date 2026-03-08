@@ -25,6 +25,7 @@ const emptyForm = {
 
 const ContactsPage = () => {
   const { selectedCompany } = useCompany();
+  const { fmt } = useCurrency();
   const [contacts, setContacts] = useState<any[]>([]);
   const [search, setSearch] = useState('');
   const [activeTab, setActiveTab] = useState('all');

@@ -15,6 +15,7 @@ import { useAuth } from '@/contexts/AuthContext';
 
 const JournalEntriesPage = () => {
   const { selectedCompany } = useCompany();
+  const { fmt } = useCurrency();
   const { user } = useAuth();
   const [entries, setEntries] = useState<any[]>([]);
   const [accounts, setAccounts] = useState<any[]>([]);
