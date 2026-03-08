@@ -210,8 +210,12 @@ export function AppSidebar() {
           <SidebarGroupContent>{renderItems(mainItems)}</SidebarGroupContent>
         </SidebarGroup>
         <SidebarGroup>
-          <SidebarGroupLabel>Sales & Purchase</SidebarGroupLabel>
+          <SidebarGroupLabel>Sales</SidebarGroupLabel>
           <SidebarGroupContent>{renderItems(salesItems)}</SidebarGroupContent>
+        </SidebarGroup>
+        <SidebarGroup>
+          <SidebarGroupLabel>Purchase</SidebarGroupLabel>
+          <SidebarGroupContent>{renderItems(purchaseItems)}</SidebarGroupContent>
         </SidebarGroup>
         <SidebarGroup>
           <SidebarGroupLabel>Stock</SidebarGroupLabel>
