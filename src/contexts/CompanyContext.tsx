@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import React, { createContext, useContext, useEffect, useState, useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from './AuthContext';
 
@@ -17,6 +17,7 @@ interface CompanyContextType {
   setSelectedCompany: (company: Company | null) => void;
   loading: boolean;
   refetchCompanies: () => Promise<void>;
+  companyChosen: boolean;
 }
 
 const CompanyContext = createContext<CompanyContextType>({
@@ -25,6 +26,7 @@ const CompanyContext = createContext<CompanyContextType>({
   setSelectedCompany: () => {},
   loading: true,
   refetchCompanies: async () => {},
+  companyChosen: false,
 });
 
 export const useCompany = () => useContext(CompanyContext);
@@ -32,13 +34,15 @@ export const useCompany = () => useContext(CompanyContext);
 export const CompanyProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { user } = useAuth();
   const [companies, setCompanies] = useState<Company[]>([]);
-  const [selectedCompany, setSelectedCompany] = useState<Company | null>(null);
+  const [selectedCompany, setSelectedCompanyState] = useState<Company | null>(null);
   const [loading, setLoading] = useState(true);
+  const [companyChosen, setCompanyChosen] = useState(false);
 
-  const fetchCompanies = async () => {
+  const fetchCompanies = useCallback(async () => {
     if (!user) {
       setCompanies([]);
-      setSelectedCompany(null);
+      setSelectedCompanyState(null);
+      setCompanyChosen(false);
       setLoading(false);
       return;
     }
@@ -49,20 +53,45 @@ export const CompanyProvider: React.FC<{ children: React.ReactNode }> = ({ child
       .order('name');
     const companyList = (data || []) as Company[];
     setCompanies(companyList);
-    if (companyList.length > 0) {
-      // Update selectedCompany with fresh data, or pick first if none selected
-      const currentId = selectedCompany?.id;
-      const updated = currentId ? companyList.find(c => c.id === currentId) : companyList[0];
-      setSelectedCompany(updated || companyList[0]);
-    } else {
-      setSelectedCompany(null);
+
+    // If a company was already chosen, refresh its data
+    if (companyChosen && selectedCompany) {
+      const updated = companyList.find(c => c.id === selectedCompany.id);
+      if (updated) {
+        setSelectedCompanyState(updated);
+      }
     }
+
     setLoading(false);
+  }, [user, companyChosen, selectedCompany?.id]);
+
+  const setSelectedCompany = (company: Company | null) => {
+    setSelectedCompanyState(company);
+    setCompanyChosen(!!company);
+    if (company) {
+      localStorage.setItem('selectedCompanyId', company.id);
+    } else {
+      localStorage.removeItem('selectedCompanyId');
+    }
   };
 
   useEffect(() => {
     fetchCompanies();
   }, [user]);
+
+  // Auto-restore last selected company from localStorage after companies load
+  useEffect(() => {
+    if (!companyChosen && companies.length > 0 && !loading) {
+      const savedId = localStorage.getItem('selectedCompanyId');
+      if (savedId) {
+        const found = companies.find(c => c.id === savedId);
+        if (found) {
+          setSelectedCompanyState(found);
+          setCompanyChosen(true);
+        }
+      }
+    }
+  }, [companies, loading, companyChosen]);
 
   return (
     <CompanyContext.Provider value={{
@@ -71,6 +100,7 @@ export const CompanyProvider: React.FC<{ children: React.ReactNode }> = ({ child
       setSelectedCompany,
       loading,
       refetchCompanies: fetchCompanies,
+      companyChosen,
     }}>
       {children}
     </CompanyContext.Provider>
