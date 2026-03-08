@@ -165,7 +165,7 @@ const CashBookPage = () => {
             </TableCell>
             <TableCell>{e.contacts?.name || e.payee_name || '—'}</TableCell>
             <TableCell className="text-muted-foreground max-w-[200px] truncate">{e.description || '—'}</TableCell>
-            <TableCell className="text-right font-medium">RM {(+e.total_amount).toFixed(2)}</TableCell>
+            <TableCell className="text-right font-medium">{fmt(+e.total_amount)}</TableCell>
             <TableCell>
               <Badge variant={e.status === 'void' ? 'destructive' : e.status === 'applied' ? 'default' : 'secondary'}>{e.status}</Badge>
             </TableCell>
