@@ -29,6 +29,7 @@ const salesItems = [
 
 const stockItems = [
   { title: 'Stock / Inventory', url: '/dashboard/stock', icon: Package },
+  { title: 'Inventory Reports', url: '/dashboard/inventory-reports', icon: BarChart3 },
   { title: 'Stock Take', url: '/dashboard/stock-take', icon: ClipboardList },
 ];
 
