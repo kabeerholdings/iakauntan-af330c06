@@ -10,8 +10,9 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
-import { Plus, FileText } from 'lucide-react';
+import { Plus, FileText, Eye } from 'lucide-react';
 import { toast } from 'sonner';
+import DocumentPrintPreview from '@/components/DocumentPrintPreview';
 
 const statusColors: Record<string, string> = { draft: 'secondary', sent: 'default', accepted: 'default', rejected: 'destructive', expired: 'secondary', converted: 'outline' };
 
@@ -20,7 +21,9 @@ const QuotationsPage = () => {
   const { user } = useAuth();
   const [quotations, setQuotations] = useState<any[]>([]);
   const [contacts, setContacts] = useState<any[]>([]);
+  const [templates, setTemplates] = useState<any[]>([]);
   const [open, setOpen] = useState(false);
+  const [printPreview, setPrintPreview] = useState<{ quotation: any; template: any } | null>(null);
   const [form, setForm] = useState({
     quotation_number: '', quotation_date: new Date().toISOString().split('T')[0],
     valid_until: '', contact_id: '', notes: '',
@@ -29,12 +32,14 @@ const QuotationsPage = () => {
 
   const fetchData = async () => {
     if (!selectedCompany) return;
-    const [q, c] = await Promise.all([
+    const [q, c, tpl] = await Promise.all([
       supabase.from('quotations').select('*, contacts(name), quotation_lines(*)').eq('company_id', selectedCompany.id).order('quotation_date', { ascending: false }),
       supabase.from('contacts').select('id, name').eq('company_id', selectedCompany.id).eq('type', 'customer').eq('is_active', true),
+      supabase.from('document_templates').select('*').eq('company_id', selectedCompany.id).in('template_type', ['invoice', 'quotation']),
     ]);
     setQuotations(q.data || []);
     setContacts(c.data || []);
+    setTemplates(tpl.data || []);
   };
 
   useEffect(() => { fetchData(); }, [selectedCompany]);
@@ -76,11 +81,17 @@ const QuotationsPage = () => {
     fetchData();
   };
 
+  const handlePrintPreview = async (q: any) => {
+    const { data: lines } = await supabase.from('quotation_lines').select('*').eq('quotation_id', q.id);
+    const defaultTpl = templates.find(t => t.is_default) || templates[0] || null;
+    setPrintPreview({ quotation: { ...q, lines: lines || [] }, template: defaultTpl });
+  };
+
   const convertToInvoice = async (q: any) => {
     if (!selectedCompany) return;
     const { data: inv, error } = await supabase.from('invoices').insert({
       company_id: selectedCompany.id, invoice_number: `INV-${q.quotation_number}`,
-      invoice_type: 'standard', contact_id: q.contact_id, invoice_date: new Date().toISOString().split('T')[0],
+      invoice_type: 'sales', contact_id: q.contact_id, invoice_date: new Date().toISOString().split('T')[0],
       subtotal: q.subtotal, tax_amount: q.tax_amount, total_amount: q.total_amount,
       notes: q.notes, currency: q.currency,
     }).select().single();
@@ -118,7 +129,7 @@ const QuotationsPage = () => {
                 <TableHead>Valid Until</TableHead>
                 <TableHead className="text-right">Amount</TableHead>
                 <TableHead>Status</TableHead>
-                <TableHead className="w-28"></TableHead>
+                <TableHead className="w-40"></TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -132,7 +143,10 @@ const QuotationsPage = () => {
                   <TableCell>{q.valid_until || '—'}</TableCell>
                   <TableCell className="text-right font-medium">RM {(+q.total_amount).toFixed(2)}</TableCell>
                   <TableCell><Badge variant={(statusColors[q.status] || 'secondary') as any}>{q.status}</Badge></TableCell>
-                  <TableCell>
+                  <TableCell className="flex gap-1">
+                    <Button variant="ghost" size="sm" onClick={() => handlePrintPreview(q)}>
+                      <Eye className="h-3 w-3 mr-1" />Preview
+                    </Button>
                     {(q.status === 'accepted' || q.status === 'draft' || q.status === 'sent') && (
                       <Button variant="ghost" size="sm" onClick={() => convertToInvoice(q)}>
                         <FileText className="h-3 w-3 mr-1" />Convert
@@ -188,6 +202,28 @@ const QuotationsPage = () => {
           </div>
         </DialogContent>
       </Dialog>
+
+      {printPreview && (
+        <DocumentPrintPreview
+          open={!!printPreview}
+          onClose={() => setPrintPreview(null)}
+          documentType="QUOTATION"
+          documentNumber={printPreview.quotation.quotation_number}
+          documentDate={printPreview.quotation.quotation_date}
+          dueDate={printPreview.quotation.valid_until}
+          contactName={printPreview.quotation.contacts?.name}
+          lines={printPreview.quotation.lines || []}
+          subtotal={+printPreview.quotation.subtotal || 0}
+          taxAmount={+printPreview.quotation.tax_amount || 0}
+          totalAmount={+printPreview.quotation.total_amount || 0}
+          notes={printPreview.quotation.notes}
+          template={printPreview.template}
+          templates={templates}
+          company={selectedCompany}
+          onChangeTemplate={tpl => setPrintPreview(prev => prev ? { ...prev, template: tpl } : null)}
+          extraFields={printPreview.quotation.valid_until ? [{ label: 'Valid Until', value: printPreview.quotation.valid_until }] : undefined}
+        />
+      )}
     </div>
   );
 };

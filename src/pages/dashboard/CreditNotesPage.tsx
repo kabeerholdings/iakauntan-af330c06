@@ -11,8 +11,9 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/u
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Plus } from 'lucide-react';
+import { Plus, Eye } from 'lucide-react';
 import { toast } from 'sonner';
+import DocumentPrintPreview from '@/components/DocumentPrintPreview';
 
 const CreditNotesPage = () => {
   const { selectedCompany } = useCompany();
@@ -20,8 +21,10 @@ const CreditNotesPage = () => {
   const [notes, setNotes] = useState<any[]>([]);
   const [contacts, setContacts] = useState<any[]>([]);
   const [invoices, setInvoices] = useState<any[]>([]);
+  const [templates, setTemplates] = useState<any[]>([]);
   const [open, setOpen] = useState(false);
   const [noteType, setNoteType] = useState<'sales' | 'purchase'>('sales');
+  const [printPreview, setPrintPreview] = useState<{ note: any; template: any } | null>(null);
   const [form, setForm] = useState({
     note_number: '', note_date: new Date().toISOString().split('T')[0],
     contact_id: '', invoice_id: '', reason: '',
@@ -30,14 +33,16 @@ const CreditNotesPage = () => {
 
   const fetchData = async () => {
     if (!selectedCompany) return;
-    const [n, c, inv] = await Promise.all([
+    const [n, c, inv, tpl] = await Promise.all([
       supabase.from('credit_notes').select('*, contacts(name), credit_note_lines(*)').eq('company_id', selectedCompany.id).order('note_date', { ascending: false }),
       supabase.from('contacts').select('id, name, type').eq('company_id', selectedCompany.id).eq('is_active', true),
       supabase.from('invoices').select('id, invoice_number, contact_id').eq('company_id', selectedCompany.id),
+      supabase.from('document_templates').select('*').eq('company_id', selectedCompany.id).in('template_type', ['invoice', 'credit_note']),
     ]);
     setNotes(n.data || []);
     setContacts(c.data || []);
     setInvoices(inv.data || []);
+    setTemplates(tpl.data || []);
   };
 
   useEffect(() => { fetchData(); }, [selectedCompany]);
@@ -83,6 +88,12 @@ const CreditNotesPage = () => {
     fetchData();
   };
 
+  const handlePrintPreview = async (n: any) => {
+    const { data: lines } = await supabase.from('credit_note_lines').select('*').eq('credit_note_id', n.id);
+    const defaultTpl = templates.find(t => t.is_default) || templates[0] || null;
+    setPrintPreview({ note: { ...n, lines: lines || [] }, template: defaultTpl });
+  };
+
   if (!selectedCompany) return <p className="text-muted-foreground">Select a company first.</p>;
 
   const salesNotes = notes.filter(n => n.note_type === 'sales');
@@ -99,11 +110,12 @@ const CreditNotesPage = () => {
           <TableHead>Reason</TableHead>
           <TableHead className="text-right">Amount</TableHead>
           <TableHead>Status</TableHead>
+          <TableHead className="w-24"></TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
         {data.length === 0 ? (
-          <TableRow><TableCell colSpan={7} className="text-center text-muted-foreground py-8">No notes yet</TableCell></TableRow>
+          <TableRow><TableCell colSpan={8} className="text-center text-muted-foreground py-8">No notes yet</TableCell></TableRow>
         ) : data.map(n => (
           <TableRow key={n.id}>
             <TableCell>{n.note_date}</TableCell>
@@ -113,6 +125,11 @@ const CreditNotesPage = () => {
             <TableCell className="text-muted-foreground">{n.reason || '—'}</TableCell>
             <TableCell className="text-right font-medium">RM {(+n.total_amount).toFixed(2)}</TableCell>
             <TableCell><Badge variant={n.status === 'void' ? 'destructive' : n.status === 'posted' ? 'default' : 'secondary'}>{n.status}</Badge></TableCell>
+            <TableCell>
+              <Button variant="ghost" size="sm" onClick={() => handlePrintPreview(n)}>
+                <Eye className="h-3 w-3 mr-1" />Preview
+              </Button>
+            </TableCell>
           </TableRow>
         ))}
       </TableBody>
@@ -198,6 +215,27 @@ const CreditNotesPage = () => {
           </div>
         </DialogContent>
       </Dialog>
+
+      {printPreview && (
+        <DocumentPrintPreview
+          open={!!printPreview}
+          onClose={() => setPrintPreview(null)}
+          documentType={printPreview.note.note_type === 'sales' ? 'CREDIT NOTE' : 'DEBIT NOTE'}
+          documentNumber={printPreview.note.note_number}
+          documentDate={printPreview.note.note_date}
+          contactName={printPreview.note.contacts?.name}
+          lines={printPreview.note.lines || []}
+          subtotal={+printPreview.note.subtotal || 0}
+          taxAmount={+printPreview.note.tax_amount || 0}
+          totalAmount={+printPreview.note.total_amount || 0}
+          notes={printPreview.note.reason}
+          template={printPreview.template}
+          templates={templates}
+          company={selectedCompany}
+          onChangeTemplate={tpl => setPrintPreview(prev => prev ? { ...prev, template: tpl } : null)}
+          extraFields={printPreview.note.reason ? [{ label: 'Reason', value: printPreview.note.reason }] : undefined}
+        />
+      )}
     </div>
   );
 };
