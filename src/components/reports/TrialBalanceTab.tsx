@@ -1,8 +1,10 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { useCurrency } from '@/hooks/useCurrency';
 import type { AccountBalance } from '@/pages/dashboard/FinancialReportsPage';
 
 const TrialBalanceTab = ({ balances }: { balances: AccountBalance[] }) => {
+  const { fmt } = useCurrency();
   const totalDebit = balances.reduce((s, b) => s + b.debit_total, 0);
   const totalCredit = balances.reduce((s, b) => s + b.credit_total, 0);
 
