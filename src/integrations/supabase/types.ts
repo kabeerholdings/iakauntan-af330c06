@@ -183,6 +183,103 @@ export type Database = {
           },
         ]
       }
+      autocount_api_keys: {
+        Row: {
+          account_book_id: string
+          api_key: string
+          company_id: string
+          created_at: string | null
+          description: string | null
+          endpoint_url: string
+          id: string
+          is_active: boolean | null
+          key_id: string
+          updated_at: string | null
+        }
+        Insert: {
+          account_book_id: string
+          api_key: string
+          company_id: string
+          created_at?: string | null
+          description?: string | null
+          endpoint_url?: string
+          id?: string
+          is_active?: boolean | null
+          key_id: string
+          updated_at?: string | null
+        }
+        Update: {
+          account_book_id?: string
+          api_key?: string
+          company_id?: string
+          created_at?: string | null
+          description?: string | null
+          endpoint_url?: string
+          id?: string
+          is_active?: boolean | null
+          key_id?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "autocount_api_keys_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: true
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      autocount_sync_log: {
+        Row: {
+          company_id: string
+          completed_at: string | null
+          created_at: string | null
+          direction: string
+          error_message: string | null
+          id: string
+          records_failed: number | null
+          records_processed: number | null
+          started_at: string | null
+          status: string | null
+          sync_type: string
+        }
+        Insert: {
+          company_id: string
+          completed_at?: string | null
+          created_at?: string | null
+          direction?: string
+          error_message?: string | null
+          id?: string
+          records_failed?: number | null
+          records_processed?: number | null
+          started_at?: string | null
+          status?: string | null
+          sync_type: string
+        }
+        Update: {
+          company_id?: string
+          completed_at?: string | null
+          created_at?: string | null
+          direction?: string
+          error_message?: string | null
+          id?: string
+          records_failed?: number | null
+          records_processed?: number | null
+          started_at?: string | null
+          status?: string | null
+          sync_type?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "autocount_sync_log_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       backup_schedules: {
         Row: {
           ai_recycle_enabled: boolean | null
