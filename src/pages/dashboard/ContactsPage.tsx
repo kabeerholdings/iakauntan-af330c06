@@ -181,11 +181,12 @@ const ContactsPage = () => {
                     <TableHead>Tax ID</TableHead>
                     <TableHead className="text-right">Credit Limit</TableHead>
                     <TableHead>Terms</TableHead>
+                    <TableHead className="text-right">Actions</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {filtered.length === 0 ? (
-                    <TableRow><TableCell colSpan={7} className="text-center text-muted-foreground py-8">No contacts</TableCell></TableRow>
+                    <TableRow><TableCell colSpan={8} className="text-center text-muted-foreground py-8">No contacts</TableCell></TableRow>
                   ) : filtered.map(c => (
                     <TableRow key={c.id}>
                       <TableCell className="font-medium">{c.name}</TableCell>
@@ -195,7 +196,28 @@ const ContactsPage = () => {
                       <TableCell>{c.tax_id || '—'}</TableCell>
                       <TableCell className="text-right">{c.credit_limit ? `RM ${Number(c.credit_limit).toFixed(2)}` : '—'}</TableCell>
                       <TableCell>{c.credit_terms ? `${c.credit_terms}d` : '—'}</TableCell>
-                    </TableRow>
+                      <TableCell className="text-right">
+                        <div className="flex justify-end gap-1">
+                          <Button variant="ghost" size="icon" onClick={() => openEdit(c)}>
+                            <Pencil className="h-4 w-4" />
+                          </Button>
+                          <AlertDialog>
+                            <AlertDialogTrigger asChild>
+                              <Button variant="ghost" size="icon"><Trash2 className="h-4 w-4 text-destructive" /></Button>
+                            </AlertDialogTrigger>
+                            <AlertDialogContent>
+                              <AlertDialogHeader>
+                                <AlertDialogTitle>Delete contact?</AlertDialogTitle>
+                                <AlertDialogDescription>This will permanently delete "{c.name}". This cannot be undone.</AlertDialogDescription>
+                              </AlertDialogHeader>
+                              <AlertDialogFooter>
+                                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                <AlertDialogAction onClick={() => handleDelete(c.id)}>Delete</AlertDialogAction>
+                              </AlertDialogFooter>
+                            </AlertDialogContent>
+                          </AlertDialog>
+                        </div>
+                      </TableCell>
                   ))}
                 </TableBody>
               </Table>
