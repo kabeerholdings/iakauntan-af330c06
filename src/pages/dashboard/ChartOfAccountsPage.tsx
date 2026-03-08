@@ -142,6 +142,12 @@ const ChartOfAccountsPage = () => {
               )}
               <div><Label>Account Name</Label><Input value={form.name} onChange={e => setForm(f => ({ ...f, name: e.target.value }))} placeholder="Cash at Bank" /></div>
               <div><Label>Description</Label><Input value={form.description} onChange={e => setForm(f => ({ ...f, description: e.target.value }))} /></div>
+              {editingId && (
+                <div className="flex items-center justify-between">
+                  <Label>Active</Label>
+                  <Switch checked={form.is_active} onCheckedChange={v => setForm(f => ({ ...f, is_active: v }))} />
+                </div>
+              )}
               <Button onClick={handleSave} className="w-full">{editingId ? 'Update Account' : 'Add Account'}</Button>
             </div>
           </DialogContent>
