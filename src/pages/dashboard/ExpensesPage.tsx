@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useCurrency } from '@/hooks/useCurrency';
 import { supabase } from '@/integrations/supabase/client';
 import { useCompany } from '@/contexts/CompanyContext';
 import { Button } from '@/components/ui/button';

@@ -40,7 +40,7 @@ const DebitNotesPage = () => {
 
   useEffect(() => { fetchData(); }, [selectedCompany]);
 
-  const fmt = (n: number) => `RM ${Number(n).toLocaleString('en-MY', { minimumFractionDigits: 2 })}`;
+  const fmt = (n: number) => formatCurrency(n, selectedCompany?.base_currency);
 
   const addLine = () => setForm(f => ({ ...f, lines: [...f.lines, { description: '', quantity: '1', unit_price: '', tax_rate: '0' }] }));
   const updateLine = (i: number, field: string, value: string) => setForm(f => ({ ...f, lines: f.lines.map((l, idx) => idx === i ? { ...l, [field]: value } : l) }));
