@@ -1561,6 +1561,298 @@ export type Database = {
           },
         ]
       }
+      marketplace_order_lines: {
+        Row: {
+          created_at: string
+          discount: number | null
+          id: string
+          line_total: number | null
+          order_id: string
+          product_id: string | null
+          product_name: string
+          quantity: number | null
+          sku: string | null
+          stock_item_id: string | null
+          unit_price: number | null
+        }
+        Insert: {
+          created_at?: string
+          discount?: number | null
+          id?: string
+          line_total?: number | null
+          order_id: string
+          product_id?: string | null
+          product_name: string
+          quantity?: number | null
+          sku?: string | null
+          stock_item_id?: string | null
+          unit_price?: number | null
+        }
+        Update: {
+          created_at?: string
+          discount?: number | null
+          id?: string
+          line_total?: number | null
+          order_id?: string
+          product_id?: string | null
+          product_name?: string
+          quantity?: number | null
+          sku?: string | null
+          stock_item_id?: string | null
+          unit_price?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "marketplace_order_lines_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "marketplace_orders"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "marketplace_order_lines_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "marketplace_products"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "marketplace_order_lines_stock_item_id_fkey"
+            columns: ["stock_item_id"]
+            isOneToOne: false
+            referencedRelation: "stock_items"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      marketplace_orders: {
+        Row: {
+          commission_fee: number | null
+          company_id: string
+          courier: string | null
+          created_at: string
+          customer_email: string | null
+          customer_name: string | null
+          customer_phone: string | null
+          external_order_id: string | null
+          id: string
+          notes: string | null
+          order_date: string | null
+          order_number: string
+          payment_fee: number | null
+          payment_status: string | null
+          platform_fee: number | null
+          posted_to_accounting: boolean | null
+          seller_payout: number | null
+          shipping_address: string | null
+          shipping_fee: number | null
+          status: string | null
+          store_id: string | null
+          subtotal: number | null
+          total_amount: number | null
+          tracking_number: string | null
+          updated_at: string
+          voucher_discount: number | null
+        }
+        Insert: {
+          commission_fee?: number | null
+          company_id: string
+          courier?: string | null
+          created_at?: string
+          customer_email?: string | null
+          customer_name?: string | null
+          customer_phone?: string | null
+          external_order_id?: string | null
+          id?: string
+          notes?: string | null
+          order_date?: string | null
+          order_number: string
+          payment_fee?: number | null
+          payment_status?: string | null
+          platform_fee?: number | null
+          posted_to_accounting?: boolean | null
+          seller_payout?: number | null
+          shipping_address?: string | null
+          shipping_fee?: number | null
+          status?: string | null
+          store_id?: string | null
+          subtotal?: number | null
+          total_amount?: number | null
+          tracking_number?: string | null
+          updated_at?: string
+          voucher_discount?: number | null
+        }
+        Update: {
+          commission_fee?: number | null
+          company_id?: string
+          courier?: string | null
+          created_at?: string
+          customer_email?: string | null
+          customer_name?: string | null
+          customer_phone?: string | null
+          external_order_id?: string | null
+          id?: string
+          notes?: string | null
+          order_date?: string | null
+          order_number?: string
+          payment_fee?: number | null
+          payment_status?: string | null
+          platform_fee?: number | null
+          posted_to_accounting?: boolean | null
+          seller_payout?: number | null
+          shipping_address?: string | null
+          shipping_fee?: number | null
+          status?: string | null
+          store_id?: string | null
+          subtotal?: number | null
+          total_amount?: number | null
+          tracking_number?: string | null
+          updated_at?: string
+          voucher_discount?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "marketplace_orders_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "marketplace_orders_store_id_fkey"
+            columns: ["store_id"]
+            isOneToOne: false
+            referencedRelation: "marketplace_stores"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      marketplace_products: {
+        Row: {
+          company_id: string
+          created_at: string
+          external_product_id: string | null
+          id: string
+          image_url: string | null
+          last_sync_at: string | null
+          price: number | null
+          product_name: string
+          sku: string | null
+          status: string | null
+          stock_item_id: string | null
+          stock_qty: number | null
+          store_id: string | null
+          updated_at: string
+        }
+        Insert: {
+          company_id: string
+          created_at?: string
+          external_product_id?: string | null
+          id?: string
+          image_url?: string | null
+          last_sync_at?: string | null
+          price?: number | null
+          product_name: string
+          sku?: string | null
+          status?: string | null
+          stock_item_id?: string | null
+          stock_qty?: number | null
+          store_id?: string | null
+          updated_at?: string
+        }
+        Update: {
+          company_id?: string
+          created_at?: string
+          external_product_id?: string | null
+          id?: string
+          image_url?: string | null
+          last_sync_at?: string | null
+          price?: number | null
+          product_name?: string
+          sku?: string | null
+          status?: string | null
+          stock_item_id?: string | null
+          stock_qty?: number | null
+          store_id?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "marketplace_products_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "marketplace_products_stock_item_id_fkey"
+            columns: ["stock_item_id"]
+            isOneToOne: false
+            referencedRelation: "stock_items"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "marketplace_products_store_id_fkey"
+            columns: ["store_id"]
+            isOneToOne: false
+            referencedRelation: "marketplace_stores"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      marketplace_stores: {
+        Row: {
+          company_id: string
+          created_at: string
+          credentials: Json | null
+          id: string
+          last_sync_at: string | null
+          marketplace: string
+          region: string | null
+          status: string | null
+          store_id: string | null
+          store_name: string
+          store_url: string | null
+          updated_at: string
+        }
+        Insert: {
+          company_id: string
+          created_at?: string
+          credentials?: Json | null
+          id?: string
+          last_sync_at?: string | null
+          marketplace: string
+          region?: string | null
+          status?: string | null
+          store_id?: string | null
+          store_name: string
+          store_url?: string | null
+          updated_at?: string
+        }
+        Update: {
+          company_id?: string
+          created_at?: string
+          credentials?: Json | null
+          id?: string
+          last_sync_at?: string | null
+          marketplace?: string
+          region?: string | null
+          status?: string | null
+          store_id?: string | null
+          store_name?: string
+          store_url?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "marketplace_stores_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       payment_allocations: {
         Row: {
           amount: number
@@ -1955,6 +2247,300 @@ export type Database = {
             columns: ["payroll_period_id"]
             isOneToOne: false
             referencedRelation: "payroll_periods"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      pos_payments: {
+        Row: {
+          amount: number
+          created_at: string
+          id: string
+          payment_method: string
+          reference: string | null
+          transaction_id: string
+        }
+        Insert: {
+          amount?: number
+          created_at?: string
+          id?: string
+          payment_method: string
+          reference?: string | null
+          transaction_id: string
+        }
+        Update: {
+          amount?: number
+          created_at?: string
+          id?: string
+          payment_method?: string
+          reference?: string | null
+          transaction_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "pos_payments_transaction_id_fkey"
+            columns: ["transaction_id"]
+            isOneToOne: false
+            referencedRelation: "pos_transactions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      pos_sessions: {
+        Row: {
+          closed_at: string | null
+          closing_balance: number | null
+          company_id: string
+          created_at: string
+          id: string
+          notes: string | null
+          opened_at: string | null
+          opened_by: string | null
+          opening_balance: number | null
+          status: string | null
+          terminal_id: string
+          total_refunds: number | null
+          total_sales: number | null
+        }
+        Insert: {
+          closed_at?: string | null
+          closing_balance?: number | null
+          company_id: string
+          created_at?: string
+          id?: string
+          notes?: string | null
+          opened_at?: string | null
+          opened_by?: string | null
+          opening_balance?: number | null
+          status?: string | null
+          terminal_id: string
+          total_refunds?: number | null
+          total_sales?: number | null
+        }
+        Update: {
+          closed_at?: string | null
+          closing_balance?: number | null
+          company_id?: string
+          created_at?: string
+          id?: string
+          notes?: string | null
+          opened_at?: string | null
+          opened_by?: string | null
+          opening_balance?: number | null
+          status?: string | null
+          terminal_id?: string
+          total_refunds?: number | null
+          total_sales?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "pos_sessions_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "pos_sessions_terminal_id_fkey"
+            columns: ["terminal_id"]
+            isOneToOne: false
+            referencedRelation: "pos_terminals"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      pos_terminals: {
+        Row: {
+          company_id: string
+          created_at: string
+          id: string
+          is_active: boolean | null
+          location: string | null
+          terminal_name: string
+          updated_at: string
+          warehouse_id: string | null
+        }
+        Insert: {
+          company_id: string
+          created_at?: string
+          id?: string
+          is_active?: boolean | null
+          location?: string | null
+          terminal_name: string
+          updated_at?: string
+          warehouse_id?: string | null
+        }
+        Update: {
+          company_id?: string
+          created_at?: string
+          id?: string
+          is_active?: boolean | null
+          location?: string | null
+          terminal_name?: string
+          updated_at?: string
+          warehouse_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "pos_terminals_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "pos_terminals_warehouse_id_fkey"
+            columns: ["warehouse_id"]
+            isOneToOne: false
+            referencedRelation: "warehouses"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      pos_transaction_lines: {
+        Row: {
+          created_at: string
+          description: string
+          discount_amount: number | null
+          discount_percent: number | null
+          id: string
+          line_total: number | null
+          quantity: number | null
+          stock_item_id: string | null
+          tax_amount: number | null
+          tax_rate: number | null
+          transaction_id: string
+          unit_price: number | null
+        }
+        Insert: {
+          created_at?: string
+          description: string
+          discount_amount?: number | null
+          discount_percent?: number | null
+          id?: string
+          line_total?: number | null
+          quantity?: number | null
+          stock_item_id?: string | null
+          tax_amount?: number | null
+          tax_rate?: number | null
+          transaction_id: string
+          unit_price?: number | null
+        }
+        Update: {
+          created_at?: string
+          description?: string
+          discount_amount?: number | null
+          discount_percent?: number | null
+          id?: string
+          line_total?: number | null
+          quantity?: number | null
+          stock_item_id?: string | null
+          tax_amount?: number | null
+          tax_rate?: number | null
+          transaction_id?: string
+          unit_price?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "pos_transaction_lines_stock_item_id_fkey"
+            columns: ["stock_item_id"]
+            isOneToOne: false
+            referencedRelation: "stock_items"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "pos_transaction_lines_transaction_id_fkey"
+            columns: ["transaction_id"]
+            isOneToOne: false
+            referencedRelation: "pos_transactions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      pos_transactions: {
+        Row: {
+          amount_paid: number | null
+          change_amount: number | null
+          company_id: string
+          completed_at: string | null
+          contact_id: string | null
+          created_at: string
+          created_by: string | null
+          customer_name: string | null
+          discount_amount: number | null
+          held_at: string | null
+          id: string
+          notes: string | null
+          session_id: string | null
+          status: string | null
+          subtotal: number | null
+          tax_amount: number | null
+          total_amount: number | null
+          transaction_number: string
+          transaction_type: string | null
+        }
+        Insert: {
+          amount_paid?: number | null
+          change_amount?: number | null
+          company_id: string
+          completed_at?: string | null
+          contact_id?: string | null
+          created_at?: string
+          created_by?: string | null
+          customer_name?: string | null
+          discount_amount?: number | null
+          held_at?: string | null
+          id?: string
+          notes?: string | null
+          session_id?: string | null
+          status?: string | null
+          subtotal?: number | null
+          tax_amount?: number | null
+          total_amount?: number | null
+          transaction_number: string
+          transaction_type?: string | null
+        }
+        Update: {
+          amount_paid?: number | null
+          change_amount?: number | null
+          company_id?: string
+          completed_at?: string | null
+          contact_id?: string | null
+          created_at?: string
+          created_by?: string | null
+          customer_name?: string | null
+          discount_amount?: number | null
+          held_at?: string | null
+          id?: string
+          notes?: string | null
+          session_id?: string | null
+          status?: string | null
+          subtotal?: number | null
+          tax_amount?: number | null
+          total_amount?: number | null
+          transaction_number?: string
+          transaction_type?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "pos_transactions_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "pos_transactions_contact_id_fkey"
+            columns: ["contact_id"]
+            isOneToOne: false
+            referencedRelation: "contacts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "pos_transactions_session_id_fkey"
+            columns: ["session_id"]
+            isOneToOne: false
+            referencedRelation: "pos_sessions"
             referencedColumns: ["id"]
           },
         ]
@@ -2390,6 +2976,86 @@ export type Database = {
           },
         ]
       }
+      scanned_documents: {
+        Row: {
+          account_code: string | null
+          category: string | null
+          company_id: string
+          created_at: string
+          description: string | null
+          document_date: string | null
+          document_number: string | null
+          document_type: string | null
+          extracted_data: Json | null
+          file_name: string
+          file_type: string | null
+          file_url: string | null
+          id: string
+          is_processed: boolean | null
+          processed_entry_id: string | null
+          scan_status: string | null
+          scanned_by: string | null
+          supplier_name: string | null
+          tax_amount: number | null
+          total_amount: number | null
+          updated_at: string
+        }
+        Insert: {
+          account_code?: string | null
+          category?: string | null
+          company_id: string
+          created_at?: string
+          description?: string | null
+          document_date?: string | null
+          document_number?: string | null
+          document_type?: string | null
+          extracted_data?: Json | null
+          file_name: string
+          file_type?: string | null
+          file_url?: string | null
+          id?: string
+          is_processed?: boolean | null
+          processed_entry_id?: string | null
+          scan_status?: string | null
+          scanned_by?: string | null
+          supplier_name?: string | null
+          tax_amount?: number | null
+          total_amount?: number | null
+          updated_at?: string
+        }
+        Update: {
+          account_code?: string | null
+          category?: string | null
+          company_id?: string
+          created_at?: string
+          description?: string | null
+          document_date?: string | null
+          document_number?: string | null
+          document_type?: string | null
+          extracted_data?: Json | null
+          file_name?: string
+          file_type?: string | null
+          file_url?: string | null
+          id?: string
+          is_processed?: boolean | null
+          processed_entry_id?: string | null
+          scan_status?: string | null
+          scanned_by?: string | null
+          supplier_name?: string | null
+          tax_amount?: number | null
+          total_amount?: number | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "scanned_documents_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       stock_adjustment_lines: {
         Row: {
           adjustment_id: string
@@ -2684,6 +3350,117 @@ export type Database = {
           },
         ]
       }
+      stock_take_lines: {
+        Row: {
+          barcode: string | null
+          counted_qty: number | null
+          created_at: string
+          id: string
+          notes: string | null
+          stock_item_id: string
+          stock_take_id: string
+          system_qty: number | null
+          unit_cost: number | null
+          variance: number | null
+          variance_value: number | null
+        }
+        Insert: {
+          barcode?: string | null
+          counted_qty?: number | null
+          created_at?: string
+          id?: string
+          notes?: string | null
+          stock_item_id: string
+          stock_take_id: string
+          system_qty?: number | null
+          unit_cost?: number | null
+          variance?: number | null
+          variance_value?: number | null
+        }
+        Update: {
+          barcode?: string | null
+          counted_qty?: number | null
+          created_at?: string
+          id?: string
+          notes?: string | null
+          stock_item_id?: string
+          stock_take_id?: string
+          system_qty?: number | null
+          unit_cost?: number | null
+          variance?: number | null
+          variance_value?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "stock_take_lines_stock_item_id_fkey"
+            columns: ["stock_item_id"]
+            isOneToOne: false
+            referencedRelation: "stock_items"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "stock_take_lines_stock_take_id_fkey"
+            columns: ["stock_take_id"]
+            isOneToOne: false
+            referencedRelation: "stock_takes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      stock_takes: {
+        Row: {
+          company_id: string
+          created_at: string
+          created_by: string | null
+          id: string
+          notes: string | null
+          status: string | null
+          take_date: string | null
+          take_number: string
+          updated_at: string
+          warehouse_id: string | null
+        }
+        Insert: {
+          company_id: string
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          notes?: string | null
+          status?: string | null
+          take_date?: string | null
+          take_number: string
+          updated_at?: string
+          warehouse_id?: string | null
+        }
+        Update: {
+          company_id?: string
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          notes?: string | null
+          status?: string | null
+          take_date?: string | null
+          take_number?: string
+          updated_at?: string
+          warehouse_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "stock_takes_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "stock_takes_warehouse_id_fkey"
+            columns: ["warehouse_id"]
+            isOneToOne: false
+            referencedRelation: "warehouses"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       stock_transfer_lines: {
         Row: {
           created_at: string
@@ -2877,6 +3654,355 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "warehouses_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      wellness_appointments: {
+        Row: {
+          appointment_date: string
+          commission_amount: number | null
+          company_id: string
+          created_at: string
+          end_time: string | null
+          id: string
+          membership_id: string | null
+          notes: string | null
+          price: number | null
+          room_slot: string | null
+          service_id: string | null
+          start_time: string
+          status: string | null
+          therapist_id: string | null
+          updated_at: string
+        }
+        Insert: {
+          appointment_date: string
+          commission_amount?: number | null
+          company_id: string
+          created_at?: string
+          end_time?: string | null
+          id?: string
+          membership_id?: string | null
+          notes?: string | null
+          price?: number | null
+          room_slot?: string | null
+          service_id?: string | null
+          start_time: string
+          status?: string | null
+          therapist_id?: string | null
+          updated_at?: string
+        }
+        Update: {
+          appointment_date?: string
+          commission_amount?: number | null
+          company_id?: string
+          created_at?: string
+          end_time?: string | null
+          id?: string
+          membership_id?: string | null
+          notes?: string | null
+          price?: number | null
+          room_slot?: string | null
+          service_id?: string | null
+          start_time?: string
+          status?: string | null
+          therapist_id?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "wellness_appointments_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "wellness_appointments_membership_id_fkey"
+            columns: ["membership_id"]
+            isOneToOne: false
+            referencedRelation: "wellness_memberships"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "wellness_appointments_service_id_fkey"
+            columns: ["service_id"]
+            isOneToOne: false
+            referencedRelation: "wellness_services"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "wellness_appointments_therapist_id_fkey"
+            columns: ["therapist_id"]
+            isOneToOne: false
+            referencedRelation: "employees"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      wellness_commissions: {
+        Row: {
+          appointment_id: string | null
+          commission_amount: number | null
+          commission_rate: number | null
+          company_id: string
+          created_at: string
+          employee_id: string
+          id: string
+          period_month: number | null
+          period_year: number | null
+          service_name: string | null
+          status: string | null
+        }
+        Insert: {
+          appointment_id?: string | null
+          commission_amount?: number | null
+          commission_rate?: number | null
+          company_id: string
+          created_at?: string
+          employee_id: string
+          id?: string
+          period_month?: number | null
+          period_year?: number | null
+          service_name?: string | null
+          status?: string | null
+        }
+        Update: {
+          appointment_id?: string | null
+          commission_amount?: number | null
+          commission_rate?: number | null
+          company_id?: string
+          created_at?: string
+          employee_id?: string
+          id?: string
+          period_month?: number | null
+          period_year?: number | null
+          service_name?: string | null
+          status?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "wellness_commissions_appointment_id_fkey"
+            columns: ["appointment_id"]
+            isOneToOne: false
+            referencedRelation: "wellness_appointments"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "wellness_commissions_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "wellness_commissions_employee_id_fkey"
+            columns: ["employee_id"]
+            isOneToOne: false
+            referencedRelation: "employees"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      wellness_memberships: {
+        Row: {
+          company_id: string
+          contact_id: string | null
+          created_at: string
+          credit_balance: number | null
+          expiry_date: string | null
+          id: string
+          join_date: string | null
+          member_email: string | null
+          member_name: string
+          member_phone: string | null
+          membership_type: string | null
+          points_balance: number | null
+          status: string | null
+          updated_at: string
+        }
+        Insert: {
+          company_id: string
+          contact_id?: string | null
+          created_at?: string
+          credit_balance?: number | null
+          expiry_date?: string | null
+          id?: string
+          join_date?: string | null
+          member_email?: string | null
+          member_name: string
+          member_phone?: string | null
+          membership_type?: string | null
+          points_balance?: number | null
+          status?: string | null
+          updated_at?: string
+        }
+        Update: {
+          company_id?: string
+          contact_id?: string | null
+          created_at?: string
+          credit_balance?: number | null
+          expiry_date?: string | null
+          id?: string
+          join_date?: string | null
+          member_email?: string | null
+          member_name?: string
+          member_phone?: string | null
+          membership_type?: string | null
+          points_balance?: number | null
+          status?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "wellness_memberships_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "wellness_memberships_contact_id_fkey"
+            columns: ["contact_id"]
+            isOneToOne: false
+            referencedRelation: "contacts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      wellness_package_services: {
+        Row: {
+          created_at: string
+          id: string
+          package_id: string
+          service_id: string
+          sessions: number | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          package_id: string
+          service_id: string
+          sessions?: number | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          package_id?: string
+          service_id?: string
+          sessions?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "wellness_package_services_package_id_fkey"
+            columns: ["package_id"]
+            isOneToOne: false
+            referencedRelation: "wellness_packages"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "wellness_package_services_service_id_fkey"
+            columns: ["service_id"]
+            isOneToOne: false
+            referencedRelation: "wellness_services"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      wellness_packages: {
+        Row: {
+          company_id: string
+          created_at: string
+          description: string | null
+          id: string
+          is_active: boolean | null
+          name: string
+          price: number | null
+          total_sessions: number | null
+          updated_at: string
+          validity_days: number | null
+        }
+        Insert: {
+          company_id: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_active?: boolean | null
+          name: string
+          price?: number | null
+          total_sessions?: number | null
+          updated_at?: string
+          validity_days?: number | null
+        }
+        Update: {
+          company_id?: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_active?: boolean | null
+          name?: string
+          price?: number | null
+          total_sessions?: number | null
+          updated_at?: string
+          validity_days?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "wellness_packages_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      wellness_services: {
+        Row: {
+          category: string | null
+          commission_rate: number | null
+          company_id: string
+          created_at: string
+          description: string | null
+          duration_minutes: number | null
+          id: string
+          is_active: boolean | null
+          name: string
+          price: number | null
+          updated_at: string
+        }
+        Insert: {
+          category?: string | null
+          commission_rate?: number | null
+          company_id: string
+          created_at?: string
+          description?: string | null
+          duration_minutes?: number | null
+          id?: string
+          is_active?: boolean | null
+          name: string
+          price?: number | null
+          updated_at?: string
+        }
+        Update: {
+          category?: string | null
+          commission_rate?: number | null
+          company_id?: string
+          created_at?: string
+          description?: string | null
+          duration_minutes?: number | null
+          id?: string
+          is_active?: boolean | null
+          name?: string
+          price?: number | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "wellness_services_company_id_fkey"
             columns: ["company_id"]
             isOneToOne: false
             referencedRelation: "companies"
