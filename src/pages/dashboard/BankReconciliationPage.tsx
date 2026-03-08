@@ -345,7 +345,7 @@ const BankReconciliationPage = () => {
                       <TableCell className="font-mono text-xs">{p.reference || '—'}</TableCell>
                       <TableCell className="capitalize">{p.payment_type}</TableCell>
                       <TableCell>{(p.contacts as any)?.name || '—'}</TableCell>
-                      <TableCell className="text-right font-medium">RM {Number(p.amount).toFixed(2)}</TableCell>
+                      <TableCell className="text-right font-medium">{fmt(Number(p.amount))}</TableCell>
                       <TableCell>
                         {isMatched
                           ? <Badge variant="default"><Link2 className="h-3 w-3 mr-1" /> Matched</Badge>
