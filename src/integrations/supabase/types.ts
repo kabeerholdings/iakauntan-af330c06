@@ -313,6 +313,65 @@ export type Database = {
           },
         ]
       }
+      batch_messages: {
+        Row: {
+          body: string | null
+          company_id: string
+          created_at: string
+          entity_ids: Json | null
+          entity_type: string | null
+          id: string
+          message_type: string
+          recipients: Json | null
+          sent_at: string | null
+          sent_by: string | null
+          status: string | null
+          subject: string | null
+          total_failed: number | null
+          total_sent: number | null
+        }
+        Insert: {
+          body?: string | null
+          company_id: string
+          created_at?: string
+          entity_ids?: Json | null
+          entity_type?: string | null
+          id?: string
+          message_type?: string
+          recipients?: Json | null
+          sent_at?: string | null
+          sent_by?: string | null
+          status?: string | null
+          subject?: string | null
+          total_failed?: number | null
+          total_sent?: number | null
+        }
+        Update: {
+          body?: string | null
+          company_id?: string
+          created_at?: string
+          entity_ids?: Json | null
+          entity_type?: string | null
+          id?: string
+          message_type?: string
+          recipients?: Json | null
+          sent_at?: string | null
+          sent_by?: string | null
+          status?: string | null
+          subject?: string | null
+          total_failed?: number | null
+          total_sent?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "batch_messages_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       bill_of_materials: {
         Row: {
           bom_code: string
@@ -554,6 +613,85 @@ export type Database = {
             columns: ["company_id"]
             isOneToOne: false
             referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      commission_rules: {
+        Row: {
+          calculation_basis: string | null
+          company_id: string
+          created_at: string
+          id: string
+          is_active: boolean | null
+          rule_name: string
+          tier_type: string | null
+          updated_at: string
+        }
+        Insert: {
+          calculation_basis?: string | null
+          company_id: string
+          created_at?: string
+          id?: string
+          is_active?: boolean | null
+          rule_name: string
+          tier_type?: string | null
+          updated_at?: string
+        }
+        Update: {
+          calculation_basis?: string | null
+          company_id?: string
+          created_at?: string
+          id?: string
+          is_active?: boolean | null
+          rule_name?: string
+          tier_type?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "commission_rules_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      commission_tiers: {
+        Row: {
+          created_at: string
+          flat_amount: number | null
+          id: string
+          max_amount: number | null
+          min_amount: number | null
+          rate: number | null
+          rule_id: string
+        }
+        Insert: {
+          created_at?: string
+          flat_amount?: number | null
+          id?: string
+          max_amount?: number | null
+          min_amount?: number | null
+          rate?: number | null
+          rule_id: string
+        }
+        Update: {
+          created_at?: string
+          flat_amount?: number | null
+          id?: string
+          max_amount?: number | null
+          min_amount?: number | null
+          rate?: number | null
+          rule_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "commission_tiers_rule_id_fkey"
+            columns: ["rule_id"]
+            isOneToOne: false
+            referencedRelation: "commission_rules"
             referencedColumns: ["id"]
           },
         ]
@@ -923,6 +1061,74 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "document_attachments_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      document_templates: {
+        Row: {
+          body_html: string | null
+          company_id: string
+          created_at: string
+          font_family: string | null
+          footer_html: string | null
+          header_html: string | null
+          id: string
+          is_default: boolean | null
+          logo_url: string | null
+          paper_size: string | null
+          primary_color: string | null
+          show_logo: boolean | null
+          show_notes: boolean | null
+          show_payment_info: boolean | null
+          template_name: string
+          template_type: string
+          updated_at: string
+        }
+        Insert: {
+          body_html?: string | null
+          company_id: string
+          created_at?: string
+          font_family?: string | null
+          footer_html?: string | null
+          header_html?: string | null
+          id?: string
+          is_default?: boolean | null
+          logo_url?: string | null
+          paper_size?: string | null
+          primary_color?: string | null
+          show_logo?: boolean | null
+          show_notes?: boolean | null
+          show_payment_info?: boolean | null
+          template_name: string
+          template_type?: string
+          updated_at?: string
+        }
+        Update: {
+          body_html?: string | null
+          company_id?: string
+          created_at?: string
+          font_family?: string | null
+          footer_html?: string | null
+          header_html?: string | null
+          id?: string
+          is_default?: boolean | null
+          logo_url?: string | null
+          paper_size?: string | null
+          primary_color?: string | null
+          show_logo?: boolean | null
+          show_notes?: boolean | null
+          show_payment_info?: boolean | null
+          template_name?: string
+          template_type?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "document_templates_company_id_fkey"
             columns: ["company_id"]
             isOneToOne: false
             referencedRelation: "companies"
@@ -3226,6 +3432,72 @@ export type Database = {
           },
         ]
       }
+      salesman_commissions: {
+        Row: {
+          calculation_basis: string | null
+          commission_amount: number | null
+          commission_rate: number | null
+          company_id: string
+          created_at: string
+          id: string
+          notes: string | null
+          period_month: number
+          period_year: number
+          salesman_id: string
+          status: string | null
+          total_collections: number | null
+          total_sales: number | null
+          updated_at: string
+        }
+        Insert: {
+          calculation_basis?: string | null
+          commission_amount?: number | null
+          commission_rate?: number | null
+          company_id: string
+          created_at?: string
+          id?: string
+          notes?: string | null
+          period_month: number
+          period_year: number
+          salesman_id: string
+          status?: string | null
+          total_collections?: number | null
+          total_sales?: number | null
+          updated_at?: string
+        }
+        Update: {
+          calculation_basis?: string | null
+          commission_amount?: number | null
+          commission_rate?: number | null
+          company_id?: string
+          created_at?: string
+          id?: string
+          notes?: string | null
+          period_month?: number
+          period_year?: number
+          salesman_id?: string
+          status?: string | null
+          total_collections?: number | null
+          total_sales?: number | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "salesman_commissions_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "salesman_commissions_salesman_id_fkey"
+            columns: ["salesman_id"]
+            isOneToOne: false
+            referencedRelation: "contacts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       scanned_documents: {
         Row: {
           account_code: string | null
@@ -3349,6 +3621,50 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "script_customizations_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      security_locks: {
+        Row: {
+          company_id: string
+          created_at: string
+          id: string
+          is_active: boolean | null
+          lock_date: string | null
+          lock_type: string
+          locked_by: string | null
+          notes: string | null
+          updated_at: string
+        }
+        Insert: {
+          company_id: string
+          created_at?: string
+          id?: string
+          is_active?: boolean | null
+          lock_date?: string | null
+          lock_type: string
+          locked_by?: string | null
+          notes?: string | null
+          updated_at?: string
+        }
+        Update: {
+          company_id?: string
+          created_at?: string
+          id?: string
+          is_active?: boolean | null
+          lock_date?: string | null
+          lock_type?: string
+          locked_by?: string | null
+          notes?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "security_locks_company_id_fkey"
             columns: ["company_id"]
             isOneToOne: false
             referencedRelation: "companies"
