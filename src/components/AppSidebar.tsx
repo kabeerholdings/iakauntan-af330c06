@@ -220,8 +220,16 @@ export function AppSidebar() {
           <SidebarGroupContent>{renderItems(manufacturingItems)}</SidebarGroupContent>
         </SidebarGroup>
         <SidebarGroup>
-          <SidebarGroupLabel>Accounting</SidebarGroupLabel>
-          <SidebarGroupContent>{renderItems(accountingItems)}</SidebarGroupContent>
+          <SidebarGroupLabel>Accounting — Entries</SidebarGroupLabel>
+          <SidebarGroupContent>{renderItems(accountingEntryItems)}</SidebarGroupContent>
+        </SidebarGroup>
+        <SidebarGroup>
+          <SidebarGroupLabel>Accounting — Reports</SidebarGroupLabel>
+          <SidebarGroupContent>{renderItems(accountingReportItems)}</SidebarGroupContent>
+        </SidebarGroup>
+        <SidebarGroup>
+          <SidebarGroupLabel>Accounting — Tools</SidebarGroupLabel>
+          <SidebarGroupContent>{renderItems(accountingOtherItems)}</SidebarGroupContent>
         </SidebarGroup>
         <SidebarGroup>
           <SidebarGroupLabel>Payroll & HR</SidebarGroupLabel>
