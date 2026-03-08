@@ -261,13 +261,13 @@ const XStoreDashboard = () => {
                   <TableRow key={o.id}>
                     <TableCell className="font-medium">{o.order_number}</TableCell>
                     <TableCell>{(o.marketplace_stores as any)?.store_name}</TableCell>
-                    <TableCell>RM {(o.total_amount || 0).toFixed(2)}</TableCell>
-                    <TableCell className="text-destructive">-RM {(o.platform_fee || 0).toFixed(2)}</TableCell>
-                    <TableCell className="text-destructive">-RM {(o.commission_fee || 0).toFixed(2)}</TableCell>
-                    <TableCell className="text-destructive">-RM {(o.payment_fee || 0).toFixed(2)}</TableCell>
-                    <TableCell>RM {(o.shipping_fee || 0).toFixed(2)}</TableCell>
-                    <TableCell className="text-destructive">-RM {(o.voucher_discount || 0).toFixed(2)}</TableCell>
-                    <TableCell className="font-semibold">RM {(o.seller_payout || 0).toFixed(2)}</TableCell>
+                    <TableCell>{fmt(o.total_amount || 0)}</TableCell>
+                    <TableCell className="text-destructive">-{fmt(o.platform_fee || 0)}</TableCell>
+                    <TableCell className="text-destructive">-{fmt(o.commission_fee || 0)}</TableCell>
+                    <TableCell className="text-destructive">-{fmt(o.payment_fee || 0)}</TableCell>
+                    <TableCell>{fmt(o.shipping_fee || 0)}</TableCell>
+                    <TableCell className="text-destructive">-{fmt(o.voucher_discount || 0)}</TableCell>
+                    <TableCell className="font-semibold">{fmt(o.seller_payout || 0)}</TableCell>
                   </TableRow>
                 ))}
                 {orders.length === 0 && <TableRow><TableCell colSpan={9} className="text-center text-muted-foreground py-8">No orders to display</TableCell></TableRow>}

@@ -349,10 +349,10 @@ function TemplatePreviewDialog({ template, open, onClose, onSelect, isSelected }
                 )}
               </div>
               <div className="text-right space-y-0.5 min-w-[200px]">
-                <div className="flex justify-between text-sm"><span className="text-muted-foreground">Subtotal:</span> <span>RM 9,800.00</span></div>
-                {template.hasSst && <div className="flex justify-between text-sm"><span className="text-muted-foreground">SST (6%):</span> <span>RM 588.00</span></div>}
+                <div className="flex justify-between text-sm"><span className="text-muted-foreground">Subtotal:</span> <span>9,800.00</span></div>
+                {template.hasSst && <div className="flex justify-between text-sm"><span className="text-muted-foreground">SST (6%):</span> <span>588.00</span></div>}
                 <div className="flex justify-between text-sm font-bold pt-1 border-t" style={{ color: c, borderColor: c }}>
-                  <span>Total:</span> <span>RM {template.hasSst ? '10,388.00' : '9,800.00'}</span>
+                  <span>Total:</span> <span>{template.hasSst ? '10,388.00' : '9,800.00'}</span>
                 </div>
               </div>
             </div>

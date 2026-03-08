@@ -246,9 +246,9 @@ const SalesReportsPage = () => {
                       ))}
                       <TableRow className="font-bold border-t-2">
                         <TableCell colSpan={3}>Total</TableCell>
-                        <TableCell className="text-right font-mono">{totalSellingAll.toFixed(2)}</TableCell>
-                        <TableCell className="text-right font-mono">{pnlByDocument.reduce((s, d) => s + d.cost_total, 0).toFixed(2)}</TableCell>
-                        <TableCell className={`text-right font-mono ${totalProfit >= 0 ? 'text-green-600' : 'text-red-600'}`}>{totalProfit.toFixed(2)}</TableCell>
+                        <TableCell className="text-right font-mono">{fmt(totalSellingAll)}</TableCell>
+                        <TableCell className="text-right font-mono">{fmt(pnlByDocument.reduce((s, d) => s + d.cost_total, 0))}</TableCell>
+                        <TableCell className={`text-right font-mono ${totalProfit >= 0 ? 'text-green-600' : 'text-red-600'}`}>{fmt(totalProfit)}</TableCell>
                         <TableCell className={`text-right font-mono ${overallMargin >= 0 ? 'text-green-600' : 'text-red-600'}`}>{overallMargin.toFixed(1)}%</TableCell>
                         <TableCell></TableCell>
                       </TableRow>

@@ -270,7 +270,7 @@ const EmployeesPage = () => {
                   <TableCell>{e.ic_no || '—'}</TableCell>
                   <TableCell>{e.department || '—'}</TableCell>
                   <TableCell>{e.position || '—'}</TableCell>
-                  <TableCell className="text-right">RM {Number(e.basic_salary).toFixed(2)}</TableCell>
+                  <TableCell className="text-right">{fmt(Number(e.basic_salary))}</TableCell>
                   <TableCell>{e.join_date}</TableCell>
                   <TableCell>{e.is_active ? <Badge>Active</Badge> : <Badge variant="secondary">Resigned</Badge>}</TableCell>
                 </TableRow>

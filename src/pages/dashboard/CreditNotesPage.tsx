@@ -208,9 +208,9 @@ const CreditNotesPage = () => {
             </div>
             <div className="flex justify-between items-center pt-2 border-t border-border">
               <div className="text-sm space-x-4">
-                <span>Subtotal: <strong>RM {subtotal.toFixed(2)}</strong></span>
-                <span>Tax: <strong>RM {taxTotal.toFixed(2)}</strong></span>
-                <span>Total: <strong>RM {(subtotal + taxTotal).toFixed(2)}</strong></span>
+                <span>Subtotal: <strong>{fmt(subtotal)}</strong></span>
+                <span>Tax: <strong>{fmt(taxTotal)}</strong></span>
+                <span>Total: <strong>{fmt(subtotal + taxTotal)}</strong></span>
               </div>
               <Button onClick={handleCreate}>Create Note</Button>
             </div>

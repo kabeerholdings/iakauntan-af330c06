@@ -312,9 +312,9 @@ const SSTPage = () => {
                   {taxTransactions.length > 0 && (
                     <TableRow className="bg-muted/50 font-bold">
                       <TableCell colSpan={3}>Total</TableCell>
-                      <TableCell className="text-right">{taxTransactions.reduce((s, t) => s + t.subtotal, 0).toFixed(2)}</TableCell>
-                      <TableCell className="text-right">{taxTransactions.reduce((s, t) => s + t.tax, 0).toFixed(2)}</TableCell>
-                      <TableCell className="text-right">{taxTransactions.reduce((s, t) => s + t.total, 0).toFixed(2)}</TableCell>
+                      <TableCell className="text-right">{fmt(taxTransactions.reduce((s, t) => s + t.subtotal, 0))}</TableCell>
+                      <TableCell className="text-right">{fmt(taxTransactions.reduce((s, t) => s + t.tax, 0))}</TableCell>
+                      <TableCell className="text-right">{fmt(taxTransactions.reduce((s, t) => s + t.total, 0))}</TableCell>
                       <TableCell></TableCell>
                     </TableRow>
                   )}

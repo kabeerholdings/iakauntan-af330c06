@@ -384,7 +384,7 @@ const FixedAssetsPage = () => {
             <div><Label>Description</Label><Input value={assetForm.description} onChange={e => setAssetForm(f => ({ ...f, description: e.target.value }))} /></div>
             <div className="grid grid-cols-3 gap-4">
               <div><Label>Purchase Date</Label><Input type="date" value={assetForm.purchase_date} onChange={e => setAssetForm(f => ({ ...f, purchase_date: e.target.value }))} /></div>
-              <div><Label>Purchase Cost (RM)</Label><Input type="number" value={assetForm.purchase_cost} onChange={e => setAssetForm(f => ({ ...f, purchase_cost: e.target.value }))} /></div>
+              <div><Label>Purchase Cost ({symbol})</Label><Input type="number" value={assetForm.purchase_cost} onChange={e => setAssetForm(f => ({ ...f, purchase_cost: e.target.value }))} /></div>
               <div><Label>Residual Value</Label><Input type="number" value={assetForm.residual_value} onChange={e => setAssetForm(f => ({ ...f, residual_value: e.target.value }))} /></div>
             </div>
             <div className="grid grid-cols-3 gap-4">

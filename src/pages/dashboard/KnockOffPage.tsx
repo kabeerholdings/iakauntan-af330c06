@@ -168,8 +168,8 @@ const KnockOffPage = () => {
 
             <div className="flex justify-between items-center pt-2 border-t border-border">
               <div className="text-sm space-x-4">
-                <span>Source: <strong>RM {totalSourced.toFixed(2)}</strong></span>
-                <span>Applied: <strong>RM {totalApplied.toFixed(2)}</strong></span>
+                <span>Source: <strong>{fmt(totalSourced)}</strong></span>
+                <span>Applied: <strong>{fmt(totalApplied)}</strong></span>
               </div>
               <Button onClick={handleCreate} disabled={totalApplied <= 0}>Apply Knock Off</Button>
             </div>

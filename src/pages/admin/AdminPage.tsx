@@ -148,7 +148,7 @@ const AdminPage = () => {
                     <TableRow key={i.id}>
                       <TableCell className="font-medium">{i.invoice_number}</TableCell>
                       <TableCell>{(i as any).companies?.name || '—'}</TableCell>
-                      <TableCell>RM {Number(i.total_amount).toFixed(2)}</TableCell>
+                      <TableCell>{fmt(Number(i.total_amount))}</TableCell>
                       <TableCell><Badge variant="secondary">{i.status}</Badge></TableCell>
                       <TableCell>{i.einvoice_status ? <Badge>{i.einvoice_status}</Badge> : '—'}</TableCell>
                     </TableRow>

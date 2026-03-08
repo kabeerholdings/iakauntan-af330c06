@@ -387,7 +387,7 @@ const BankReconciliationPage = () => {
                 <SelectContent>
                   {unmatchedPays.map(p => (
                     <SelectItem key={p.id} value={p.id}>
-                      {p.payment_date} — {p.reference || '—'} — RM {Number(p.amount).toFixed(2)} ({p.payment_type})
+                      {p.payment_date} — {p.reference || '—'} — {fmt(Number(p.amount))} ({p.payment_type})
                     </SelectItem>
                   ))}
                 </SelectContent>

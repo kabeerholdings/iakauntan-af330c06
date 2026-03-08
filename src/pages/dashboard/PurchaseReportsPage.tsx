@@ -167,9 +167,9 @@ const PurchaseReportsPage = () => {
                   <TableRow className="bg-muted/50 font-bold">
                     <TableCell>Total</TableCell>
                     <TableCell className="text-right">{totalCount}</TableCell>
-                    <TableCell className="text-right">{totalPurchases.toFixed(2)}</TableCell>
-                    <TableCell className="text-right">{totalTax.toFixed(2)}</TableCell>
-                    <TableCell className="text-right">{(totalPurchases + totalTax).toFixed(2)}</TableCell>
+                    <TableCell className="text-right">{fmt(totalPurchases)}</TableCell>
+                    <TableCell className="text-right">{fmt(totalTax)}</TableCell>
+                    <TableCell className="text-right">{fmt(totalPurchases + totalTax)}</TableCell>
                   </TableRow>
                 </>
               )}
