@@ -45,7 +45,7 @@ const EmployeesPage = () => {
 
   const handleCreate = async () => {
     if (!selectedCompany || !form.employee_no || !form.first_name) { toast.error('Employee No and First Name required'); return; }
-    const { error } = await supabase.from('employees').insert({
+    const { data, error } = await supabase.from('employees').insert({
       company_id: selectedCompany.id, employee_no: form.employee_no,
       first_name: form.first_name, last_name: form.last_name || '',
       ic_no: form.ic_no || null, passport_no: form.passport_no || null,
@@ -65,10 +65,14 @@ const EmployeesPage = () => {
       zakat_percentage: +form.zakat_percentage || 0, hrdf_contribute: form.hrdf_contribute,
       bank_name: form.bank_name || null, bank_account_no: form.bank_account_no || null,
       payment_method: form.payment_method,
-    });
+    }).select('id').single();
     if (error) { toast.error(error.message); return; }
+    if (data) {
+      await saveCustomFieldValues(selectedCompany.id, 'employee', data.id, customValues);
+    }
     toast.success('Employee added');
     setOpen(false);
+    setCustomValues({});
     fetchData();
   };
 
