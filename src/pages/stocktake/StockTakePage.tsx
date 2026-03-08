@@ -11,7 +11,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Badge } from '@/components/ui/badge';
 import { Label } from '@/components/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Plus, Search, ScanBarcode, ClipboardCheck, Package, AlertTriangle, CheckCircle, Truck } from 'lucide-react';
+import { Plus, Search, ScanBarcode, ClipboardCheck, Package, AlertTriangle, CheckCircle, Truck, RefreshCw, ArrowUpDown } from 'lucide-react';
 import { toast } from 'sonner';
 
 const StockTakePage = () => {
@@ -28,6 +28,8 @@ const StockTakePage = () => {
   const [priceCheckResult, setPriceCheckResult] = useState<any>(null);
   const [scanInput, setScanInput] = useState('');
   const [form, setForm] = useState({ take_number: '', warehouse_id: '', notes: '' });
+  const [syncing, setSyncing] = useState(false);
+  const [activeTab, setActiveTab] = useState('takes');
   const scanRef = useRef<HTMLInputElement>(null);
 
   const fetchAll = async () => {
@@ -78,10 +80,14 @@ const StockTakePage = () => {
         counted_qty: newQty, variance, variance_value: variance * (existing.unit_cost || 0),
       }).eq('id', existing.id);
     } else {
+      // stock_items doesn't have quantity_on_hand, use 0 as system_qty placeholder
+      const systemQty = 0;
       await supabase.from('stock_take_lines').insert({
         stock_take_id: selectedTake.id, stock_item_id: item.id,
-        system_qty: 0, counted_qty: 1, variance: 1,
-        unit_cost: item.purchase_price || 0, variance_value: item.purchase_price || 0,
+        system_qty: systemQty, counted_qty: 1,
+        variance: 1 - systemQty,
+        unit_cost: item.purchase_price || 0,
+        variance_value: (1 - systemQty) * (item.purchase_price || 0),
         barcode: item.barcode,
       });
     }
@@ -107,6 +113,63 @@ const StockTakePage = () => {
     fetchAll();
   };
 
+  // Sync stock take to accounting - create stock adjustment
+  const syncToAccounting = async () => {
+    if (!selectedTake || !selectedCompany || selectedTake.status !== 'completed') return;
+    setSyncing(true);
+    try {
+      const varianceLines = takeLines.filter(l => l.variance !== 0);
+      if (varianceLines.length === 0) {
+        toast.info('No variances to adjust');
+        setSyncing(false);
+        return;
+      }
+
+      // Use existing stock_adjustments schema (reference, description instead of adjustment_number, reason)
+      const adjRef = `ADJ-${selectedTake.take_number}`;
+      const { data: adj, error: adjErr } = await supabase.from('stock_adjustments').insert({
+        company_id: selectedCompany.id,
+        reference: adjRef,
+        description: `Auto-generated from stock take ${selectedTake.take_number}. Total variance: RM ${totalVariance.toFixed(2)}`,
+        status: 'posted',
+        created_by: user?.id,
+      }).select().single();
+
+      if (adjErr) throw adjErr;
+
+      // Use existing stock_adjustment_lines schema (quantity, warehouse_id required)
+      const defaultWarehouseId = selectedTake.warehouse_id || warehouses[0]?.id;
+      if (!defaultWarehouseId) {
+        toast.error('No warehouse found. Please create a warehouse first.');
+        setSyncing(false);
+        return;
+      }
+
+      const lines = varianceLines.map(l => ({
+        adjustment_id: adj.id,
+        stock_item_id: l.stock_item_id,
+        quantity: l.variance, // variance is the adjustment quantity
+        unit_cost: l.unit_cost || 0,
+        warehouse_id: defaultWarehouseId,
+        description: `System: ${l.system_qty}, Counted: ${l.counted_qty}`,
+      }));
+
+      const { error: lineErr } = await supabase.from('stock_adjustment_lines').insert(lines);
+      if (lineErr) throw lineErr;
+
+      // Update stock take status to synced
+      await supabase.from('stock_takes').update({ status: 'synced' }).eq('id', selectedTake.id);
+      setSelectedTake({ ...selectedTake, status: 'synced' });
+
+      toast.success(`Stock adjustment ${adjRef} created & synced. ${varianceLines.length} items adjusted.`);
+      fetchAll();
+    } catch (err: any) {
+      toast.error(err.message || 'Sync failed');
+    } finally {
+      setSyncing(false);
+    }
+  };
+
   const checkPrice = () => {
     const item = stockItems.find(i =>
       i.barcode?.toLowerCase() === priceCheckSearch.toLowerCase() ||
@@ -125,7 +188,7 @@ const StockTakePage = () => {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold text-foreground">Stock Take</h1>
-          <p className="text-muted-foreground">Physical inventory count & adjustments</p>
+          <p className="text-muted-foreground">Physical inventory count, adjustments & sync</p>
         </div>
         <div className="flex gap-2">
           <Button variant="outline" onClick={() => setPriceCheckOpen(true)}><ScanBarcode className="mr-2 h-4 w-4" />Price Checker</Button>
@@ -149,8 +212,13 @@ const StockTakePage = () => {
         </div>
       </div>
 
-      <Tabs defaultValue="takes">
-        <TabsList><TabsTrigger value="takes">Stock Takes</TabsTrigger><TabsTrigger value="counting" disabled={!selectedTake}>Counting</TabsTrigger><TabsTrigger value="picking">Picking List</TabsTrigger></TabsList>
+      <Tabs value={activeTab} onValueChange={setActiveTab}>
+        <TabsList>
+          <TabsTrigger value="takes">Stock Takes</TabsTrigger>
+          <TabsTrigger value="counting" disabled={!selectedTake}>Counting</TabsTrigger>
+          <TabsTrigger value="picking">Picking List</TabsTrigger>
+          <TabsTrigger value="adjustments">Adjustments</TabsTrigger>
+        </TabsList>
 
         <TabsContent value="takes" className="space-y-4">
           <Card><Table>
@@ -161,11 +229,17 @@ const StockTakePage = () => {
                   <TableCell className="font-medium">{st.take_number}</TableCell>
                   <TableCell>{st.take_date}</TableCell>
                   <TableCell>{(st.warehouses as any)?.name || 'All'}</TableCell>
-                  <TableCell><Badge variant={st.status === 'completed' ? 'default' : st.status === 'synced' ? 'default' : 'secondary'}>{st.status}</Badge></TableCell>
                   <TableCell>
-                    <Button size="sm" variant="outline" onClick={() => { setSelectedTake(st); loadTakeLines(st.id); }}>
-                      <ClipboardCheck className="h-3 w-3 mr-1" />Open
-                    </Button>
+                    <Badge variant={st.status === 'synced' ? 'default' : st.status === 'completed' ? 'secondary' : 'outline'}>
+                      {st.status === 'synced' ? '✓ Synced' : st.status}
+                    </Badge>
+                  </TableCell>
+                  <TableCell>
+                    <div className="flex gap-1">
+                      <Button size="sm" variant="outline" onClick={() => { setSelectedTake(st); loadTakeLines(st.id); setActiveTab('counting'); }}>
+                        <ClipboardCheck className="h-3 w-3 mr-1" />Open
+                      </Button>
+                    </div>
                   </TableCell>
                 </TableRow>
               ))}
@@ -177,17 +251,33 @@ const StockTakePage = () => {
         <TabsContent value="counting" className="space-y-4">
           {selectedTake && (
             <>
-              <div className="flex items-center gap-4">
-                <Card className="flex-1"><CardContent className="pt-4 flex items-center gap-3"><Package className="h-6 w-6 text-primary" /><div><p className="text-sm text-muted-foreground">Items Counted</p><p className="text-xl font-bold">{takeLines.length}</p></div></CardContent></Card>
-                <Card className="flex-1"><CardContent className="pt-4 flex items-center gap-3"><AlertTriangle className="h-6 w-6 text-yellow-500" /><div><p className="text-sm text-muted-foreground">Variances</p><p className="text-xl font-bold">{itemsWithVariance}</p></div></CardContent></Card>
-                <Card className="flex-1"><CardContent className="pt-4 flex items-center gap-3"><span className={`text-xl font-bold ${totalVariance < 0 ? 'text-destructive' : 'text-green-600'}`}>RM {totalVariance.toFixed(2)}</span><p className="text-sm text-muted-foreground">Variance Value</p></CardContent></Card>
+              <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <Card><CardContent className="pt-4 flex items-center gap-3"><Package className="h-6 w-6 text-primary" /><div><p className="text-sm text-muted-foreground">Items Counted</p><p className="text-xl font-bold">{takeLines.length}</p></div></CardContent></Card>
+                <Card><CardContent className="pt-4 flex items-center gap-3"><AlertTriangle className="h-6 w-6 text-yellow-500" /><div><p className="text-sm text-muted-foreground">Variances</p><p className="text-xl font-bold">{itemsWithVariance}</p></div></CardContent></Card>
+                <Card><CardContent className="pt-4 flex items-center gap-3"><span className={`text-xl font-bold ${totalVariance < 0 ? 'text-destructive' : 'text-green-600'}`}>RM {totalVariance.toFixed(2)}</span><p className="text-sm text-muted-foreground">Variance Value</p></CardContent></Card>
+                <Card><CardContent className="pt-4 flex items-center gap-3">
+                  <Badge variant={selectedTake.status === 'synced' ? 'default' : 'secondary'} className="text-sm">
+                    {selectedTake.status === 'synced' ? '✓ Synced to Accounting' : selectedTake.status}
+                  </Badge>
+                </CardContent></Card>
               </div>
 
-              {selectedTake.status !== 'completed' && (
+              {selectedTake.status === 'in_progress' && (
                 <div className="flex gap-2">
                   <Input ref={scanRef} value={scanInput} onChange={e => setScanInput(e.target.value)} onKeyDown={e => e.key === 'Enter' && handleScan()} placeholder="Scan barcode or type item code..." className="flex-1" autoFocus />
                   <Button onClick={handleScan}><ScanBarcode className="mr-2 h-4 w-4" />Add</Button>
                   <Button variant="outline" onClick={completeStockTake}><CheckCircle className="mr-2 h-4 w-4" />Complete</Button>
+                </div>
+              )}
+
+              {selectedTake.status === 'completed' && (
+                <div className="flex gap-2 items-center p-3 rounded-lg bg-muted">
+                  <ArrowUpDown className="h-5 w-5 text-primary" />
+                  <span className="text-sm flex-1">Stock take completed. Sync to create stock adjustments automatically.</span>
+                  <Button onClick={syncToAccounting} disabled={syncing}>
+                    <RefreshCw className={`mr-2 h-4 w-4 ${syncing ? 'animate-spin' : ''}`} />
+                    {syncing ? 'Syncing...' : 'Sync to Accounting'}
+                  </Button>
                 </div>
               )}
 
@@ -200,7 +290,7 @@ const StockTakePage = () => {
                       <TableCell>{l.barcode || (l.stock_items as any)?.barcode || '-'}</TableCell>
                       <TableCell>{l.system_qty}</TableCell>
                       <TableCell>
-                        {selectedTake.status !== 'completed' ? (
+                        {selectedTake.status === 'in_progress' ? (
                           <Input type="number" className="w-20 h-8" value={l.counted_qty} onChange={e => updateCountedQty(l.id, parseFloat(e.target.value) || 0, l.system_qty, l.unit_cost)} />
                         ) : l.counted_qty}
                       </TableCell>
@@ -221,15 +311,15 @@ const StockTakePage = () => {
             <CardContent>
               <p className="text-muted-foreground mb-4">Verify item types, quantities, shelf locations and batch numbers for order fulfillment.</p>
               <Table>
-                <TableHeader><TableRow><TableHead>Item Code</TableHead><TableHead>Item Name</TableHead><TableHead>Barcode</TableHead><TableHead>Qty on Hand</TableHead><TableHead>Location</TableHead></TableRow></TableHeader>
+                <TableHeader><TableRow><TableHead>Item Code</TableHead><TableHead>Item Name</TableHead><TableHead>Barcode</TableHead><TableHead>UOM</TableHead><TableHead>Min Price</TableHead></TableRow></TableHeader>
                 <TableBody>
                   {stockItems.slice(0, 50).map(i => (
                     <TableRow key={i.id}>
                       <TableCell className="font-medium">{i.code}</TableCell>
                       <TableCell>{i.name}</TableCell>
                       <TableCell>{i.barcode || '-'}</TableCell>
-                      <TableCell>{i.quantity_on_hand || 0}</TableCell>
-                      <TableCell>{i.location || '-'}</TableCell>
+                      <TableCell>{i.base_uom || '-'}</TableCell>
+                      <TableCell>RM {(i.selling_price || 0).toFixed(2)}</TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
@@ -237,9 +327,12 @@ const StockTakePage = () => {
             </CardContent>
           </Card>
         </TabsContent>
+
+        <TabsContent value="adjustments" className="space-y-4">
+          <StockAdjustmentsTab companyId={selectedCompany?.id} />
+        </TabsContent>
       </Tabs>
 
-      {/* Price Checker Dialog */}
       <Dialog open={priceCheckOpen} onOpenChange={setPriceCheckOpen}>
         <DialogContent>
           <DialogHeader><DialogTitle>Price Checker</DialogTitle></DialogHeader>
@@ -255,12 +348,48 @@ const StockTakePage = () => {
                 {priceCheckResult.barcode && <p className="text-sm text-muted-foreground">Barcode: {priceCheckResult.barcode}</p>}
                 <p className="text-2xl font-bold text-primary">RM {(priceCheckResult.selling_price || 0).toFixed(2)}</p>
                 <p className="text-sm text-muted-foreground">Cost: RM {(priceCheckResult.purchase_price || 0).toFixed(2)}</p>
+                <p className="text-sm text-muted-foreground">UOM: {priceCheckResult.base_uom || 'units'}</p>
               </CardContent></Card>
             )}
           </div>
         </DialogContent>
       </Dialog>
     </div>
+  );
+};
+
+// Sub-component: Stock Adjustments history
+const StockAdjustmentsTab = ({ companyId }: { companyId?: string }) => {
+  const [adjustments, setAdjustments] = useState<any[]>([]);
+
+  useEffect(() => {
+    if (!companyId) return;
+    supabase.from('stock_adjustments').select('*').eq('company_id', companyId)
+      .order('created_at', { ascending: false })
+      .then(({ data }) => setAdjustments(data || []));
+  }, [companyId]);
+
+  return (
+    <Card>
+      <CardHeader><CardTitle className="flex items-center gap-2"><ArrowUpDown className="h-5 w-5" />Stock Adjustments</CardTitle></CardHeader>
+      <CardContent>
+        <p className="text-muted-foreground mb-4">Auto-generated stock adjustments from completed stock takes synced to accounting.</p>
+        <Table>
+          <TableHeader><TableRow><TableHead>Reference</TableHead><TableHead>Date</TableHead><TableHead>Description</TableHead><TableHead>Status</TableHead></TableRow></TableHeader>
+          <TableBody>
+            {adjustments.map(a => (
+              <TableRow key={a.id}>
+                <TableCell className="font-medium">{a.reference || '-'}</TableCell>
+                <TableCell>{a.adjustment_date}</TableCell>
+                <TableCell className="max-w-xs truncate">{a.description || '-'}</TableCell>
+                <TableCell><Badge variant="default">{a.status}</Badge></TableCell>
+              </TableRow>
+            ))}
+            {adjustments.length === 0 && <TableRow><TableCell colSpan={4} className="text-center text-muted-foreground py-8">No adjustments yet. Complete a stock take and sync to generate adjustments.</TableCell></TableRow>}
+          </TableBody>
+        </Table>
+      </CardContent>
+    </Card>
   );
 };
 

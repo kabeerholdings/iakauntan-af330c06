@@ -2,7 +2,7 @@ import {
   LayoutDashboard, FileText, Receipt, BookOpen, Users, Globe, Settings, Building2, LogOut,
   ChevronDown, BarChart3, CreditCard, Package, ShoppingCart, Truck, Wallet, FolderKanban, DollarSign,
   UserCheck, Calculator, CalendarDays, ClipboardList, Zap, Landmark, Paperclip, Factory, Layers, Hammer, PieChart,
-  Store, ScanBarcode, Brain, Sparkles, Heart
+  Store, ScanBarcode, Brain, Sparkles, Heart, Cloud, Puzzle
 } from 'lucide-react';
 import { NavLink } from '@/components/NavLink';
 import { useAuth } from '@/contexts/AuthContext';
@@ -70,6 +70,8 @@ const managementItems = [
 ];
 
 const otherItems = [
+  { title: 'AI Cloud Backup', url: '/dashboard/ai-cloud', icon: Cloud },
+  { title: 'Customization', url: '/dashboard/customization', icon: Puzzle },
   { title: 'e-Invoice', url: '/dashboard/einvoice', icon: Globe },
   { title: 'Settings', url: '/dashboard/settings', icon: Settings },
 ];
