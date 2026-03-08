@@ -12,7 +12,7 @@ import { Badge } from '@/components/ui/badge';
 import { Plus } from 'lucide-react';
 import { toast } from 'sonner';
 
-const accountTypes = ['asset', 'liability', 'equity', 'revenue', 'expense'];
+const defaultAccountTypes = ['asset', 'liability', 'equity', 'revenue', 'expense'];
 const typeColors: Record<string, string> = { asset: 'default', liability: 'secondary', equity: 'outline', revenue: 'default', expense: 'destructive' };
 
 const ChartOfAccountsPage = () => {
