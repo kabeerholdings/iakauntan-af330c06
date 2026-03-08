@@ -77,7 +77,7 @@ const CreditorAgingTab = ({ invoices, contacts, payments, asOfDate }: Props) => 
                     <TableCell className="text-right font-mono">{fmt(d.d60)}</TableCell>
                     <TableCell className="text-right font-mono">{fmt(d.d90)}</TableCell>
                     <TableCell className="text-right font-mono">{fmt(d.over90)}</TableCell>
-                    <TableCell className="text-right font-mono font-semibold">RM {d.total.toFixed(2)}</TableCell>
+                    <TableCell className="text-right font-mono font-semibold">{fmtCurrency(d.total)}</TableCell>
                   </TableRow>
                 ))}
                 <TableRow className="font-bold border-t-2">
