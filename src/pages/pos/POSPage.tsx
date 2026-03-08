@@ -229,10 +229,10 @@ const POSPage = () => {
           {cart.length === 0 && <p className="text-center text-muted-foreground py-8">Cart is empty</p>}
         </ScrollArea>
         <div className="p-4 border-t space-y-2">
-          <div className="flex justify-between text-sm"><span>Subtotal</span><span>RM {subtotal.toFixed(2)}</span></div>
-          <div className="flex justify-between text-sm"><span>Tax</span><span>RM {taxTotal.toFixed(2)}</span></div>
+          <div className="flex justify-between text-sm"><span>Subtotal</span><span>{fmt(subtotal)}</span></div>
+          <div className="flex justify-between text-sm"><span>Tax</span><span>{fmt(taxTotal)}</span></div>
           <Separator />
-          <div className="flex justify-between text-lg font-bold"><span>Total</span><span>RM {grandTotal.toFixed(2)}</span></div>
+          <div className="flex justify-between text-lg font-bold"><span>Total</span><span>{fmt(grandTotal)}</span></div>
           <div className="grid grid-cols-2 gap-2">
             <Button variant="outline" onClick={holdBill} disabled={cart.length === 0}><Pause className="mr-1 h-4 w-4" />Hold</Button>
             <Button onClick={() => setPaymentOpen(true)} disabled={cart.length === 0}><CreditCard className="mr-1 h-4 w-4" />Pay</Button>
