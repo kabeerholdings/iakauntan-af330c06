@@ -930,6 +930,8 @@ export type Database = {
           id: string
           is_active: boolean | null
           is_required: boolean | null
+          position_placement: string | null
+          position_reference: string | null
           sort_order: number | null
           updated_at: string
         }
@@ -944,6 +946,8 @@ export type Database = {
           id?: string
           is_active?: boolean | null
           is_required?: boolean | null
+          position_placement?: string | null
+          position_reference?: string | null
           sort_order?: number | null
           updated_at?: string
         }
@@ -958,6 +962,8 @@ export type Database = {
           id?: string
           is_active?: boolean | null
           is_required?: boolean | null
+          position_placement?: string | null
+          position_reference?: string | null
           sort_order?: number | null
           updated_at?: string
         }

@@ -38,6 +38,86 @@ const FIELD_TYPES = [
 
 const MODULES = ['General', 'GL/AR/AP', 'Sales/Purchase/Stock', 'Payroll', 'Manufacturing'];
 
+// Native fields per entity type for positioning reference
+const NATIVE_FIELDS: Record<string, { value: string; label: string }[]> = {
+  customer: [
+    { value: 'name', label: 'Name' },
+    { value: 'email', label: 'Email' },
+    { value: 'phone', label: 'Phone' },
+    { value: 'address', label: 'Address' },
+    { value: 'city', label: 'City' },
+    { value: 'state', label: 'State' },
+    { value: 'postcode', label: 'Postcode' },
+    { value: 'tax_id', label: 'Tax ID' },
+    { value: 'credit_limit', label: 'Credit Limit' },
+    { value: 'credit_terms', label: 'Credit Terms' },
+  ],
+  supplier: [
+    { value: 'name', label: 'Name' },
+    { value: 'email', label: 'Email' },
+    { value: 'phone', label: 'Phone' },
+    { value: 'address', label: 'Address' },
+    { value: 'city', label: 'City' },
+    { value: 'state', label: 'State' },
+    { value: 'postcode', label: 'Postcode' },
+    { value: 'tax_id', label: 'Tax ID' },
+    { value: 'credit_limit', label: 'Credit Limit' },
+    { value: 'credit_terms', label: 'Credit Terms' },
+  ],
+  stock_item: [
+    { value: 'item_code', label: 'Item Code' },
+    { value: 'description', label: 'Description' },
+    { value: 'category', label: 'Category' },
+    { value: 'unit_price', label: 'Unit Price' },
+    { value: 'cost_price', label: 'Cost Price' },
+    { value: 'quantity_on_hand', label: 'Qty On Hand' },
+    { value: 'reorder_level', label: 'Reorder Level' },
+    { value: 'uom', label: 'UOM' },
+  ],
+  invoice: [
+    { value: 'invoice_number', label: 'Invoice Number' },
+    { value: 'invoice_date', label: 'Invoice Date' },
+    { value: 'due_date', label: 'Due Date' },
+    { value: 'contact_id', label: 'Customer' },
+    { value: 'currency', label: 'Currency' },
+    { value: 'notes', label: 'Notes' },
+    { value: 'subtotal', label: 'Subtotal' },
+    { value: 'total_amount', label: 'Total Amount' },
+  ],
+  quotation: [
+    { value: 'doc_number', label: 'Document Number' },
+    { value: 'doc_date', label: 'Document Date' },
+    { value: 'contact_id', label: 'Customer' },
+    { value: 'notes', label: 'Notes' },
+    { value: 'total_amount', label: 'Total Amount' },
+  ],
+  purchase_order: [
+    { value: 'doc_number', label: 'Document Number' },
+    { value: 'doc_date', label: 'Document Date' },
+    { value: 'contact_id', label: 'Supplier' },
+    { value: 'notes', label: 'Notes' },
+    { value: 'total_amount', label: 'Total Amount' },
+  ],
+  delivery_order: [
+    { value: 'doc_number', label: 'Document Number' },
+    { value: 'doc_date', label: 'Document Date' },
+    { value: 'contact_id', label: 'Customer' },
+    { value: 'notes', label: 'Notes' },
+  ],
+  employee: [
+    { value: 'employee_no', label: 'Employee No' },
+    { value: 'first_name', label: 'First Name' },
+    { value: 'last_name', label: 'Last Name' },
+    { value: 'ic_no', label: 'IC No' },
+    { value: 'email', label: 'Email' },
+    { value: 'phone', label: 'Phone' },
+    { value: 'department', label: 'Department' },
+    { value: 'position', label: 'Position' },
+    { value: 'join_date', label: 'Join Date' },
+    { value: 'basic_salary', label: 'Basic Salary' },
+  ],
+};
+
 const CustomizationPage = () => {
   const { selectedCompany } = useCompany();
   const { user } = useAuth();
@@ -48,6 +128,7 @@ const CustomizationPage = () => {
   const [editingFieldId, setEditingFieldId] = useState<string | null>(null);
   const [fieldForm, setFieldForm] = useState({
     entity_type: 'customer', field_name: '', field_label: '', field_type: 'text', is_required: false, field_options: '[]',
+    position_reference: '' as string, position_placement: 'after' as string,
   });
 
   // Custom Reports
@@ -90,6 +171,8 @@ const CustomizationPage = () => {
       field_type: fieldForm.field_type,
       is_required: fieldForm.is_required,
       field_options: options,
+      position_reference: fieldForm.position_reference || null,
+      position_placement: fieldForm.position_placement || 'after',
     };
 
     if (editingFieldId) {
@@ -108,7 +191,7 @@ const CustomizationPage = () => {
   const closeFieldDialog = () => {
     setFieldOpen(false);
     setEditingFieldId(null);
-    setFieldForm({ entity_type: 'customer', field_name: '', field_label: '', field_type: 'text', is_required: false, field_options: '[]' });
+    setFieldForm({ entity_type: 'customer', field_name: '', field_label: '', field_type: 'text', is_required: false, field_options: '[]', position_reference: '', position_placement: 'after' });
   };
 
   const openEditField = (f: any) => {
@@ -120,6 +203,8 @@ const CustomizationPage = () => {
       field_type: f.field_type,
       is_required: f.is_required || false,
       field_options: JSON.stringify(f.field_options || []),
+      position_reference: f.position_reference || '',
+      position_placement: f.position_placement || 'after',
     });
     setFieldOpen(true);
   };
@@ -215,6 +300,36 @@ const CustomizationPage = () => {
                     <Switch checked={fieldForm.is_required} onCheckedChange={v => setFieldForm({ ...fieldForm, is_required: v })} />
                     <Label>Required field</Label>
                   </div>
+                  {/* Position placement */}
+                  <div className="border border-border rounded-md p-3 space-y-3 bg-muted/30">
+                    <Label className="text-sm font-medium">Field Position</Label>
+                    <p className="text-xs text-muted-foreground">Choose where this custom field appears relative to existing fields on the form.</p>
+                    <div className="grid grid-cols-2 gap-3">
+                      <div>
+                        <Label className="text-xs">Placement</Label>
+                        <Select value={fieldForm.position_placement} onValueChange={v => setFieldForm({ ...fieldForm, position_placement: v })}>
+                          <SelectTrigger><SelectValue /></SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="before">Before</SelectItem>
+                            <SelectItem value="after">After</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                      <div>
+                        <Label className="text-xs">Reference Field</Label>
+                        <Select value={fieldForm.position_reference} onValueChange={v => setFieldForm({ ...fieldForm, position_reference: v })}>
+                          <SelectTrigger><SelectValue placeholder="Select field..." /></SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="__start">— Start of form —</SelectItem>
+                            {(NATIVE_FIELDS[fieldForm.entity_type] || []).map(nf => (
+                              <SelectItem key={nf.value} value={nf.value}>{nf.label}</SelectItem>
+                            ))}
+                            <SelectItem value="__end">— End of form —</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                    </div>
+                  </div>
                   <Button onClick={saveField} className="w-full">{editingFieldId ? 'Update Field' : 'Create Field'}</Button>
                 </div>
               </DialogContent>
@@ -222,19 +337,27 @@ const CustomizationPage = () => {
           </div>
 
           <Card><Table>
-            <TableHeader><TableRow><TableHead>Entity</TableHead><TableHead>Label</TableHead><TableHead>Field Name</TableHead><TableHead>Type</TableHead><TableHead>Required</TableHead><TableHead>Actions</TableHead></TableRow></TableHeader>
+            <TableHeader><TableRow><TableHead>Entity</TableHead><TableHead>Label</TableHead><TableHead>Field Name</TableHead><TableHead>Type</TableHead><TableHead>Position</TableHead><TableHead>Required</TableHead><TableHead>Actions</TableHead></TableRow></TableHeader>
             <TableBody>
-              {customFields.map(f => (
-                <TableRow key={f.id}>
-                  <TableCell><Badge variant="outline">{f.entity_type}</Badge></TableCell>
-                  <TableCell className="font-medium">{f.field_label}</TableCell>
-                  <TableCell className="font-mono text-xs">{f.field_name}</TableCell>
-                  <TableCell><Badge variant="secondary">{f.field_type}</Badge></TableCell>
-                  <TableCell>{f.is_required ? '✓' : '-'}</TableCell>
-                  <TableCell><div className="flex gap-1"><Button size="sm" variant="ghost" onClick={() => openEditField(f)}><Edit className="h-3 w-3" /></Button><Button size="sm" variant="ghost" onClick={() => deleteField(f.id)}><Trash2 className="h-3 w-3" /></Button></div></TableCell>
-                </TableRow>
-              ))}
-              {customFields.length === 0 && <TableRow><TableCell colSpan={6} className="text-center text-muted-foreground py-8">No custom fields. Create your first DIY field.</TableCell></TableRow>}
+              {customFields.map(f => {
+                const refLabel = f.position_reference
+                  ? f.position_reference === '__start' ? 'Start of form'
+                  : f.position_reference === '__end' ? 'End of form'
+                  : (NATIVE_FIELDS[f.entity_type] || []).find((nf: any) => nf.value === f.position_reference)?.label || f.position_reference
+                  : 'Default';
+                return (
+                  <TableRow key={f.id}>
+                    <TableCell><Badge variant="outline">{f.entity_type}</Badge></TableCell>
+                    <TableCell className="font-medium">{f.field_label}</TableCell>
+                    <TableCell className="font-mono text-xs">{f.field_name}</TableCell>
+                    <TableCell><Badge variant="secondary">{f.field_type}</Badge></TableCell>
+                    <TableCell className="text-xs text-muted-foreground">{f.position_placement === 'before' ? 'Before' : 'After'} {refLabel}</TableCell>
+                    <TableCell>{f.is_required ? '✓' : '-'}</TableCell>
+                    <TableCell><div className="flex gap-1"><Button size="sm" variant="ghost" onClick={() => openEditField(f)}><Edit className="h-3 w-3" /></Button><Button size="sm" variant="ghost" onClick={() => deleteField(f.id)}><Trash2 className="h-3 w-3" /></Button></div></TableCell>
+                  </TableRow>
+                );
+              })}
+              {customFields.length === 0 && <TableRow><TableCell colSpan={7} className="text-center text-muted-foreground py-8">No custom fields. Create your first DIY field.</TableCell></TableRow>}
             </TableBody>
           </Table></Card>
         </TabsContent>
