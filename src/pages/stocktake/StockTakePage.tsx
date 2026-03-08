@@ -375,18 +375,17 @@ const StockAdjustmentsTab = ({ companyId }: { companyId?: string }) => {
       <CardContent>
         <p className="text-muted-foreground mb-4">Auto-generated stock adjustments from completed stock takes synced to accounting.</p>
         <Table>
-          <TableHeader><TableRow><TableHead>Adjustment #</TableHead><TableHead>Date</TableHead><TableHead>Reason</TableHead><TableHead>Total Value</TableHead><TableHead>Status</TableHead></TableRow></TableHeader>
+          <TableHeader><TableRow><TableHead>Reference</TableHead><TableHead>Date</TableHead><TableHead>Description</TableHead><TableHead>Status</TableHead></TableRow></TableHeader>
           <TableBody>
             {adjustments.map(a => (
               <TableRow key={a.id}>
-                <TableCell className="font-medium">{a.adjustment_number}</TableCell>
+                <TableCell className="font-medium">{a.reference || '-'}</TableCell>
                 <TableCell>{a.adjustment_date}</TableCell>
-                <TableCell className="max-w-xs truncate">{a.reason}</TableCell>
-                <TableCell className={a.total_value < 0 ? 'text-destructive' : ''}>RM {(a.total_value || 0).toFixed(2)}</TableCell>
+                <TableCell className="max-w-xs truncate">{a.description || '-'}</TableCell>
                 <TableCell><Badge variant="default">{a.status}</Badge></TableCell>
               </TableRow>
             ))}
-            {adjustments.length === 0 && <TableRow><TableCell colSpan={5} className="text-center text-muted-foreground py-8">No adjustments yet. Complete a stock take and sync to generate adjustments.</TableCell></TableRow>}
+            {adjustments.length === 0 && <TableRow><TableCell colSpan={4} className="text-center text-muted-foreground py-8">No adjustments yet. Complete a stock take and sync to generate adjustments.</TableCell></TableRow>}
           </TableBody>
         </Table>
       </CardContent>
