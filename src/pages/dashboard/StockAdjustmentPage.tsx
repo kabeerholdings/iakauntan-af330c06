@@ -38,7 +38,7 @@ const StockAdjustmentPage = () => {
 
   useEffect(() => { fetchData(); }, [selectedCompany]);
 
-  const addLine = () => setForm(f => ({ ...f, lines: [...f.lines, { stock_item_id: '', quantity: 0, unit_cost: 0, reason: '' }] }));
+  const addLine = () => setForm(f => ({ ...f, lines: [...f.lines, { stock_item_id: '', warehouse_id: '', quantity: 0, unit_cost: 0, description: '' }] }));
   const updateLine = (i: number, field: string, value: any) => setForm(f => ({ ...f, lines: f.lines.map((l, idx) => idx === i ? { ...l, [field]: value } : l) }));
 
   const handleCreate = async () => {
