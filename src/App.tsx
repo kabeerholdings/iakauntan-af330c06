@@ -25,6 +25,10 @@ import PurchaseDocumentsPage from "./pages/dashboard/PurchaseDocumentsPage";
 import PaymentsPage from "./pages/dashboard/PaymentsPage";
 import ProjectsPage from "./pages/dashboard/ProjectsPage";
 import CurrencyRatesPage from "./pages/dashboard/CurrencyRatesPage";
+import EmployeesPage from "./pages/payroll/EmployeesPage";
+import PayrollProcessPage from "./pages/payroll/PayrollProcessPage";
+import LeavePage from "./pages/payroll/LeavePage";
+import PayrollReportsPage from "./pages/payroll/PayrollReportsPage";
 import AdminPage from "./pages/admin/AdminPage";
 import NotFound from "./pages/NotFound";
 
@@ -59,6 +63,10 @@ const App = () => (
               <Route path="payments" element={<PaymentsPage />} />
               <Route path="projects" element={<ProjectsPage />} />
               <Route path="currency-rates" element={<CurrencyRatesPage />} />
+              <Route path="employees" element={<EmployeesPage />} />
+              <Route path="payroll" element={<PayrollProcessPage />} />
+              <Route path="leave" element={<LeavePage />} />
+              <Route path="payroll-reports" element={<PayrollReportsPage />} />
             </Route>
             <Route path="/admin" element={<DashboardLayout />}>
               <Route index element={<AdminPage />} />
