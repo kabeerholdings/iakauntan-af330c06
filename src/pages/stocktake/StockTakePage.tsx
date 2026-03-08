@@ -80,12 +80,14 @@ const StockTakePage = () => {
         counted_qty: newQty, variance, variance_value: variance * (existing.unit_cost || 0),
       }).eq('id', existing.id);
     } else {
+      // stock_items doesn't have quantity_on_hand, use 0 as system_qty placeholder
+      const systemQty = 0;
       await supabase.from('stock_take_lines').insert({
         stock_take_id: selectedTake.id, stock_item_id: item.id,
-        system_qty: item.quantity_on_hand || 0, counted_qty: 1,
-        variance: 1 - (item.quantity_on_hand || 0),
+        system_qty: systemQty, counted_qty: 1,
+        variance: 1 - systemQty,
         unit_cost: item.purchase_price || 0,
-        variance_value: (1 - (item.quantity_on_hand || 0)) * (item.purchase_price || 0),
+        variance_value: (1 - systemQty) * (item.purchase_price || 0),
         barcode: item.barcode,
       });
     }
