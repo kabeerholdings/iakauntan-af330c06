@@ -136,6 +136,9 @@ const App = () => (
               <Route path="purchase-reports" element={<PurchaseReportsPage />} />
               <Route path="sst" element={<SSTPage />} />
               <Route path="recurring" element={<RecurringTransactionsPage />} />
+              <Route path="fixed-assets" element={<FixedAssetsPage />} />
+              <Route path="debit-notes" element={<DebitNotesPage />} />
+              <Route path="opening-balance" element={<OpeningBalancePage />} />
             </Route>
             <Route path="/admin" element={<DashboardLayout />}>
               <Route index element={<AdminPage />} />
