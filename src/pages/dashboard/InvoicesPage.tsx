@@ -12,7 +12,7 @@ import { Badge } from '@/components/ui/badge';
 import { Plus, Eye, Palette, Printer } from 'lucide-react';
 import { toast } from 'sonner';
 import { useNavigate } from 'react-router-dom';
-import CustomFieldsSection, { saveCustomFieldValues } from '@/components/CustomFieldsSection';
+import { useCustomFields, saveCustomFieldValues } from '@/components/CustomFieldsSection';
 
 const InvoicesPage = () => {
   const { selectedCompany } = useCompany();
@@ -27,7 +27,7 @@ const InvoicesPage = () => {
     due_date: '', invoice_type: 'sales' as string, notes: '',
     lines: [{ description: '', quantity: 1, unit_price: 0, tax_rate: 0 }],
   });
-  const [customValues, setCustomValues] = useState<Record<string, string>>({});
+  const { values: customValues, setValues: setCustomValues, renderFieldsFor, renderUnpositionedFields } = useCustomFields('invoice');
 
   const fetchData = async () => {
     if (!selectedCompany) return;
@@ -185,7 +185,8 @@ const InvoicesPage = () => {
                   <Button onClick={handleCreate}>Create Invoice</Button>
                 </div>
 
-                <CustomFieldsSection entityType="invoice" values={customValues} onChange={setCustomValues} />
+                {renderFieldsFor('notes', 'after')}
+                {renderUnpositionedFields()}
               </div>
             </DialogContent>
           </Dialog>

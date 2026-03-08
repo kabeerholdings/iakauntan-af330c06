@@ -12,7 +12,7 @@ import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Plus, Search, UserPlus } from 'lucide-react';
 import { toast } from 'sonner';
-import CustomFieldsSection, { saveCustomFieldValues } from '@/components/CustomFieldsSection';
+import { useCustomFields, saveCustomFieldValues } from '@/components/CustomFieldsSection';
 
 const EmployeesPage = () => {
   const { selectedCompany } = useCompany();
@@ -20,7 +20,7 @@ const EmployeesPage = () => {
   const [search, setSearch] = useState('');
   const [open, setOpen] = useState(false);
   const [formTab, setFormTab] = useState('personal');
-  const [customValues, setCustomValues] = useState<Record<string, string>>({});
+  const { values: customValues, setValues: setCustomValues, renderFieldsFor, renderUnpositionedFields } = useCustomFields('employee');
   const [form, setForm] = useState({
     employee_no: '', first_name: '', last_name: '', ic_no: '', passport_no: '',
     date_of_birth: '', gender: 'male', marital_status: 'single', nationality: 'Malaysian',
@@ -231,7 +231,7 @@ const EmployeesPage = () => {
                 </div>
               </TabsContent>
             </Tabs>
-            <CustomFieldsSection entityType="employee" values={customValues} onChange={setCustomValues} />
+            {renderUnpositionedFields()}
             <Button onClick={handleCreate} className="w-full mt-4">Add Employee</Button>
           </DialogContent>
         </Dialog>

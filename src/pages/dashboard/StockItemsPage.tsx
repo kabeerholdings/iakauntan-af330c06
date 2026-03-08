@@ -12,7 +12,7 @@ import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Plus, Search, Package } from 'lucide-react';
 import { toast } from 'sonner';
-import CustomFieldsSection, { saveCustomFieldValues } from '@/components/CustomFieldsSection';
+import { useCustomFields, saveCustomFieldValues } from '@/components/CustomFieldsSection';
 
 const StockItemsPage = () => {
   const { selectedCompany } = useCompany();
@@ -31,7 +31,7 @@ const StockItemsPage = () => {
   });
   const [catForm, setCatForm] = useState({ name: '', description: '' });
   const [whForm, setWhForm] = useState({ code: '', name: '', address: '' });
-  const [customValues, setCustomValues] = useState<Record<string, string>>({});
+  const { values: customValues, setValues: setCustomValues, renderFieldsFor, renderUnpositionedFields } = useCustomFields('stock_item');
 
   const fetchData = async () => {
     if (!selectedCompany) return;
@@ -131,6 +131,7 @@ const StockItemsPage = () => {
             <DialogContent className="max-w-2xl max-h-[85vh] overflow-y-auto">
               <DialogHeader><DialogTitle className="font-display">Add Stock Item</DialogTitle></DialogHeader>
               <div className="space-y-4">
+                {renderFieldsFor('item_code', 'before')}
                 <div className="grid grid-cols-3 gap-4">
                   <div><Label>Code</Label><Input value={form.code} onChange={e => setForm(f => ({ ...f, code: e.target.value }))} placeholder="ITM-001" /></div>
                   <div><Label>Name</Label><Input value={form.name} onChange={e => setForm(f => ({ ...f, name: e.target.value }))} /></div>
@@ -142,12 +143,23 @@ const StockItemsPage = () => {
                     </Select>
                   </div>
                 </div>
+                {renderFieldsFor('item_code', 'after')}
+                {renderFieldsFor('category', 'after')}
+                {renderFieldsFor('description', 'before')}
                 <div><Label>Description</Label><Input value={form.description} onChange={e => setForm(f => ({ ...f, description: e.target.value }))} /></div>
+                {renderFieldsFor('description', 'after')}
+                {renderFieldsFor('uom', 'before')}
+                {renderFieldsFor('unit_price', 'before')}
+                {renderFieldsFor('cost_price', 'before')}
                 <div className="grid grid-cols-3 gap-4">
                   <div><Label>Base UOM</Label><Input value={form.base_uom} onChange={e => setForm(f => ({ ...f, base_uom: e.target.value }))} /></div>
                   <div><Label>Purchase Price</Label><Input type="number" value={form.purchase_price} onChange={e => setForm(f => ({ ...f, purchase_price: e.target.value }))} /></div>
                   <div><Label>Selling Price</Label><Input type="number" value={form.selling_price} onChange={e => setForm(f => ({ ...f, selling_price: e.target.value }))} /></div>
                 </div>
+                {renderFieldsFor('uom', 'after')}
+                {renderFieldsFor('unit_price', 'after')}
+                {renderFieldsFor('cost_price', 'after')}
+                {renderFieldsFor('reorder_level', 'before')}
                 <div className="grid grid-cols-3 gap-4">
                   <div><Label>Reorder Level</Label><Input type="number" value={form.reorder_level} onChange={e => setForm(f => ({ ...f, reorder_level: e.target.value }))} /></div>
                   <div><Label>Reorder Qty</Label><Input type="number" value={form.reorder_qty} onChange={e => setForm(f => ({ ...f, reorder_qty: e.target.value }))} /></div>
@@ -162,11 +174,12 @@ const StockItemsPage = () => {
                     </Select>
                   </div>
                 </div>
+                {renderFieldsFor('reorder_level', 'after')}
                 <div className="grid grid-cols-2 gap-4">
                   <div><Label>Barcode</Label><Input value={form.barcode} onChange={e => setForm(f => ({ ...f, barcode: e.target.value }))} /></div>
                   <div><Label>Tax Rate (%)</Label><Input type="number" value={form.tax_rate} onChange={e => setForm(f => ({ ...f, tax_rate: e.target.value }))} /></div>
                 </div>
-                <CustomFieldsSection entityType="stock_item" values={customValues} onChange={setCustomValues} />
+                {renderUnpositionedFields()}
                 <Button onClick={handleCreateItem} className="w-full">Add Item</Button>
               </div>
             </DialogContent>
