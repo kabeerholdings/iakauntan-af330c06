@@ -20,6 +20,12 @@ const ChartOfAccountsPage = () => {
   const [accounts, setAccounts] = useState<any[]>([]);
   const [open, setOpen] = useState(false);
   const [form, setForm] = useState({ code: '', name: '', account_type: 'asset', description: '' });
+  const [customType, setCustomType] = useState('');
+  const [showCustomType, setShowCustomType] = useState(false);
+
+  // Collect unique types from existing accounts to include custom ones
+  const existingTypes = Array.from(new Set(accounts.map(a => a.account_type))).filter(t => !defaultAccountTypes.includes(t));
+  const accountTypes = [...defaultAccountTypes, ...existingTypes];
 
   const fetchData = async () => {
     if (!selectedCompany) return;
