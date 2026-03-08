@@ -10,8 +10,16 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
-import { Plus, Search } from 'lucide-react';
+import { Plus, Search, Pencil, Trash2 } from 'lucide-react';
 import { toast } from 'sonner';
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
+
+const emptyForm = {
+  name: '', email: '', phone: '', type: 'customer', tax_id: '',
+  address: '', city: '', state: '', postcode: '', country: 'Malaysia',
+  credit_limit: '', credit_terms: '30', overdue_limit: '',
+  bank_name: '', bank_account_no: '',
+};
 
 const ContactsPage = () => {
   const { selectedCompany } = useCompany();
@@ -19,12 +27,8 @@ const ContactsPage = () => {
   const [search, setSearch] = useState('');
   const [activeTab, setActiveTab] = useState('all');
   const [open, setOpen] = useState(false);
-  const [form, setForm] = useState({
-    name: '', email: '', phone: '', type: 'customer', tax_id: '',
-    address: '', city: '', state: '', postcode: '', country: 'Malaysia',
-    credit_limit: '', credit_terms: '30', overdue_limit: '',
-    bank_name: '', bank_account_no: '',
-  });
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [form, setForm] = useState({ ...emptyForm });
 
   const fetchData = async () => {
     if (!selectedCompany) return;
@@ -36,7 +40,7 @@ const ContactsPage = () => {
 
   const handleCreate = async () => {
     if (!selectedCompany || !form.name) { toast.error('Name is required'); return; }
-    const { error } = await supabase.from('contacts').insert({
+    const payload = {
       company_id: selectedCompany.id, name: form.name, email: form.email || null,
       phone: form.phone || null, type: form.type, tax_id: form.tax_id || null,
       address: form.address || null, city: form.city || null, state: form.state || null,
@@ -44,11 +48,45 @@ const ContactsPage = () => {
       credit_limit: +form.credit_limit || 0, credit_terms: +form.credit_terms || 30,
       overdue_limit: +form.overdue_limit || 0, bank_name: form.bank_name || null,
       bank_account_no: form.bank_account_no || null,
-    });
-    if (error) { toast.error(error.message); return; }
-    toast.success('Contact added');
+    };
+
+    if (editingId) {
+      const { error } = await supabase.from('contacts').update(payload).eq('id', editingId);
+      if (error) { toast.error(error.message); return; }
+      toast.success('Contact updated');
+    } else {
+      const { error } = await supabase.from('contacts').insert(payload);
+      if (error) { toast.error(error.message); return; }
+      toast.success('Contact added');
+    }
+    closeDialog();
+    fetchData();
+  };
+
+  const closeDialog = () => {
     setOpen(false);
-    setForm({ name: '', email: '', phone: '', type: 'customer', tax_id: '', address: '', city: '', state: '', postcode: '', country: 'Malaysia', credit_limit: '', credit_terms: '30', overdue_limit: '', bank_name: '', bank_account_no: '' });
+    setEditingId(null);
+    setForm({ ...emptyForm });
+  };
+
+  const openEdit = (c: any) => {
+    setEditingId(c.id);
+    setForm({
+      name: c.name || '', email: c.email || '', phone: c.phone || '',
+      type: c.type || 'customer', tax_id: c.tax_id || '',
+      address: c.address || '', city: c.city || '', state: c.state || '',
+      postcode: c.postcode || '', country: c.country || 'Malaysia',
+      credit_limit: c.credit_limit?.toString() || '', credit_terms: c.credit_terms?.toString() || '30',
+      overdue_limit: c.overdue_limit?.toString() || '',
+      bank_name: c.bank_name || '', bank_account_no: c.bank_account_no || '',
+    });
+    setOpen(true);
+  };
+
+  const handleDelete = async (id: string) => {
+    const { error } = await supabase.from('contacts').delete().eq('id', id);
+    if (error) { toast.error(error.message); return; }
+    toast.success('Contact deleted');
     fetchData();
   };
 
@@ -64,10 +102,10 @@ const ContactsPage = () => {
     <div>
       <div className="flex items-center justify-between mb-6">
         <h1 className="font-display text-2xl font-bold text-foreground">Contacts</h1>
-        <Dialog open={open} onOpenChange={setOpen}>
+        <Dialog open={open} onOpenChange={(v) => { if (!v) closeDialog(); else setOpen(true); }}>
           <DialogTrigger asChild><Button><Plus className="h-4 w-4 mr-2" />Add Contact</Button></DialogTrigger>
           <DialogContent className="max-w-2xl max-h-[85vh] overflow-y-auto">
-            <DialogHeader><DialogTitle className="font-display">Add Contact</DialogTitle></DialogHeader>
+            <DialogHeader><DialogTitle className="font-display">{editingId ? 'Edit Contact' : 'Add Contact'}</DialogTitle></DialogHeader>
             <div className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
                 <div><Label>Name</Label><Input value={form.name} onChange={e => setForm(f => ({ ...f, name: e.target.value }))} /></div>
@@ -112,7 +150,7 @@ const ContactsPage = () => {
                 </div>
               </div>
 
-              <Button onClick={handleCreate} className="w-full">Add Contact</Button>
+              <Button onClick={handleCreate} className="w-full">{editingId ? 'Update Contact' : 'Add Contact'}</Button>
             </div>
           </DialogContent>
         </Dialog>
@@ -143,11 +181,12 @@ const ContactsPage = () => {
                     <TableHead>Tax ID</TableHead>
                     <TableHead className="text-right">Credit Limit</TableHead>
                     <TableHead>Terms</TableHead>
+                    <TableHead className="text-right">Actions</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {filtered.length === 0 ? (
-                    <TableRow><TableCell colSpan={7} className="text-center text-muted-foreground py-8">No contacts</TableCell></TableRow>
+                    <TableRow><TableCell colSpan={8} className="text-center text-muted-foreground py-8">No contacts</TableCell></TableRow>
                   ) : filtered.map(c => (
                     <TableRow key={c.id}>
                       <TableCell className="font-medium">{c.name}</TableCell>
@@ -157,8 +196,31 @@ const ContactsPage = () => {
                       <TableCell>{c.tax_id || '—'}</TableCell>
                       <TableCell className="text-right">{c.credit_limit ? `RM ${Number(c.credit_limit).toFixed(2)}` : '—'}</TableCell>
                       <TableCell>{c.credit_terms ? `${c.credit_terms}d` : '—'}</TableCell>
+                      <TableCell className="text-right">
+                        <div className="flex justify-end gap-1">
+                          <Button variant="ghost" size="icon" onClick={() => openEdit(c)}>
+                            <Pencil className="h-4 w-4" />
+                          </Button>
+                          <AlertDialog>
+                            <AlertDialogTrigger asChild>
+                              <Button variant="ghost" size="icon"><Trash2 className="h-4 w-4 text-destructive" /></Button>
+                            </AlertDialogTrigger>
+                            <AlertDialogContent>
+                              <AlertDialogHeader>
+                                <AlertDialogTitle>Delete contact?</AlertDialogTitle>
+                                <AlertDialogDescription>This will permanently delete "{c.name}". This cannot be undone.</AlertDialogDescription>
+                              </AlertDialogHeader>
+                              <AlertDialogFooter>
+                                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                <AlertDialogAction onClick={() => handleDelete(c.id)}>Delete</AlertDialogAction>
+                              </AlertDialogFooter>
+                            </AlertDialogContent>
+                          </AlertDialog>
+                        </div>
+                      </TableCell>
                     </TableRow>
                   ))}
+
                 </TableBody>
               </Table>
             </CardContent>
