@@ -10,8 +10,16 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
-import { Plus, Search } from 'lucide-react';
+import { Plus, Search, Pencil, Trash2 } from 'lucide-react';
 import { toast } from 'sonner';
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
+
+const emptyForm = {
+  name: '', email: '', phone: '', type: 'customer', tax_id: '',
+  address: '', city: '', state: '', postcode: '', country: 'Malaysia',
+  credit_limit: '', credit_terms: '30', overdue_limit: '',
+  bank_name: '', bank_account_no: '',
+};
 
 const ContactsPage = () => {
   const { selectedCompany } = useCompany();
@@ -19,12 +27,8 @@ const ContactsPage = () => {
   const [search, setSearch] = useState('');
   const [activeTab, setActiveTab] = useState('all');
   const [open, setOpen] = useState(false);
-  const [form, setForm] = useState({
-    name: '', email: '', phone: '', type: 'customer', tax_id: '',
-    address: '', city: '', state: '', postcode: '', country: 'Malaysia',
-    credit_limit: '', credit_terms: '30', overdue_limit: '',
-    bank_name: '', bank_account_no: '',
-  });
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [form, setForm] = useState({ ...emptyForm });
 
   const fetchData = async () => {
     if (!selectedCompany) return;
