@@ -53,7 +53,6 @@ const GeneralLedgerTab = ({ balances, journalLines, accounts }: Props) => {
         );
       })}
     </CardContent>
-  </Card>
-);
-
+  );
+};
 export default GeneralLedgerTab;

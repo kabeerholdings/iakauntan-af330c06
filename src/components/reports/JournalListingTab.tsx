@@ -54,8 +54,8 @@ const JournalListingTab = ({ journalEntries, journalLines, accounts }: Props) =>
                   })}
                   <TableRow className="font-semibold border-t">
                     <TableCell colSpan={2} className="text-right">Total</TableCell>
-                    <TableCell className="text-right font-mono">RM {totalDebit.toFixed(2)}</TableCell>
-                    <TableCell className="text-right font-mono">RM {totalCredit.toFixed(2)}</TableCell>
+                    <TableCell className="text-right font-mono">{fmt(totalDebit)}</TableCell>
+                    <TableCell className="text-right font-mono">{fmt(totalCredit)}</TableCell>
                   </TableRow>
                 </TableBody>
               </Table>
