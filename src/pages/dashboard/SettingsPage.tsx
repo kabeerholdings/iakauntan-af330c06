@@ -292,6 +292,13 @@ const SettingsPage = () => {
           )}
         </TabsContent>
       </Tabs>
+
+      <EditCompanyDialog
+        company={editCompany}
+        open={!!editCompany}
+        onOpenChange={(open) => { if (!open) setEditCompany(null); }}
+        onSaved={refetchCompanies}
+      />
     </div>
   );
 };

@@ -247,6 +247,13 @@ export function AppSidebar() {
         </div>
       </DialogContent>
     </Dialog>
+
+    <EditCompanyDialog
+      company={selectedCompany}
+      open={showEditCompany}
+      onOpenChange={setShowEditCompany}
+      onSaved={refetchCompanies}
+    />
     </>
   );
 }
