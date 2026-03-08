@@ -63,6 +63,9 @@ import ApiIntegrationPage from "./pages/dashboard/ApiIntegrationPage";
 import PurchaseReportsPage from "./pages/dashboard/PurchaseReportsPage";
 import SSTPage from "./pages/dashboard/SSTPage";
 import RecurringTransactionsPage from "./pages/dashboard/RecurringTransactionsPage";
+import FixedAssetsPage from "./pages/dashboard/FixedAssetsPage";
+import DebitNotesPage from "./pages/dashboard/DebitNotesPage";
+import OpeningBalancePage from "./pages/dashboard/OpeningBalancePage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
