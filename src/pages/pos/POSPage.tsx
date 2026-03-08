@@ -223,7 +223,7 @@ const POSPage = () => {
                 <Button size="icon" variant="ghost" className="h-6 w-6" onClick={() => updateQty(c.stock_item_id, 1)}><Plus className="h-3 w-3" /></Button>
                 <Button size="icon" variant="ghost" className="h-6 w-6 text-destructive" onClick={() => removeFromCart(c.stock_item_id)}><Trash2 className="h-3 w-3" /></Button>
               </div>
-              <p className="text-sm font-semibold w-20 text-right">RM {c.line_total.toFixed(2)}</p>
+              <p className="text-sm font-semibold w-20 text-right">{fmt(c.line_total)}</p>
             </div>
           ))}
           {cart.length === 0 && <p className="text-center text-muted-foreground py-8">Cart is empty</p>}
