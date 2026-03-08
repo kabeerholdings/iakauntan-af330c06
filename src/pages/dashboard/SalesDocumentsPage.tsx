@@ -266,7 +266,7 @@ const SalesDocumentsPage = () => {
                       <TableCell>{d.contacts?.name || '—'}</TableCell>
                       <TableCell>{d.doc_date}</TableCell>
                       <TableCell>{d.currency}</TableCell>
-                      <TableCell className="text-right font-mono">RM {Number(d.total_amount).toFixed(2)}</TableCell>
+                      <TableCell className="text-right font-mono">{fmt(Number(d.total_amount))}</TableCell>
                       <TableCell><Badge variant={statusColor(d.status)}>{d.status}</Badge></TableCell>
                       <TableCell>
                         <DropdownMenu>
