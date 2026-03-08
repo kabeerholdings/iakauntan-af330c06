@@ -78,6 +78,7 @@ const ContactsPage = () => {
     setOpen(false);
     setEditingId(null);
     setForm({ ...emptyForm });
+    setCustomValues({});
   };
 
   const openEdit = (c: any) => {
