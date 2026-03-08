@@ -42,6 +42,8 @@ import POSPage from "./pages/pos/POSPage";
 import AIScannerPage from "./pages/scanner/AIScannerPage";
 import StockTakePage from "./pages/stocktake/StockTakePage";
 import WellnessPOSPage from "./pages/wellness/WellnessPOSPage";
+import AICloudPage from "./pages/cloud/AICloudPage";
+import CustomizationPage from "./pages/customization/CustomizationPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
