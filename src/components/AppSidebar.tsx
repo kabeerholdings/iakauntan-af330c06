@@ -58,16 +58,30 @@ const manufacturingItems = [
   { title: 'MRP Reports', url: '/dashboard/mrp-reports', icon: PieChart },
 ];
 
-const accountingItems = [
-  { title: 'Fast Entry', url: '/dashboard/fast-entry', icon: Zap },
-  { title: 'Cash Book', url: '/dashboard/cash-book', icon: ArrowDownLeft },
-  { title: 'Chart of Accounts', url: '/dashboard/chart-of-accounts', icon: BookOpen },
-  { title: 'Journal Entries', url: '/dashboard/journal-entries', icon: Receipt },
-  { title: 'Knock Off', url: '/dashboard/knock-off', icon: Link2 },
+const accountingEntryItems = [
+  { title: 'Cash Book Entry', url: '/dashboard/cash-book', icon: ArrowDownLeft },
+  { title: 'Journal Entry', url: '/dashboard/journal-entries', icon: Receipt },
+  { title: 'Knock Off Entry', url: '/dashboard/knock-off', icon: Link2 },
   { title: 'Bank Reconciliation', url: '/dashboard/bank-reconciliation', icon: Landmark },
+  { title: 'Fast Entry', url: '/dashboard/fast-entry', icon: Zap },
+  { title: 'Chart of Accounts', url: '/dashboard/chart-of-accounts', icon: BookOpen },
   { title: 'Payment Methods', url: '/dashboard/payment-methods', icon: CreditCard },
-  { title: 'Financial Reports', url: '/dashboard/financial-reports', icon: BarChart },
-  { title: 'Reports', url: '/dashboard/reports', icon: BarChart3 },
+];
+
+const accountingReportItems = [
+  { title: 'Ledger', url: '/dashboard/financial-reports?tab=ledger', icon: BookOpen },
+  { title: 'Journal Listing', url: '/dashboard/financial-reports?tab=journal', icon: Receipt },
+  { title: 'Trial Balance', url: '/dashboard/financial-reports?tab=trial-balance', icon: BarChart },
+  { title: 'Profit & Loss', url: '/dashboard/financial-reports?tab=pnl', icon: TrendingUp },
+  { title: 'Balance Sheet', url: '/dashboard/financial-reports?tab=balance-sheet', icon: BarChart3 },
+  { title: 'Debtor Aging', url: '/dashboard/financial-reports?tab=debtor-aging', icon: Users },
+  { title: 'Creditor Aging', url: '/dashboard/financial-reports?tab=creditor-aging', icon: Users },
+  { title: 'Debtor Statement', url: '/dashboard/financial-reports?tab=debtor-statement', icon: FileText },
+  { title: 'Creditor Statement', url: '/dashboard/financial-reports?tab=creditor-statement', icon: FileText },
+  { title: 'Reports', url: '/dashboard/reports', icon: PieChart },
+];
+
+const accountingOtherItems = [
   { title: 'Documents', url: '/dashboard/documents', icon: Paperclip },
   { title: 'AI Easy Scan', url: '/dashboard/ai-scanner', icon: Brain },
 ];
@@ -206,8 +220,16 @@ export function AppSidebar() {
           <SidebarGroupContent>{renderItems(manufacturingItems)}</SidebarGroupContent>
         </SidebarGroup>
         <SidebarGroup>
-          <SidebarGroupLabel>Accounting</SidebarGroupLabel>
-          <SidebarGroupContent>{renderItems(accountingItems)}</SidebarGroupContent>
+          <SidebarGroupLabel>Accounting — Entries</SidebarGroupLabel>
+          <SidebarGroupContent>{renderItems(accountingEntryItems)}</SidebarGroupContent>
+        </SidebarGroup>
+        <SidebarGroup>
+          <SidebarGroupLabel>Accounting — Reports</SidebarGroupLabel>
+          <SidebarGroupContent>{renderItems(accountingReportItems)}</SidebarGroupContent>
+        </SidebarGroup>
+        <SidebarGroup>
+          <SidebarGroupLabel>Accounting — Tools</SidebarGroupLabel>
+          <SidebarGroupContent>{renderItems(accountingOtherItems)}</SidebarGroupContent>
         </SidebarGroup>
         <SidebarGroup>
           <SidebarGroupLabel>Payroll & HR</SidebarGroupLabel>
