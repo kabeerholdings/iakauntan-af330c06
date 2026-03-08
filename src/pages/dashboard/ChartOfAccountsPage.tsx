@@ -25,8 +25,15 @@ const ChartOfAccountsPage = () => {
   const [customType, setCustomType] = useState('');
   const [showCustomType, setShowCustomType] = useState(false);
 
+  const [search, setSearch] = useState('');
+
   const existingTypes = Array.from(new Set(accounts.map(a => a.account_type))).filter(t => !defaultAccountTypes.includes(t));
   const accountTypes = [...defaultAccountTypes, ...existingTypes];
+
+  const filteredAccounts = accounts.filter(a => {
+    const q = search.toLowerCase();
+    return !q || a.code.toLowerCase().includes(q) || a.name.toLowerCase().includes(q) || a.account_type.toLowerCase().includes(q) || (a.description || '').toLowerCase().includes(q);
+  });
 
   const fetchData = async () => {
     if (!selectedCompany) return;
