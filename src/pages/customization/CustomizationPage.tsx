@@ -45,6 +45,7 @@ const CustomizationPage = () => {
   // DIY Fields
   const [customFields, setCustomFields] = useState<any[]>([]);
   const [fieldOpen, setFieldOpen] = useState(false);
+  const [editingFieldId, setEditingFieldId] = useState<string | null>(null);
   const [fieldForm, setFieldForm] = useState({
     entity_type: 'customer', field_name: '', field_label: '', field_type: 'text', is_required: false, field_options: '[]',
   });
