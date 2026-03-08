@@ -220,7 +220,7 @@ const WellnessPOSPage = () => {
                   <TableCell>{(a.wellness_services as any)?.name || '-'}</TableCell>
                   <TableCell>{(a.employees as any) ? `${(a.employees as any).first_name} ${(a.employees as any).last_name}` : '-'}</TableCell>
                   <TableCell>{a.room_slot || '-'}</TableCell>
-                  <TableCell>RM {(a.price || 0).toFixed(2)}</TableCell>
+                  <TableCell>{fmt(a.price || 0)}</TableCell>
                   <TableCell><Badge variant={a.status === 'completed' ? 'default' : a.status === 'cancelled' ? 'destructive' : 'secondary'}>{a.status}</Badge></TableCell>
                   <TableCell>
                     <Select onValueChange={v => updateApptStatus(a.id, v)}>
