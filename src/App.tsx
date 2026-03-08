@@ -93,6 +93,8 @@ const App = () => (
               <Route path="ai-scanner" element={<AIScannerPage />} />
               <Route path="stock-take" element={<StockTakePage />} />
               <Route path="wellness-pos" element={<WellnessPOSPage />} />
+              <Route path="ai-cloud" element={<AICloudPage />} />
+              <Route path="customization" element={<CustomizationPage />} />
             </Route>
             <Route path="/admin" element={<DashboardLayout />}>
               <Route index element={<AdminPage />} />
