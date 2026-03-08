@@ -35,6 +35,7 @@ const salesItems = [
   { title: 'Credit Notes', url: '/dashboard/credit-notes', icon: FileX },
   { title: 'Purchase', url: '/dashboard/purchase', icon: Truck },
   { title: 'Payments', url: '/dashboard/payments', icon: Wallet },
+  { title: 'Sales Reports', url: '/dashboard/sales-reports', icon: BarChart3 },
 ];
 
 const stockItems = [

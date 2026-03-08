@@ -56,6 +56,7 @@ import QuotationsPage from "./pages/dashboard/QuotationsPage";
 import CreditNotesPage from "./pages/dashboard/CreditNotesPage";
 import StockAdjustmentPage from "./pages/dashboard/StockAdjustmentPage";
 import StockTransferPage from "./pages/dashboard/StockTransferPage";
+import SalesReportsPage from "./pages/dashboard/SalesReportsPage";
 import FinancialReportsPage from "./pages/dashboard/FinancialReportsPage";
 import KnockOffPage from "./pages/dashboard/KnockOffPage";
 import NotFound from "./pages/NotFound";
