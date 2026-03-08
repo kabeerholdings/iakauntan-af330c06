@@ -153,6 +153,11 @@ export function AppSidebar() {
                   {c.name}
                 </DropdownMenuItem>
               ))}
+              <DropdownMenuSeparator />
+              <DropdownMenuItem onClick={() => setShowCreateCompany(true)}>
+                <Plus className="h-4 w-4 mr-2" />
+                Add New Company
+              </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
