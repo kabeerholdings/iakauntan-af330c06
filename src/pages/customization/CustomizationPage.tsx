@@ -45,6 +45,7 @@ const CustomizationPage = () => {
   // DIY Fields
   const [customFields, setCustomFields] = useState<any[]>([]);
   const [fieldOpen, setFieldOpen] = useState(false);
+  const [editingFieldId, setEditingFieldId] = useState<string | null>(null);
   const [fieldForm, setFieldForm] = useState({
     entity_type: 'customer', field_name: '', field_label: '', field_type: 'text', is_required: false, field_options: '[]',
   });
@@ -77,12 +78,11 @@ const CustomizationPage = () => {
 
   useEffect(() => { fetchAll(); }, [selectedCompany]);
 
-  // DIY Fields CRUD
-  const createField = async () => {
+  const saveField = async () => {
     if (!selectedCompany || !fieldForm.field_name || !fieldForm.field_label) return;
     let options: any[] = [];
     try { options = JSON.parse(fieldForm.field_options); } catch { options = []; }
-    const { error } = await supabase.from('custom_fields').insert({
+    const payload = {
       company_id: selectedCompany.id,
       entity_type: fieldForm.entity_type,
       field_name: fieldForm.field_name.toLowerCase().replace(/\s+/g, '_'),
@@ -90,12 +90,38 @@ const CustomizationPage = () => {
       field_type: fieldForm.field_type,
       is_required: fieldForm.is_required,
       field_options: options,
-    });
-    if (error) { toast.error(error.message); return; }
-    toast.success('Custom field created');
-    setFieldOpen(false);
-    setFieldForm({ entity_type: 'customer', field_name: '', field_label: '', field_type: 'text', is_required: false, field_options: '[]' });
+    };
+
+    if (editingFieldId) {
+      const { error } = await supabase.from('custom_fields').update(payload).eq('id', editingFieldId);
+      if (error) { toast.error(error.message); return; }
+      toast.success('Custom field updated');
+    } else {
+      const { error } = await supabase.from('custom_fields').insert(payload);
+      if (error) { toast.error(error.message); return; }
+      toast.success('Custom field created');
+    }
+    closeFieldDialog();
     fetchAll();
+  };
+
+  const closeFieldDialog = () => {
+    setFieldOpen(false);
+    setEditingFieldId(null);
+    setFieldForm({ entity_type: 'customer', field_name: '', field_label: '', field_type: 'text', is_required: false, field_options: '[]' });
+  };
+
+  const openEditField = (f: any) => {
+    setEditingFieldId(f.id);
+    setFieldForm({
+      entity_type: f.entity_type,
+      field_name: f.field_name,
+      field_label: f.field_label,
+      field_type: f.field_type,
+      is_required: f.is_required || false,
+      field_options: JSON.stringify(f.field_options || []),
+    });
+    setFieldOpen(true);
   };
 
   const deleteField = async (id: string) => {
@@ -163,10 +189,10 @@ const CustomizationPage = () => {
               <h2 className="text-lg font-semibold">DIY Custom Fields</h2>
               <p className="text-sm text-muted-foreground">Create unlimited custom data fields for any document or entity — text, date, memo, dropdown & more.</p>
             </div>
-            <Dialog open={fieldOpen} onOpenChange={setFieldOpen}>
+            <Dialog open={fieldOpen} onOpenChange={(v) => { if (!v) closeFieldDialog(); else setFieldOpen(true); }}>
               <DialogTrigger asChild><Button><Plus className="mr-2 h-4 w-4" />Add Field</Button></DialogTrigger>
               <DialogContent>
-                <DialogHeader><DialogTitle>Create Custom Field</DialogTitle></DialogHeader>
+                <DialogHeader><DialogTitle>{editingFieldId ? 'Edit Custom Field' : 'Create Custom Field'}</DialogTitle></DialogHeader>
                 <div className="space-y-4">
                   <div><Label>Entity / Document</Label>
                     <Select value={fieldForm.entity_type} onValueChange={v => setFieldForm({ ...fieldForm, entity_type: v })}>
@@ -189,7 +215,7 @@ const CustomizationPage = () => {
                     <Switch checked={fieldForm.is_required} onCheckedChange={v => setFieldForm({ ...fieldForm, is_required: v })} />
                     <Label>Required field</Label>
                   </div>
-                  <Button onClick={createField} className="w-full">Create Field</Button>
+                  <Button onClick={saveField} className="w-full">{editingFieldId ? 'Update Field' : 'Create Field'}</Button>
                 </div>
               </DialogContent>
             </Dialog>
@@ -205,7 +231,7 @@ const CustomizationPage = () => {
                   <TableCell className="font-mono text-xs">{f.field_name}</TableCell>
                   <TableCell><Badge variant="secondary">{f.field_type}</Badge></TableCell>
                   <TableCell>{f.is_required ? '✓' : '-'}</TableCell>
-                  <TableCell><Button size="sm" variant="ghost" onClick={() => deleteField(f.id)}><Trash2 className="h-3 w-3" /></Button></TableCell>
+                  <TableCell><div className="flex gap-1"><Button size="sm" variant="ghost" onClick={() => openEditField(f)}><Edit className="h-3 w-3" /></Button><Button size="sm" variant="ghost" onClick={() => deleteField(f.id)}><Trash2 className="h-3 w-3" /></Button></div></TableCell>
                 </TableRow>
               ))}
               {customFields.length === 0 && <TableRow><TableCell colSpan={6} className="text-center text-muted-foreground py-8">No custom fields. Create your first DIY field.</TableCell></TableRow>}
