@@ -20,6 +20,7 @@ const EmployeesPage = () => {
   const [search, setSearch] = useState('');
   const [open, setOpen] = useState(false);
   const [formTab, setFormTab] = useState('personal');
+  const [customValues, setCustomValues] = useState<Record<string, string>>({});
   const [form, setForm] = useState({
     employee_no: '', first_name: '', last_name: '', ic_no: '', passport_no: '',
     date_of_birth: '', gender: 'male', marital_status: 'single', nationality: 'Malaysian',
