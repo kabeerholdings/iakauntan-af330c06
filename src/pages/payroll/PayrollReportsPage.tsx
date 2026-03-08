@@ -12,6 +12,7 @@ const months = ['January','February','March','April','May','June','July','August
 
 const PayrollReportsPage = () => {
   const { selectedCompany } = useCompany();
+  const fmt = (n: number) => formatCurrency(n, selectedCompany?.base_currency);
   const [periods, setPeriods] = useState<any[]>([]);
   const [selectedPeriodId, setSelectedPeriodId] = useState('');
   const [payslips, setPayslips] = useState<any[]>([]);
