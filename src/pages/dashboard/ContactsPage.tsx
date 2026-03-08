@@ -13,6 +13,7 @@ import { Badge } from '@/components/ui/badge';
 import { Plus, Search, Pencil, Trash2 } from 'lucide-react';
 import { toast } from 'sonner';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
+import CustomFieldsSection, { saveCustomFieldValues } from '@/components/CustomFieldsSection';
 
 const emptyForm = {
   name: '', email: '', phone: '', type: 'customer', tax_id: '',
@@ -29,6 +30,7 @@ const ContactsPage = () => {
   const [open, setOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [form, setForm] = useState({ ...emptyForm });
+  const [customValues, setCustomValues] = useState<Record<string, string>>({});
 
   const fetchData = async () => {
     if (!selectedCompany) return;
@@ -50,15 +52,24 @@ const ContactsPage = () => {
       bank_account_no: form.bank_account_no || null,
     };
 
+    let entityId = editingId;
     if (editingId) {
       const { error } = await supabase.from('contacts').update(payload).eq('id', editingId);
       if (error) { toast.error(error.message); return; }
       toast.success('Contact updated');
     } else {
-      const { error } = await supabase.from('contacts').insert(payload);
+      const { data, error } = await supabase.from('contacts').insert(payload).select('id').single();
       if (error) { toast.error(error.message); return; }
+      entityId = data.id;
       toast.success('Contact added');
     }
+
+    // Save custom field values
+    const cfEntityType = form.type === 'supplier' ? 'supplier' : 'customer';
+    if (entityId) {
+      await saveCustomFieldValues(selectedCompany.id, cfEntityType, entityId, customValues);
+    }
+
     closeDialog();
     fetchData();
   };
@@ -67,6 +78,7 @@ const ContactsPage = () => {
     setOpen(false);
     setEditingId(null);
     setForm({ ...emptyForm });
+    setCustomValues({});
   };
 
   const openEdit = (c: any) => {
@@ -80,6 +92,7 @@ const ContactsPage = () => {
       overdue_limit: c.overdue_limit?.toString() || '',
       bank_name: c.bank_name || '', bank_account_no: c.bank_account_no || '',
     });
+    setCustomValues({});
     setOpen(true);
   };
 
@@ -149,6 +162,13 @@ const ContactsPage = () => {
                   <div><Label>Account No.</Label><Input value={form.bank_account_no} onChange={e => setForm(f => ({ ...f, bank_account_no: e.target.value }))} /></div>
                 </div>
               </div>
+
+              <CustomFieldsSection
+                entityType={form.type === 'supplier' ? 'supplier' : 'customer'}
+                entityId={editingId}
+                values={customValues}
+                onChange={setCustomValues}
+              />
 
               <Button onClick={handleCreate} className="w-full">{editingId ? 'Update Contact' : 'Add Contact'}</Button>
             </div>

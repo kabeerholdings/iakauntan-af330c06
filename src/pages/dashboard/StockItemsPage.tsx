@@ -12,6 +12,7 @@ import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Plus, Search, Package } from 'lucide-react';
 import { toast } from 'sonner';
+import CustomFieldsSection, { saveCustomFieldValues } from '@/components/CustomFieldsSection';
 
 const StockItemsPage = () => {
   const { selectedCompany } = useCompany();
@@ -30,6 +31,7 @@ const StockItemsPage = () => {
   });
   const [catForm, setCatForm] = useState({ name: '', description: '' });
   const [whForm, setWhForm] = useState({ code: '', name: '', address: '' });
+  const [customValues, setCustomValues] = useState<Record<string, string>>({});
 
   const fetchData = async () => {
     if (!selectedCompany) return;
@@ -49,18 +51,22 @@ const StockItemsPage = () => {
 
   const handleCreateItem = async () => {
     if (!selectedCompany || !form.code || !form.name) { toast.error('Code and Name required'); return; }
-    const { error } = await supabase.from('stock_items').insert({
+    const { data, error } = await supabase.from('stock_items').insert({
       company_id: selectedCompany.id, code: form.code, name: form.name,
       description: form.description || null, category_id: form.category_id || null,
       base_uom: form.base_uom, purchase_price: +form.purchase_price || 0,
       selling_price: +form.selling_price || 0, reorder_level: +form.reorder_level || 0,
       reorder_qty: +form.reorder_qty || 0, costing_method: form.costing_method,
       barcode: form.barcode || null, tax_rate: +form.tax_rate || 0,
-    });
+    }).select('id').single();
     if (error) { toast.error(error.message); return; }
+    if (data) {
+      await saveCustomFieldValues(selectedCompany.id, 'stock_item', data.id, customValues);
+    }
     toast.success('Stock item created');
     setOpen(false);
     setForm({ code: '', name: '', description: '', category_id: '', base_uom: 'unit', purchase_price: '', selling_price: '', reorder_level: '', reorder_qty: '', costing_method: 'weighted_avg', barcode: '', tax_rate: '0' });
+    setCustomValues({});
     fetchData();
   };
 
@@ -160,6 +166,7 @@ const StockItemsPage = () => {
                   <div><Label>Barcode</Label><Input value={form.barcode} onChange={e => setForm(f => ({ ...f, barcode: e.target.value }))} /></div>
                   <div><Label>Tax Rate (%)</Label><Input type="number" value={form.tax_rate} onChange={e => setForm(f => ({ ...f, tax_rate: e.target.value }))} /></div>
                 </div>
+                <CustomFieldsSection entityType="stock_item" values={customValues} onChange={setCustomValues} />
                 <Button onClick={handleCreateItem} className="w-full">Add Item</Button>
               </div>
             </DialogContent>

@@ -12,6 +12,7 @@ import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Plus, Search, UserPlus } from 'lucide-react';
 import { toast } from 'sonner';
+import CustomFieldsSection, { saveCustomFieldValues } from '@/components/CustomFieldsSection';
 
 const EmployeesPage = () => {
   const { selectedCompany } = useCompany();
@@ -19,6 +20,7 @@ const EmployeesPage = () => {
   const [search, setSearch] = useState('');
   const [open, setOpen] = useState(false);
   const [formTab, setFormTab] = useState('personal');
+  const [customValues, setCustomValues] = useState<Record<string, string>>({});
   const [form, setForm] = useState({
     employee_no: '', first_name: '', last_name: '', ic_no: '', passport_no: '',
     date_of_birth: '', gender: 'male', marital_status: 'single', nationality: 'Malaysian',
@@ -43,7 +45,7 @@ const EmployeesPage = () => {
 
   const handleCreate = async () => {
     if (!selectedCompany || !form.employee_no || !form.first_name) { toast.error('Employee No and First Name required'); return; }
-    const { error } = await supabase.from('employees').insert({
+    const { data, error } = await supabase.from('employees').insert({
       company_id: selectedCompany.id, employee_no: form.employee_no,
       first_name: form.first_name, last_name: form.last_name || '',
       ic_no: form.ic_no || null, passport_no: form.passport_no || null,
@@ -63,10 +65,14 @@ const EmployeesPage = () => {
       zakat_percentage: +form.zakat_percentage || 0, hrdf_contribute: form.hrdf_contribute,
       bank_name: form.bank_name || null, bank_account_no: form.bank_account_no || null,
       payment_method: form.payment_method,
-    });
+    }).select('id').single();
     if (error) { toast.error(error.message); return; }
+    if (data) {
+      await saveCustomFieldValues(selectedCompany.id, 'employee', data.id, customValues);
+    }
     toast.success('Employee added');
     setOpen(false);
+    setCustomValues({});
     fetchData();
   };
 
@@ -225,6 +231,7 @@ const EmployeesPage = () => {
                 </div>
               </TabsContent>
             </Tabs>
+            <CustomFieldsSection entityType="employee" values={customValues} onChange={setCustomValues} />
             <Button onClick={handleCreate} className="w-full mt-4">Add Employee</Button>
           </DialogContent>
         </Dialog>

@@ -12,6 +12,7 @@ import { Badge } from '@/components/ui/badge';
 import { Plus, Eye, Palette, Printer } from 'lucide-react';
 import { toast } from 'sonner';
 import { useNavigate } from 'react-router-dom';
+import CustomFieldsSection, { saveCustomFieldValues } from '@/components/CustomFieldsSection';
 
 const InvoicesPage = () => {
   const { selectedCompany } = useCompany();
@@ -26,6 +27,7 @@ const InvoicesPage = () => {
     due_date: '', invoice_type: 'sales' as string, notes: '',
     lines: [{ description: '', quantity: 1, unit_price: 0, tax_rate: 0 }],
   });
+  const [customValues, setCustomValues] = useState<Record<string, string>>({});
 
   const fetchData = async () => {
     if (!selectedCompany) return;
@@ -76,11 +78,13 @@ const InvoicesPage = () => {
           line_total: l.quantity * l.unit_price * (1 + l.tax_rate / 100),
         }))
       );
+      await saveCustomFieldValues(selectedCompany.id, 'invoice', inv.id, customValues);
     }
 
     toast.success('Invoice created');
     setOpen(false);
     setForm({ invoice_number: '', contact_id: '', invoice_date: new Date().toISOString().split('T')[0], due_date: '', invoice_type: 'sales', notes: '', lines: [{ description: '', quantity: 1, unit_price: 0, tax_rate: 0 }] });
+    setCustomValues({});
     fetchData();
   };
 
@@ -180,6 +184,8 @@ const InvoicesPage = () => {
                   </div>
                   <Button onClick={handleCreate}>Create Invoice</Button>
                 </div>
+
+                <CustomFieldsSection entityType="invoice" values={customValues} onChange={setCustomValues} />
               </div>
             </DialogContent>
           </Dialog>
