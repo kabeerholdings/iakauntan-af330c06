@@ -96,6 +96,7 @@ export function AppSidebar() {
   const { signOut } = useAuth();
   const { companies, selectedCompany, setSelectedCompany, refetchCompanies } = useCompany();
   const [showCreateCompany, setShowCreateCompany] = useState(false);
+  const [showEditCompany, setShowEditCompany] = useState(false);
   const [newCompany, setNewCompany] = useState({ name: '', registration_no: '', tax_id: '' });
   const [creating, setCreating] = useState(false);
 
