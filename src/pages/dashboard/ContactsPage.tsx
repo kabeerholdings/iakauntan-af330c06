@@ -92,6 +92,7 @@ const ContactsPage = () => {
       overdue_limit: c.overdue_limit?.toString() || '',
       bank_name: c.bank_name || '', bank_account_no: c.bank_account_no || '',
     });
+    setCustomValues({});
     setOpen(true);
   };
 
