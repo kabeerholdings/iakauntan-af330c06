@@ -5,15 +5,17 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
 import { Switch } from '@/components/ui/switch';
-import { FileText, Plus, Palette, Eye, Star, Trash2 } from 'lucide-react';
+import { FileText, Plus, Palette, Eye, Star, Trash2, LayoutGrid } from 'lucide-react';
 import { toast } from 'sonner';
+import TemplateGallery from '@/components/templates/TemplateGallery';
+import { type ReportTemplate } from '@/lib/report-templates';
 
 const templateTypes = [
   { value: 'invoice', label: 'Invoice' },
@@ -34,6 +36,7 @@ const DocumentTemplatesPage = () => {
   const [templates, setTemplates] = useState<any[]>([]);
   const [open, setOpen] = useState(false);
   const [preview, setPreview] = useState<any>(null);
+  const [selectedGalleryTemplate, setSelectedGalleryTemplate] = useState<string | null>(null);
   const [form, setForm] = useState({
     template_name: '', template_type: 'invoice', header_html: '', body_html: '', footer_html: '',
     primary_color: '#1a56db', font_family: 'Inter', paper_size: 'A4',
@@ -59,8 +62,48 @@ const DocumentTemplatesPage = () => {
     else { toast.success('Template created'); setOpen(false); fetchData(); }
   };
 
+  const handleSelectFromGallery = async (template: ReportTemplate) => {
+    if (!selectedCompany) return;
+    setSelectedGalleryTemplate(template.id);
+
+    // Map gallery category to template_type
+    const typeMap: Record<string, string> = {
+      sales_invoice: 'invoice', einvoice: 'invoice', sales_quotation: 'quotation',
+      sales_delivery_order: 'delivery_order', sales_order: 'invoice',
+      sales_credit_note: 'credit_note', sales_debit_note: 'debit_note',
+      purchase_invoice: 'invoice', purchase_order: 'purchase_order',
+      purchase_debit_note: 'debit_note', customer_statement: 'statement',
+      customer_aging: 'statement', customer_payment: 'receipt',
+      payment_voucher: 'receipt', official_receipt: 'receipt',
+      cash_sales: 'invoice', cheque_format: 'receipt',
+      goods_received: 'delivery_order', payslip: 'receipt',
+      stock_barcode: 'invoice', general_ledger: 'statement',
+    };
+
+    const { error } = await supabase.from('document_templates').insert({
+      company_id: selectedCompany.id,
+      template_name: template.name,
+      template_type: typeMap[template.category] || 'invoice',
+      primary_color: template.primaryColor,
+      font_family: template.fontFamily,
+      paper_size: template.paperSize,
+      show_logo: template.showLogo,
+      show_payment_info: template.showPaymentInfo,
+      show_notes: template.showNotes,
+      header_html: null,
+      body_html: null,
+      footer_html: template.showNotes ? 'Thank you for your business.' : null,
+    });
+
+    if (error) {
+      toast.error(error.message);
+    } else {
+      toast.success(`Template "${template.name}" added to your templates`);
+      fetchData();
+    }
+  };
+
   const setDefault = async (id: string, type: string) => {
-    // Unset all defaults for this type
     await supabase.from('document_templates').update({ is_default: false })
       .eq('company_id', selectedCompany!.id).eq('template_type', type);
     await supabase.from('document_templates').update({ is_default: true }).eq('id', id);
@@ -84,14 +127,14 @@ const DocumentTemplatesPage = () => {
             <Palette className="h-5 w-5 text-primary" />
           </div>
           <div>
-            <h1 className="font-display text-2xl font-bold text-foreground">Customisable Document Templates</h1>
-            <p className="text-sm text-muted-foreground">Design and manage templates for invoices, quotations, and more</p>
+            <h1 className="font-display text-2xl font-bold text-foreground">Report Templates</h1>
+            <p className="text-sm text-muted-foreground">Browse, select, and manage invoice and report printing formats</p>
           </div>
         </div>
         <Dialog open={open} onOpenChange={setOpen}>
-          <DialogTrigger asChild><Button><Plus className="h-4 w-4 mr-2" />New Template</Button></DialogTrigger>
+          <DialogTrigger asChild><Button><Plus className="h-4 w-4 mr-2" />Custom Template</Button></DialogTrigger>
           <DialogContent className="max-w-2xl max-h-[85vh] overflow-y-auto">
-            <DialogHeader><DialogTitle>Create Document Template</DialogTitle></DialogHeader>
+            <DialogHeader><DialogTitle>Create Custom Template</DialogTitle></DialogHeader>
             <div className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
                 <div><Label>Template Name</Label><Input value={form.template_name} onChange={e => setForm({ ...form, template_name: e.target.value })} placeholder="Professional Blue" /></div>
@@ -99,9 +142,7 @@ const DocumentTemplatesPage = () => {
                   <Label>Document Type</Label>
                   <Select value={form.template_type} onValueChange={v => setForm({ ...form, template_type: v })}>
                     <SelectTrigger><SelectValue /></SelectTrigger>
-                    <SelectContent>
-                      {templateTypes.map(t => <SelectItem key={t.value} value={t.value}>{t.label}</SelectItem>)}
-                    </SelectContent>
+                    <SelectContent>{templateTypes.map(t => <SelectItem key={t.value} value={t.value}>{t.label}</SelectItem>)}</SelectContent>
                   </Select>
                 </div>
               </div>
@@ -142,80 +183,104 @@ const DocumentTemplatesPage = () => {
         </Dialog>
       </div>
 
-      {/* Template Overview by Type */}
-      <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        {templateTypes.slice(0, 4).map(tt => {
-          const count = templates.filter(t => t.template_type === tt.value).length;
-          const def = templates.find(t => t.template_type === tt.value && t.is_default);
-          return (
-            <Card key={tt.value} className="shadow-card">
-              <CardContent className="pt-6">
-                <div className="flex items-center justify-between mb-2">
-                  <FileText className="h-5 w-5 text-primary" />
-                  <Badge variant="secondary">{count} template{count !== 1 ? 's' : ''}</Badge>
-                </div>
-                <h3 className="font-display font-semibold">{tt.label}</h3>
-                <p className="text-xs text-muted-foreground mt-1">
-                  Default: {def?.template_name || 'System Default'}
-                </p>
-              </CardContent>
-            </Card>
-          );
-        })}
-      </div>
+      <Tabs defaultValue="gallery" className="w-full">
+        <TabsList>
+          <TabsTrigger value="gallery" className="gap-1.5"><LayoutGrid className="h-4 w-4" />Template Gallery</TabsTrigger>
+          <TabsTrigger value="my-templates" className="gap-1.5"><FileText className="h-4 w-4" />My Templates ({templates.length})</TabsTrigger>
+        </TabsList>
 
-      {/* All Templates */}
-      <Card className="shadow-card">
-        <CardHeader>
-          <CardTitle className="font-display">All Templates</CardTitle>
-        </CardHeader>
-        <CardContent className="p-0">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Name</TableHead>
-                <TableHead>Type</TableHead>
-                <TableHead>Color</TableHead>
-                <TableHead>Font</TableHead>
-                <TableHead>Paper</TableHead>
-                <TableHead>Default</TableHead>
-                <TableHead>Actions</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {templates.length === 0 ? (
-                <TableRow><TableCell colSpan={7} className="text-center text-muted-foreground py-8">No templates yet — using system defaults</TableCell></TableRow>
-              ) : templates.map(t => (
-                <TableRow key={t.id}>
-                  <TableCell className="font-medium">{t.template_name}</TableCell>
-                  <TableCell><Badge variant="secondary">{templateTypes.find(tt => tt.value === t.template_type)?.label}</Badge></TableCell>
-                  <TableCell>
-                    <div className="flex items-center gap-2">
-                      <div className="w-4 h-4 rounded" style={{ backgroundColor: t.primary_color }} />
-                      <span className="text-xs font-mono">{t.primary_color}</span>
+        <TabsContent value="gallery" className="mt-4">
+          <Card>
+            <CardHeader>
+              <CardTitle className="font-display">Report Template Gallery</CardTitle>
+              <p className="text-sm text-muted-foreground">
+                Browse pre-built invoice and report templates. Click to preview and add to your templates.
+              </p>
+            </CardHeader>
+            <CardContent>
+              <TemplateGallery
+                onSelectTemplate={handleSelectFromGallery}
+                selectedTemplateId={selectedGalleryTemplate}
+              />
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="my-templates" className="mt-4 space-y-4">
+          {/* Template Overview by Type */}
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            {templateTypes.slice(0, 4).map(tt => {
+              const count = templates.filter(t => t.template_type === tt.value).length;
+              const def = templates.find(t => t.template_type === tt.value && t.is_default);
+              return (
+                <Card key={tt.value} className="shadow-card">
+                  <CardContent className="pt-6">
+                    <div className="flex items-center justify-between mb-2">
+                      <FileText className="h-5 w-5 text-primary" />
+                      <Badge variant="secondary">{count} template{count !== 1 ? 's' : ''}</Badge>
                     </div>
-                  </TableCell>
-                  <TableCell className="text-sm">{t.font_family}</TableCell>
-                  <TableCell>{t.paper_size}</TableCell>
-                  <TableCell>
-                    {t.is_default ? (
-                      <Badge><Star className="h-3 w-3 mr-1" />Default</Badge>
-                    ) : (
-                      <Button variant="ghost" size="sm" onClick={() => setDefault(t.id, t.template_type)}>Set Default</Button>
-                    )}
-                  </TableCell>
-                  <TableCell>
-                    <div className="flex gap-1">
-                      <Button variant="ghost" size="sm" onClick={() => setPreview(t)}><Eye className="h-4 w-4" /></Button>
-                      <Button variant="ghost" size="sm" className="text-destructive" onClick={() => deleteTemplate(t.id)}><Trash2 className="h-4 w-4" /></Button>
-                    </div>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </CardContent>
-      </Card>
+                    <h3 className="font-display font-semibold">{tt.label}</h3>
+                    <p className="text-xs text-muted-foreground mt-1">
+                      Default: {def?.template_name || 'System Default'}
+                    </p>
+                  </CardContent>
+                </Card>
+              );
+            })}
+          </div>
+
+          {/* All Templates Table */}
+          <Card className="shadow-card">
+            <CardHeader><CardTitle className="font-display">All Templates</CardTitle></CardHeader>
+            <CardContent className="p-0">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Name</TableHead>
+                    <TableHead>Type</TableHead>
+                    <TableHead>Color</TableHead>
+                    <TableHead>Font</TableHead>
+                    <TableHead>Paper</TableHead>
+                    <TableHead>Default</TableHead>
+                    <TableHead>Actions</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {templates.length === 0 ? (
+                    <TableRow><TableCell colSpan={7} className="text-center text-muted-foreground py-8">No templates yet — browse the gallery to get started</TableCell></TableRow>
+                  ) : templates.map(t => (
+                    <TableRow key={t.id}>
+                      <TableCell className="font-medium">{t.template_name}</TableCell>
+                      <TableCell><Badge variant="secondary">{templateTypes.find(tt => tt.value === t.template_type)?.label}</Badge></TableCell>
+                      <TableCell>
+                        <div className="flex items-center gap-2">
+                          <div className="w-4 h-4 rounded" style={{ backgroundColor: t.primary_color }} />
+                          <span className="text-xs font-mono">{t.primary_color}</span>
+                        </div>
+                      </TableCell>
+                      <TableCell className="text-sm">{t.font_family}</TableCell>
+                      <TableCell>{t.paper_size}</TableCell>
+                      <TableCell>
+                        {t.is_default ? (
+                          <Badge><Star className="h-3 w-3 mr-1" />Default</Badge>
+                        ) : (
+                          <Button variant="ghost" size="sm" onClick={() => setDefault(t.id, t.template_type)}>Set Default</Button>
+                        )}
+                      </TableCell>
+                      <TableCell>
+                        <div className="flex gap-1">
+                          <Button variant="ghost" size="sm" onClick={() => setPreview(t)}><Eye className="h-4 w-4" /></Button>
+                          <Button variant="ghost" size="sm" className="text-destructive" onClick={() => deleteTemplate(t.id)}><Trash2 className="h-4 w-4" /></Button>
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </CardContent>
+          </Card>
+        </TabsContent>
+      </Tabs>
 
       {/* Preview Dialog */}
       {preview && (
