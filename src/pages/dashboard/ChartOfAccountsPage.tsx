@@ -180,9 +180,9 @@ const ChartOfAccountsPage = () => {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {accounts.length === 0 ? (
-                <TableRow><TableCell colSpan={6} className="text-center text-muted-foreground py-8">No accounts yet</TableCell></TableRow>
-              ) : accounts.map(a => (
+              {filteredAccounts.length === 0 ? (
+                <TableRow><TableCell colSpan={6} className="text-center text-muted-foreground py-8">{accounts.length === 0 ? 'No accounts yet' : 'No matching accounts'}</TableCell></TableRow>
+              ) : filteredAccounts.map(a => (
                 <TableRow key={a.id}>
                   <TableCell className="font-mono font-medium">{a.code}</TableCell>
                   <TableCell className="font-medium">{a.name}</TableCell>
