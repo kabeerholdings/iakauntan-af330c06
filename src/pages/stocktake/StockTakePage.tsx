@@ -297,7 +297,7 @@ const StockTakePage = () => {
                         ) : l.counted_qty}
                       </TableCell>
                       <TableCell className={l.variance < 0 ? 'text-destructive font-semibold' : l.variance > 0 ? 'text-green-600 font-semibold' : ''}>{l.variance > 0 ? '+' : ''}{l.variance}</TableCell>
-                      <TableCell className={l.variance_value < 0 ? 'text-destructive' : ''}>RM {(l.variance_value || 0).toFixed(2)}</TableCell>
+                      <TableCell className={l.variance_value < 0 ? 'text-destructive' : ''}>{fmt(l.variance_value || 0)}</TableCell>
                     </TableRow>
                   ))}
                   {takeLines.length === 0 && <TableRow><TableCell colSpan={6} className="text-center text-muted-foreground py-8">Scan items to start counting</TableCell></TableRow>}
