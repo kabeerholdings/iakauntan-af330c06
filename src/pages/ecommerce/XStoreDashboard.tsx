@@ -21,6 +21,7 @@ const COLORS = ['hsl(var(--primary))', 'hsl(var(--chart-2))', 'hsl(var(--chart-3
 
 const XStoreDashboard = () => {
   const { selectedCompany } = useCompany();
+  const { fmt } = useCurrency();
   const [stores, setStores] = useState<any[]>([]);
   const [products, setProducts] = useState<any[]>([]);
   const [orders, setOrders] = useState<any[]>([]);

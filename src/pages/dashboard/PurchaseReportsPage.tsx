@@ -12,7 +12,7 @@ import { Printer } from 'lucide-react';
 
 const PurchaseReportsPage = () => {
   const { selectedCompany } = useCompany();
-  const { fmt } = useCurrency();
+  const { fmt, symbol } = useCurrency();
   const [docs, setDocs] = useState<any[]>([]);
   const [dateFrom, setDateFrom] = useState(() => {
     const d = new Date(); d.setMonth(0, 1);

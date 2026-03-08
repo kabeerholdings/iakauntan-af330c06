@@ -11,6 +11,7 @@ import { Users, Building2, FileText, Shield } from 'lucide-react';
 
 const AdminPage = () => {
   const { isAdmin, loading } = useAuth();
+  const { fmt } = useCurrency();
   const [users, setUsers] = useState<any[]>([]);
   const [companies, setCompanies] = useState<any[]>([]);
   const [invoices, setInvoices] = useState<any[]>([]);

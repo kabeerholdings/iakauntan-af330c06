@@ -38,6 +38,7 @@ const emptyRow = (): FastEntryRow => ({
 
 const FastEntryPage = () => {
   const { selectedCompany } = useCompany();
+  const { fmt } = useCurrency();
   const { user } = useAuth();
   const [entryType, setEntryType] = useState<'sales_invoice' | 'purchase_invoice' | 'payment' | 'receipt'>('sales_invoice');
   const [rows, setRows] = useState<FastEntryRow[]>(() => Array.from({ length: 5 }, emptyRow));

@@ -32,6 +32,7 @@ export interface AccountBalance {
 
 const FinancialReportsPage = () => {
   const { selectedCompany } = useCompany();
+  const { fmt } = useCurrency();
   const [searchParams, setSearchParams] = useSearchParams();
   const [accounts, setAccounts] = useState<any[]>([]);
   const [journalLines, setJournalLines] = useState<any[]>([]);

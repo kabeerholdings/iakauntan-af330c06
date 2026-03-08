@@ -17,6 +17,7 @@ import { toast } from 'sonner';
 
 const FixedAssetsPage = () => {
   const { selectedCompany } = useCompany();
+  const { fmt, symbol } = useCurrency();
   const { user } = useAuth();
   const [assets, setAssets] = useState<any[]>([]);
   const [assetTypes, setAssetTypes] = useState<any[]>([]);

@@ -18,6 +18,7 @@ import { toast } from 'sonner';
 
 const SSTPage = () => {
   const { selectedCompany } = useCompany();
+  const { fmt, symbol } = useCurrency();
   const { user } = useAuth();
   const [taxCodes, setTaxCodes] = useState<any[]>([]);
   const [returns, setReturns] = useState<any[]>([]);

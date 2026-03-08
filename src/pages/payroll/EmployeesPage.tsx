@@ -17,6 +17,7 @@ import { useCustomFields, saveCustomFieldValues } from '@/components/CustomField
 
 const EmployeesPage = () => {
   const { selectedCompany } = useCompany();
+  const { fmt } = useCurrency();
   const [employees, setEmployees] = useState<any[]>([]);
   const [search, setSearch] = useState('');
   const [open, setOpen] = useState(false);
