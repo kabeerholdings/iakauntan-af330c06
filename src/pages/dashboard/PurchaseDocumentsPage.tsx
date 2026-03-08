@@ -11,12 +11,13 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
-import { Plus } from 'lucide-react';
+import { Plus, Eye } from 'lucide-react';
 import { toast } from 'sonner';
+import DocumentPrintPreview from '@/components/DocumentPrintPreview';
 
 const docTypes = [
   { value: 'purchase_order', label: 'Purchase Order' },
-  { value: 'goods_received', label: 'Goods Received' },
+  { value: 'purchase_invoice', label: 'Purchase Invoice' },
   { value: 'purchase_return', label: 'Purchase Return' },
 ];
 
@@ -26,8 +27,11 @@ const PurchaseDocumentsPage = () => {
   const [docs, setDocs] = useState<any[]>([]);
   const [contacts, setContacts] = useState<any[]>([]);
   const [stockItems, setStockItems] = useState<any[]>([]);
+  const [templates, setTemplates] = useState<any[]>([]);
   const [activeTab, setActiveTab] = useState('purchase_order');
   const [open, setOpen] = useState(false);
+  const [previewDoc, setPreviewDoc] = useState<any>(null);
+  const [selectedTemplate, setSelectedTemplate] = useState<any>(null);
   const [form, setForm] = useState({
     doc_type: 'purchase_order', doc_number: '', contact_id: '',
     doc_date: new Date().toISOString().split('T')[0], due_date: '',
@@ -37,14 +41,18 @@ const PurchaseDocumentsPage = () => {
 
   const fetchData = async () => {
     if (!selectedCompany) return;
-    const [pd, con, si] = await Promise.all([
+    const [pd, con, si, tpl] = await Promise.all([
       supabase.from('purchase_documents').select('*, contacts(name), purchase_document_lines(*)').eq('company_id', selectedCompany.id).order('doc_date', { ascending: false }),
       supabase.from('contacts').select('*').eq('company_id', selectedCompany.id).eq('is_active', true).in('type', ['supplier', 'both']),
       supabase.from('stock_items').select('id, code, name, purchase_price, tax_rate').eq('company_id', selectedCompany.id).eq('is_active', true),
+      supabase.from('document_templates').select('*').eq('company_id', selectedCompany.id),
     ]);
     setDocs(pd.data || []);
     setContacts(con.data || []);
     setStockItems(si.data || []);
+    const tpls = tpl.data || [];
+    setTemplates(tpls);
+    if (tpls.length > 0 && !selectedTemplate) setSelectedTemplate(tpls.find(t => t.is_default) || tpls[0]);
   };
 
   useEffect(() => { fetchData(); }, [selectedCompany]);
@@ -99,6 +107,13 @@ const PurchaseDocumentsPage = () => {
     setForm({ doc_type: activeTab, doc_number: '', contact_id: '', doc_date: new Date().toISOString().split('T')[0], due_date: '', reference: '', currency: 'MYR', notes: '', project: '', lines: [{ description: '', quantity: 1, unit_price: 0, tax_rate: 0, stock_item_id: '', discount_percent: 0 }] });
     fetchData();
   };
+
+  const getDocTypeLabel = (type: string) => {
+    const map: Record<string, string> = { purchase_order: 'PURCHASE ORDER', purchase_invoice: 'PURCHASE INVOICE', purchase_return: 'PURCHASE RETURN' };
+    return map[type] || type.toUpperCase();
+  };
+
+  const openPreview = (doc: any) => setPreviewDoc(doc);
 
   const statusColor = (s: string) => ({ draft: 'secondary', confirmed: 'default', received: 'default', cancelled: 'outline' }[s] || 'secondary') as any;
 
@@ -186,11 +201,12 @@ const PurchaseDocumentsPage = () => {
                     <TableHead>Currency</TableHead>
                     <TableHead className="text-right">Amount</TableHead>
                     <TableHead>Status</TableHead>
+                    <TableHead className="w-[60px]"></TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {filteredDocs.length === 0 ? (
-                    <TableRow><TableCell colSpan={6} className="text-center text-muted-foreground py-8">No documents yet</TableCell></TableRow>
+                    <TableRow><TableCell colSpan={7} className="text-center text-muted-foreground py-8">No documents yet</TableCell></TableRow>
                   ) : filteredDocs.map(d => (
                     <TableRow key={d.id}>
                       <TableCell className="font-medium">{d.doc_number}</TableCell>
@@ -199,6 +215,11 @@ const PurchaseDocumentsPage = () => {
                       <TableCell>{d.currency}</TableCell>
                       <TableCell className="text-right">RM {Number(d.total_amount).toFixed(2)}</TableCell>
                       <TableCell><Badge variant={statusColor(d.status)}>{d.status}</Badge></TableCell>
+                      <TableCell>
+                        <Button variant="ghost" size="icon" onClick={() => openPreview(d)}>
+                          <Eye className="h-4 w-4" />
+                        </Button>
+                      </TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
@@ -207,6 +228,33 @@ const PurchaseDocumentsPage = () => {
           </Card>
         </TabsContent>
       </Tabs>
+
+      {previewDoc && (
+        <DocumentPrintPreview
+          open={!!previewDoc}
+          onClose={() => setPreviewDoc(null)}
+          documentType={getDocTypeLabel(previewDoc.doc_type) as any}
+          documentNumber={previewDoc.doc_number}
+          documentDate={previewDoc.doc_date}
+          dueDate={previewDoc.due_date}
+          contactName={previewDoc.contacts?.name}
+          lines={(previewDoc.purchase_document_lines || []).map((l: any) => ({
+            id: l.id, description: l.description, quantity: Number(l.quantity),
+            unit_price: Number(l.unit_price), tax_rate: Number(l.tax_rate),
+            line_total: Number(l.line_total),
+          }))}
+          subtotal={Number(previewDoc.subtotal)}
+          taxAmount={Number(previewDoc.tax_amount)}
+          totalAmount={Number(previewDoc.total_amount)}
+          notes={previewDoc.notes}
+          currency={previewDoc.currency === 'MYR' ? 'RM' : previewDoc.currency}
+          template={selectedTemplate}
+          templates={templates}
+          company={selectedCompany}
+          onChangeTemplate={setSelectedTemplate}
+          extraFields={previewDoc.reference ? [{ label: 'Ref', value: previewDoc.reference }] : undefined}
+        />
+      )}
     </div>
   );
 };

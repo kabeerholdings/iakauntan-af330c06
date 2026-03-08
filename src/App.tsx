@@ -60,6 +60,7 @@ import SalesReportsPage from "./pages/dashboard/SalesReportsPage";
 import FinancialReportsPage from "./pages/dashboard/FinancialReportsPage";
 import KnockOffPage from "./pages/dashboard/KnockOffPage";
 import ApiIntegrationPage from "./pages/dashboard/ApiIntegrationPage";
+import PurchaseReportsPage from "./pages/dashboard/PurchaseReportsPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -127,6 +128,7 @@ const App = () => (
               <Route path="knock-off" element={<KnockOffPage />} />
               <Route path="sales-reports" element={<SalesReportsPage />} />
               <Route path="api-integration" element={<ApiIntegrationPage />} />
+              <Route path="purchase-reports" element={<PurchaseReportsPage />} />
             </Route>
             <Route path="/admin" element={<DashboardLayout />}>
               <Route index element={<AdminPage />} />

@@ -33,9 +33,13 @@ const salesItems = [
   { title: 'Sales', url: '/dashboard/sales', icon: ShoppingCart },
   { title: 'Invoices', url: '/dashboard/invoices', icon: FileText },
   { title: 'Credit Notes', url: '/dashboard/credit-notes', icon: FileX },
-  { title: 'Purchase', url: '/dashboard/purchase', icon: Truck },
   { title: 'Payments', url: '/dashboard/payments', icon: Wallet },
   { title: 'Sales Reports', url: '/dashboard/sales-reports', icon: BarChart3 },
+];
+
+const purchaseItems = [
+  { title: 'Purchase Order', url: '/dashboard/purchase', icon: Truck },
+  { title: 'Purchase Reports', url: '/dashboard/purchase-reports', icon: BarChart3 },
 ];
 
 const stockItems = [
@@ -206,8 +210,12 @@ export function AppSidebar() {
           <SidebarGroupContent>{renderItems(mainItems)}</SidebarGroupContent>
         </SidebarGroup>
         <SidebarGroup>
-          <SidebarGroupLabel>Sales & Purchase</SidebarGroupLabel>
+          <SidebarGroupLabel>Sales</SidebarGroupLabel>
           <SidebarGroupContent>{renderItems(salesItems)}</SidebarGroupContent>
+        </SidebarGroup>
+        <SidebarGroup>
+          <SidebarGroupLabel>Purchase</SidebarGroupLabel>
+          <SidebarGroupContent>{renderItems(purchaseItems)}</SidebarGroupContent>
         </SidebarGroup>
         <SidebarGroup>
           <SidebarGroupLabel>Stock</SidebarGroupLabel>
