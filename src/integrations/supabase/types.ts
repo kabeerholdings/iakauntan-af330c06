@@ -3934,6 +3934,81 @@ export type Database = {
           },
         ]
       }
+      recurring_transactions: {
+        Row: {
+          amount: number
+          auto_post: boolean | null
+          company_id: string
+          contact_id: string | null
+          created_at: string
+          created_by: string | null
+          description: string
+          end_date: string | null
+          frequency: string
+          id: string
+          is_active: boolean | null
+          last_run_date: string | null
+          next_run_date: string
+          template_data: Json | null
+          total_generated: number | null
+          transaction_type: string
+          updated_at: string
+        }
+        Insert: {
+          amount?: number
+          auto_post?: boolean | null
+          company_id: string
+          contact_id?: string | null
+          created_at?: string
+          created_by?: string | null
+          description: string
+          end_date?: string | null
+          frequency?: string
+          id?: string
+          is_active?: boolean | null
+          last_run_date?: string | null
+          next_run_date?: string
+          template_data?: Json | null
+          total_generated?: number | null
+          transaction_type?: string
+          updated_at?: string
+        }
+        Update: {
+          amount?: number
+          auto_post?: boolean | null
+          company_id?: string
+          contact_id?: string | null
+          created_at?: string
+          created_by?: string | null
+          description?: string
+          end_date?: string | null
+          frequency?: string
+          id?: string
+          is_active?: boolean | null
+          last_run_date?: string | null
+          next_run_date?: string
+          template_data?: Json | null
+          total_generated?: number | null
+          transaction_type?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "recurring_transactions_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "recurring_transactions_contact_id_fkey"
+            columns: ["contact_id"]
+            isOneToOne: false
+            referencedRelation: "contacts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       sales_document_lines: {
         Row: {
           account_id: string | null
@@ -4341,6 +4416,115 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "security_locks_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      sst_returns: {
+        Row: {
+          company_id: string
+          created_at: string
+          created_by: string | null
+          id: string
+          notes: string | null
+          period_from: string
+          period_to: string
+          return_period: string
+          return_type: string
+          status: string | null
+          submitted_at: string | null
+          total_sales_tax: number | null
+          total_service_tax: number | null
+          total_tax: number | null
+          updated_at: string
+        }
+        Insert: {
+          company_id: string
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          notes?: string | null
+          period_from: string
+          period_to: string
+          return_period: string
+          return_type?: string
+          status?: string | null
+          submitted_at?: string | null
+          total_sales_tax?: number | null
+          total_service_tax?: number | null
+          total_tax?: number | null
+          updated_at?: string
+        }
+        Update: {
+          company_id?: string
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          notes?: string | null
+          period_from?: string
+          period_to?: string
+          return_period?: string
+          return_type?: string
+          status?: string | null
+          submitted_at?: string | null
+          total_sales_tax?: number | null
+          total_service_tax?: number | null
+          total_tax?: number | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "sst_returns_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      sst_tax_codes: {
+        Row: {
+          code: string
+          company_id: string
+          created_at: string
+          description: string | null
+          id: string
+          is_active: boolean | null
+          rate: number
+          tariff_code: string | null
+          tax_type: string
+          updated_at: string
+        }
+        Insert: {
+          code: string
+          company_id: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_active?: boolean | null
+          rate?: number
+          tariff_code?: string | null
+          tax_type?: string
+          updated_at?: string
+        }
+        Update: {
+          code?: string
+          company_id?: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_active?: boolean | null
+          rate?: number
+          tariff_code?: string | null
+          tax_type?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "sst_tax_codes_company_id_fkey"
             columns: ["company_id"]
             isOneToOne: false
             referencedRelation: "companies"
