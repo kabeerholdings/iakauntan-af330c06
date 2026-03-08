@@ -160,7 +160,7 @@ const WellnessPOSPage = () => {
         <Card><CardContent className="pt-6"><div className="flex items-center gap-3"><Users className="h-8 w-8 text-primary" /><div><p className="text-sm text-muted-foreground">Members</p><p className="text-2xl font-bold">{memberships.length}</p></div></div></CardContent></Card>
         <Card><CardContent className="pt-6"><div className="flex items-center gap-3"><Gift className="h-8 w-8 text-primary" /><div><p className="text-sm text-muted-foreground">Packages</p><p className="text-2xl font-bold">{packages.length}</p></div></div></CardContent></Card>
         <Card><CardContent className="pt-6"><div className="flex items-center gap-3"><Award className="h-8 w-8 text-primary" /><div><p className="text-sm text-muted-foreground">Services</p><p className="text-2xl font-bold">{services.length}</p></div></div></CardContent></Card>
-        <Card><CardContent className="pt-6"><div className="flex items-center gap-3"><DollarSign className="h-8 w-8 text-primary" /><div><p className="text-sm text-muted-foreground">Commissions</p><p className="text-2xl font-bold">RM {totalCommissions.toFixed(2)}</p></div></div></CardContent></Card>
+        <Card><CardContent className="pt-6"><div className="flex items-center gap-3"><DollarSign className="h-8 w-8 text-primary" /><div><p className="text-sm text-muted-foreground">Commissions</p><p className="text-2xl font-bold">{fmt(totalCommissions)}</p></div></div></CardContent></Card>
       </div>
 
       <Tabs defaultValue="appointments">
