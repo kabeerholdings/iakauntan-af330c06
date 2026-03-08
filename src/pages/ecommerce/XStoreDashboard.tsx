@@ -11,6 +11,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
 import { Label } from '@/components/ui/label';
 import { Plus, Store, ShoppingBag, Package, DollarSign, TrendingUp, RefreshCw, Search, Truck, Eye } from 'lucide-react';
+import { useCurrency } from '@/hooks/useCurrency';
 import { toast } from 'sonner';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, LineChart, Line } from 'recharts';
 
@@ -20,6 +21,7 @@ const COLORS = ['hsl(var(--primary))', 'hsl(var(--chart-2))', 'hsl(var(--chart-3
 
 const XStoreDashboard = () => {
   const { selectedCompany } = useCompany();
+  const { fmt } = useCurrency();
   const [stores, setStores] = useState<any[]>([]);
   const [products, setProducts] = useState<any[]>([]);
   const [orders, setOrders] = useState<any[]>([]);
@@ -130,8 +132,8 @@ const XStoreDashboard = () => {
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <Card><CardContent className="pt-6"><div className="flex items-center gap-3"><Store className="h-8 w-8 text-primary" /><div><p className="text-sm text-muted-foreground">Connected Stores</p><p className="text-2xl font-bold">{stores.length}</p></div></div></CardContent></Card>
         <Card><CardContent className="pt-6"><div className="flex items-center gap-3"><ShoppingBag className="h-8 w-8 text-primary" /><div><p className="text-sm text-muted-foreground">Total Orders</p><p className="text-2xl font-bold">{totalOrders}</p></div></div></CardContent></Card>
-        <Card><CardContent className="pt-6"><div className="flex items-center gap-3"><TrendingUp className="h-8 w-8 text-primary" /><div><p className="text-sm text-muted-foreground">Total Sales</p><p className="text-2xl font-bold">RM {totalSales.toFixed(2)}</p></div></div></CardContent></Card>
-        <Card><CardContent className="pt-6"><div className="flex items-center gap-3"><DollarSign className="h-8 w-8 text-primary" /><div><p className="text-sm text-muted-foreground">Seller Payout</p><p className="text-2xl font-bold">RM {totalPayout.toFixed(2)}</p></div></div></CardContent></Card>
+        <Card><CardContent className="pt-6"><div className="flex items-center gap-3"><TrendingUp className="h-8 w-8 text-primary" /><div><p className="text-sm text-muted-foreground">Total Sales</p><p className="text-2xl font-bold">{fmt(totalSales)}</p></div></div></CardContent></Card>
+        <Card><CardContent className="pt-6"><div className="flex items-center gap-3"><DollarSign className="h-8 w-8 text-primary" /><div><p className="text-sm text-muted-foreground">Seller Payout</p><p className="text-2xl font-bold">{fmt(totalPayout)}</p></div></div></CardContent></Card>
       </div>
 
       {/* Charts */}
@@ -166,7 +168,7 @@ const XStoreDashboard = () => {
                   <TableCell><Badge variant="outline">{(o.marketplace_stores as any)?.marketplace}</Badge> {(o.marketplace_stores as any)?.store_name}</TableCell>
                   <TableCell>{o.customer_name || '-'}</TableCell>
                   <TableCell>{o.order_date ? new Date(o.order_date).toLocaleDateString() : '-'}</TableCell>
-                  <TableCell>RM {(o.total_amount || 0).toFixed(2)}</TableCell>
+                  <TableCell>{fmt(o.total_amount || 0)}</TableCell>
                   <TableCell><Badge variant={o.status === 'completed' ? 'default' : o.status === 'cancelled' ? 'destructive' : 'secondary'}>{o.status}</Badge></TableCell>
                   <TableCell>
                     <div className="flex gap-1">
@@ -216,7 +218,7 @@ const XStoreDashboard = () => {
                   <TableCell className="font-medium">{p.product_name}</TableCell>
                   <TableCell>{p.sku || '-'}</TableCell>
                   <TableCell>{(p.marketplace_stores as any)?.store_name || '-'}</TableCell>
-                  <TableCell>RM {(p.price || 0).toFixed(2)}</TableCell>
+                  <TableCell>{fmt(p.price || 0)}</TableCell>
                   <TableCell>{p.stock_qty}</TableCell>
                   <TableCell><Badge variant={p.status === 'active' ? 'default' : 'secondary'}>{p.status}</Badge></TableCell>
                 </TableRow>
@@ -260,13 +262,13 @@ const XStoreDashboard = () => {
                   <TableRow key={o.id}>
                     <TableCell className="font-medium">{o.order_number}</TableCell>
                     <TableCell>{(o.marketplace_stores as any)?.store_name}</TableCell>
-                    <TableCell>RM {(o.total_amount || 0).toFixed(2)}</TableCell>
-                    <TableCell className="text-destructive">-RM {(o.platform_fee || 0).toFixed(2)}</TableCell>
-                    <TableCell className="text-destructive">-RM {(o.commission_fee || 0).toFixed(2)}</TableCell>
-                    <TableCell className="text-destructive">-RM {(o.payment_fee || 0).toFixed(2)}</TableCell>
-                    <TableCell>RM {(o.shipping_fee || 0).toFixed(2)}</TableCell>
-                    <TableCell className="text-destructive">-RM {(o.voucher_discount || 0).toFixed(2)}</TableCell>
-                    <TableCell className="font-semibold">RM {(o.seller_payout || 0).toFixed(2)}</TableCell>
+                    <TableCell>{fmt(o.total_amount || 0)}</TableCell>
+                    <TableCell className="text-destructive">-{fmt(o.platform_fee || 0)}</TableCell>
+                    <TableCell className="text-destructive">-{fmt(o.commission_fee || 0)}</TableCell>
+                    <TableCell className="text-destructive">-{fmt(o.payment_fee || 0)}</TableCell>
+                    <TableCell>{fmt(o.shipping_fee || 0)}</TableCell>
+                    <TableCell className="text-destructive">-{fmt(o.voucher_discount || 0)}</TableCell>
+                    <TableCell className="font-semibold">{fmt(o.seller_payout || 0)}</TableCell>
                   </TableRow>
                 ))}
                 {orders.length === 0 && <TableRow><TableCell colSpan={9} className="text-center text-muted-foreground py-8">No orders to display</TableCell></TableRow>}
@@ -295,10 +297,10 @@ const XStoreDashboard = () => {
                 <p>{selectedOrder.shipping_address || 'N/A'}</p>
               </div>
               <div className="border-t pt-2 space-y-1">
-                <div className="flex justify-between"><span>Subtotal</span><span>RM {(selectedOrder.subtotal || 0).toFixed(2)}</span></div>
-                <div className="flex justify-between"><span>Shipping</span><span>RM {(selectedOrder.shipping_fee || 0).toFixed(2)}</span></div>
-                <div className="flex justify-between text-destructive"><span>Fees</span><span>-RM {((selectedOrder.platform_fee || 0) + (selectedOrder.commission_fee || 0) + (selectedOrder.payment_fee || 0)).toFixed(2)}</span></div>
-                <div className="flex justify-between font-bold border-t pt-1"><span>Payout</span><span>RM {(selectedOrder.seller_payout || 0).toFixed(2)}</span></div>
+                <div className="flex justify-between"><span>Subtotal</span><span>{fmt(selectedOrder.subtotal || 0)}</span></div>
+                <div className="flex justify-between"><span>Shipping</span><span>{fmt(selectedOrder.shipping_fee || 0)}</span></div>
+                <div className="flex justify-between text-destructive"><span>Fees</span><span>-{fmt((selectedOrder.platform_fee || 0) + (selectedOrder.commission_fee || 0) + (selectedOrder.payment_fee || 0))}</span></div>
+                <div className="flex justify-between font-bold border-t pt-1"><span>Payout</span><span>{fmt(selectedOrder.seller_payout || 0)}</span></div>
               </div>
             </div>
           )}

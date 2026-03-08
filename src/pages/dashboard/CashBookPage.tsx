@@ -304,8 +304,8 @@ const CashBookPage = () => {
             </div>
             <div className="flex justify-between items-center pt-2 border-t border-border">
               <div className="text-sm">
-                <span>Total: <strong>RM {totalAmount.toFixed(2)}</strong></span>
-                {+form.bank_charge > 0 && <span className="ml-4">Bank Charge: <strong>RM {(+form.bank_charge).toFixed(2)}</strong></span>}
+                <span>Total: <strong>{fmt(totalAmount)}</strong></span>
+                {+form.bank_charge > 0 && <span className="ml-4">Bank Charge: <strong>{fmt(+form.bank_charge)}</strong></span>}
               </div>
               <Button onClick={handleCreate} disabled={totalAmount <= 0}>Save Voucher</Button>
             </div>

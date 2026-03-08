@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useCompany } from '@/contexts/CompanyContext';
+import { useCurrency } from '@/hooks/useCurrency';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { toast } from 'sonner';
@@ -37,6 +38,7 @@ const emptyRow = (): FastEntryRow => ({
 
 const FastEntryPage = () => {
   const { selectedCompany } = useCompany();
+  const { fmt } = useCurrency();
   const { user } = useAuth();
   const [entryType, setEntryType] = useState<'sales_invoice' | 'purchase_invoice' | 'payment' | 'receipt'>('sales_invoice');
   const [rows, setRows] = useState<FastEntryRow[]>(() => Array.from({ length: 5 }, emptyRow));
@@ -252,7 +254,7 @@ const FastEntryPage = () => {
               <tfoot>
                 <tr className="bg-muted/50 font-bold">
                   <td colSpan={7} className="p-2 text-right">Grand Total:</td>
-                  <td className="p-2 text-right">RM {grandTotal.toFixed(2)}</td>
+                  <td className="p-2 text-right">{fmt(grandTotal)}</td>
                   <td></td>
                 </tr>
               </tfoot>

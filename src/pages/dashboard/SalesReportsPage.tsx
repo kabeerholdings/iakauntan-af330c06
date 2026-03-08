@@ -14,7 +14,7 @@ import { Printer, TrendingUp, TrendingDown } from 'lucide-react';
 
 const SalesReportsPage = () => {
   const { selectedCompany } = useCompany();
-  const { fmt } = useCurrency();
+  const { fmt, symbol } = useCurrency();
   const [invoices, setInvoices] = useState<any[]>([]);
   const [invoiceLines, setInvoiceLines] = useState<any[]>([]);
   const [stockItems, setStockItems] = useState<any[]>([]);
@@ -115,13 +115,13 @@ const SalesReportsPage = () => {
         <Card>
           <CardContent className="p-4">
             <p className="text-sm text-muted-foreground">Total Sales</p>
-            <p className="text-2xl font-bold font-mono text-foreground">RM {totalSales.toFixed(2)}</p>
+            <p className="text-2xl font-bold font-mono text-foreground">{fmt(totalSales)}</p>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="p-4">
             <p className="text-sm text-muted-foreground">Tax Collected</p>
-            <p className="text-2xl font-bold font-mono text-foreground">RM {totalTax.toFixed(2)}</p>
+            <p className="text-2xl font-bold font-mono text-foreground">{fmt(totalTax)}</p>
           </CardContent>
         </Card>
         <Card>
@@ -168,9 +168,9 @@ const SalesReportsPage = () => {
                   <TableRow>
                     <TableHead>Month</TableHead>
                     <TableHead className="text-right">Invoices</TableHead>
-                    <TableHead className="text-right">Sales (RM)</TableHead>
-                    <TableHead className="text-right">Tax (RM)</TableHead>
-                    <TableHead className="text-right">Total (RM)</TableHead>
+                    <TableHead className="text-right">Sales ({symbol})</TableHead>
+                    <TableHead className="text-right">Tax ({symbol})</TableHead>
+                    <TableHead className="text-right">Total ({symbol})</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -182,17 +182,17 @@ const SalesReportsPage = () => {
                         <TableRow key={m.month}>
                           <TableCell className="font-medium">{m.month}</TableCell>
                           <TableCell className="text-right">{m.count}</TableCell>
-                          <TableCell className="text-right font-mono">{m.sales.toFixed(2)}</TableCell>
-                          <TableCell className="text-right font-mono">{m.tax.toFixed(2)}</TableCell>
-                          <TableCell className="text-right font-mono font-semibold">{(m.sales + m.tax).toFixed(2)}</TableCell>
+                          <TableCell className="text-right font-mono">{fmt(m.sales)}</TableCell>
+                          <TableCell className="text-right font-mono">{fmt(m.tax)}</TableCell>
+                          <TableCell className="text-right font-mono font-semibold">{fmt(m.sales + m.tax)}</TableCell>
                         </TableRow>
                       ))}
                       <TableRow className="font-bold border-t-2">
                         <TableCell>Total</TableCell>
                         <TableCell className="text-right">{invoices.length}</TableCell>
-                        <TableCell className="text-right font-mono">{totalSales.toFixed(2)}</TableCell>
-                        <TableCell className="text-right font-mono">{totalTax.toFixed(2)}</TableCell>
-                        <TableCell className="text-right font-mono">{totalAmount.toFixed(2)}</TableCell>
+                        <TableCell className="text-right font-mono">{fmt(totalSales)}</TableCell>
+                        <TableCell className="text-right font-mono">{fmt(totalTax)}</TableCell>
+                        <TableCell className="text-right font-mono">{fmt(totalAmount)}</TableCell>
                       </TableRow>
                     </>
                   )}
@@ -215,9 +215,9 @@ const SalesReportsPage = () => {
                     <TableHead>Invoice #</TableHead>
                     <TableHead>Date</TableHead>
                     <TableHead>Customer</TableHead>
-                    <TableHead className="text-right">Selling (RM)</TableHead>
-                    <TableHead className="text-right">Cost (RM)</TableHead>
-                    <TableHead className="text-right">Profit (RM)</TableHead>
+                    <TableHead className="text-right">Selling ({symbol})</TableHead>
+                    <TableHead className="text-right">Cost ({symbol})</TableHead>
+                    <TableHead className="text-right">Profit ({symbol})</TableHead>
                     <TableHead className="text-right">Margin %</TableHead>
                     <TableHead>Status</TableHead>
                   </TableRow>
@@ -232,12 +232,12 @@ const SalesReportsPage = () => {
                           <TableCell className="font-mono font-medium">{d.invoice_number}</TableCell>
                           <TableCell>{d.invoice_date}</TableCell>
                           <TableCell>{d.contact_name}</TableCell>
-                          <TableCell className="text-right font-mono">{d.selling_total.toFixed(2)}</TableCell>
-                          <TableCell className="text-right font-mono text-muted-foreground">{d.cost_total.toFixed(2)}</TableCell>
+                          <TableCell className="text-right font-mono">{fmt(d.selling_total)}</TableCell>
+                          <TableCell className="text-right font-mono text-muted-foreground">{fmt(d.cost_total)}</TableCell>
                           <TableCell className={`text-right font-mono font-semibold ${d.profit >= 0 ? 'text-green-600' : 'text-red-600'}`}>
                             <span className="inline-flex items-center gap-1">
                               {d.profit >= 0 ? <TrendingUp className="h-3 w-3" /> : <TrendingDown className="h-3 w-3" />}
-                              {d.profit.toFixed(2)}
+                              {fmt(d.profit)}
                             </span>
                           </TableCell>
                           <TableCell className={`text-right font-mono ${d.margin >= 0 ? 'text-green-600' : 'text-red-600'}`}>{d.margin.toFixed(1)}%</TableCell>
@@ -246,9 +246,9 @@ const SalesReportsPage = () => {
                       ))}
                       <TableRow className="font-bold border-t-2">
                         <TableCell colSpan={3}>Total</TableCell>
-                        <TableCell className="text-right font-mono">{totalSellingAll.toFixed(2)}</TableCell>
-                        <TableCell className="text-right font-mono">{pnlByDocument.reduce((s, d) => s + d.cost_total, 0).toFixed(2)}</TableCell>
-                        <TableCell className={`text-right font-mono ${totalProfit >= 0 ? 'text-green-600' : 'text-red-600'}`}>{totalProfit.toFixed(2)}</TableCell>
+                        <TableCell className="text-right font-mono">{fmt(totalSellingAll)}</TableCell>
+                        <TableCell className="text-right font-mono">{fmt(pnlByDocument.reduce((s, d) => s + d.cost_total, 0))}</TableCell>
+                        <TableCell className={`text-right font-mono ${totalProfit >= 0 ? 'text-green-600' : 'text-red-600'}`}>{fmt(totalProfit)}</TableCell>
                         <TableCell className={`text-right font-mono ${overallMargin >= 0 ? 'text-green-600' : 'text-red-600'}`}>{overallMargin.toFixed(1)}%</TableCell>
                         <TableCell></TableCell>
                       </TableRow>

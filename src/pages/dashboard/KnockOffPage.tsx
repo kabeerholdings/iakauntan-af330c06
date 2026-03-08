@@ -145,7 +145,7 @@ const KnockOffPage = () => {
                       <Checkbox checked={!!selectedSources[cb.id]} onCheckedChange={checked => setSelectedSources(s => ({ ...s, [cb.id]: checked ? +cb.total_amount : 0 }))} />
                       <span className="text-sm flex-1">{cb.voucher_no || 'Receipt'} — {cb.voucher_date}</span>
                       <Input type="number" className="w-32" value={selectedSources[cb.id] || ''} onChange={e => setSelectedSources(s => ({ ...s, [cb.id]: +e.target.value }))} max={+cb.total_amount} />
-                      <span className="text-sm text-muted-foreground">/ RM {(+cb.total_amount).toFixed(2)}</span>
+                      <span className="text-sm text-muted-foreground">/ {fmt(+cb.total_amount)}</span>
                     </div>
                   ))}
                 </div>
@@ -159,7 +159,7 @@ const KnockOffPage = () => {
                       <Checkbox checked={!!selectedTargets[inv.id]} onCheckedChange={checked => setSelectedTargets(s => ({ ...s, [inv.id]: checked ? +inv.total_amount : 0 }))} />
                       <span className="text-sm flex-1">{inv.invoice_number} — {inv.invoice_date}</span>
                       <Input type="number" className="w-32" value={selectedTargets[inv.id] || ''} onChange={e => setSelectedTargets(s => ({ ...s, [inv.id]: +e.target.value }))} max={+inv.total_amount} />
-                      <span className="text-sm text-muted-foreground">/ RM {(+inv.total_amount).toFixed(2)}</span>
+                      <span className="text-sm text-muted-foreground">/ {fmt(+inv.total_amount)}</span>
                     </div>
                   ))}
                 </div>
@@ -168,8 +168,8 @@ const KnockOffPage = () => {
 
             <div className="flex justify-between items-center pt-2 border-t border-border">
               <div className="text-sm space-x-4">
-                <span>Source: <strong>RM {totalSourced.toFixed(2)}</strong></span>
-                <span>Applied: <strong>RM {totalApplied.toFixed(2)}</strong></span>
+                <span>Source: <strong>{fmt(totalSourced)}</strong></span>
+                <span>Applied: <strong>{fmt(totalApplied)}</strong></span>
               </div>
               <Button onClick={handleCreate} disabled={totalApplied <= 0}>Apply Knock Off</Button>
             </div>

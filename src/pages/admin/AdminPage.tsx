@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Navigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
+import { useCurrency } from '@/hooks/useCurrency';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -10,6 +11,7 @@ import { Users, Building2, FileText, Shield } from 'lucide-react';
 
 const AdminPage = () => {
   const { isAdmin, loading } = useAuth();
+  const { fmt } = useCurrency();
   const [users, setUsers] = useState<any[]>([]);
   const [companies, setCompanies] = useState<any[]>([]);
   const [invoices, setInvoices] = useState<any[]>([]);
@@ -147,7 +149,7 @@ const AdminPage = () => {
                     <TableRow key={i.id}>
                       <TableCell className="font-medium">{i.invoice_number}</TableCell>
                       <TableCell>{(i as any).companies?.name || '—'}</TableCell>
-                      <TableCell>RM {Number(i.total_amount).toFixed(2)}</TableCell>
+                      <TableCell>{fmt(Number(i.total_amount))}</TableCell>
                       <TableCell><Badge variant="secondary">{i.status}</Badge></TableCell>
                       <TableCell>{i.einvoice_status ? <Badge>{i.einvoice_status}</Badge> : '—'}</TableCell>
                     </TableRow>

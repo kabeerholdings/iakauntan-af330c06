@@ -1,5 +1,6 @@
 import { useEffect, useState, useMemo } from 'react';
 import { useSearchParams } from 'react-router-dom';
+import { useCurrency } from '@/hooks/useCurrency';
 import { supabase } from '@/integrations/supabase/client';
 import { useCompany } from '@/contexts/CompanyContext';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -31,6 +32,7 @@ export interface AccountBalance {
 
 const FinancialReportsPage = () => {
   const { selectedCompany } = useCompany();
+  const { fmt } = useCurrency();
   const [searchParams, setSearchParams] = useSearchParams();
   const [accounts, setAccounts] = useState<any[]>([]);
   const [journalLines, setJournalLines] = useState<any[]>([]);
@@ -140,17 +142,17 @@ const FinancialReportsPage = () => {
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
         <Card><CardContent className="p-4">
           <p className="text-xs text-muted-foreground">Total Revenue</p>
-          <p className="text-xl font-bold text-foreground">RM {balances.filter(b => b.account_type === 'revenue').reduce((s, b) => s + b.balance, 0).toFixed(2)}</p>
+          <p className="text-xl font-bold text-foreground">{fmt(balances.filter(b => b.account_type === 'revenue').reduce((s, b) => s + b.balance, 0))}</p>
         </CardContent></Card>
         <Card><CardContent className="p-4">
           <p className="text-xs text-muted-foreground">Total Expenses</p>
-          <p className="text-xl font-bold text-foreground">RM {balances.filter(b => b.account_type === 'expense').reduce((s, b) => s + b.balance, 0).toFixed(2)}</p>
+          <p className="text-xl font-bold text-foreground">{fmt(balances.filter(b => b.account_type === 'expense').reduce((s, b) => s + b.balance, 0))}</p>
         </CardContent></Card>
         <Card><CardContent className="p-4">
           <p className="text-xs text-muted-foreground">Net Income</p>
           {(() => {
             const net = balances.filter(b => b.account_type === 'revenue').reduce((s, b) => s + b.balance, 0) - balances.filter(b => b.account_type === 'expense').reduce((s, b) => s + b.balance, 0);
-            return <p className={`text-xl font-bold ${net >= 0 ? 'text-primary' : 'text-destructive'}`}>RM {Math.abs(net).toFixed(2)}</p>;
+            return <p className={`text-xl font-bold ${net >= 0 ? 'text-primary' : 'text-destructive'}`}>{fmt(Math.abs(net))}</p>;
           })()}
         </CardContent></Card>
         <Card><CardContent className="p-4">

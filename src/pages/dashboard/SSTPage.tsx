@@ -1,6 +1,7 @@
 import { useEffect, useState, useMemo } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useCompany } from '@/contexts/CompanyContext';
+import { useCurrency } from '@/hooks/useCurrency';
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -17,6 +18,7 @@ import { toast } from 'sonner';
 
 const SSTPage = () => {
   const { selectedCompany } = useCompany();
+  const { fmt, symbol } = useCurrency();
   const { user } = useAuth();
   const [taxCodes, setTaxCodes] = useState<any[]>([]);
   const [returns, setReturns] = useState<any[]>([]);
@@ -133,13 +135,13 @@ const SSTPage = () => {
         <Card>
           <CardContent className="p-4">
             <p className="text-xs text-muted-foreground">Tax Collected</p>
-            <p className="text-2xl font-bold text-foreground">RM {taxPaymentCollection.toFixed(2)}</p>
+            <p className="text-2xl font-bold text-foreground">{fmt(taxPaymentCollection)}</p>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="p-4">
             <p className="text-xs text-muted-foreground">Outstanding Service Tax</p>
-            <p className="text-2xl font-bold text-destructive">RM {outstandingServiceTax.toFixed(2)}</p>
+            <p className="text-2xl font-bold text-destructive">{fmt(outstandingServiceTax)}</p>
           </CardContent>
         </Card>
         <Card>
@@ -247,9 +249,9 @@ const SSTPage = () => {
                     <TableHead>Period</TableHead>
                     <TableHead>From</TableHead>
                     <TableHead>To</TableHead>
-                    <TableHead className="text-right">Sales Tax (RM)</TableHead>
-                    <TableHead className="text-right">Service Tax (RM)</TableHead>
-                    <TableHead className="text-right">Total Tax (RM)</TableHead>
+                    <TableHead className="text-right">Sales Tax ({symbol})</TableHead>
+                    <TableHead className="text-right">Service Tax ({symbol})</TableHead>
+                    <TableHead className="text-right">Total Tax ({symbol})</TableHead>
                     <TableHead>Status</TableHead>
                   </TableRow>
                 </TableHeader>
@@ -261,9 +263,9 @@ const SSTPage = () => {
                       <TableCell className="font-medium">{r.return_period}</TableCell>
                       <TableCell>{r.period_from}</TableCell>
                       <TableCell>{r.period_to}</TableCell>
-                      <TableCell className="text-right">{Number(r.total_sales_tax).toFixed(2)}</TableCell>
-                      <TableCell className="text-right">{Number(r.total_service_tax).toFixed(2)}</TableCell>
-                      <TableCell className="text-right font-bold">{Number(r.total_tax).toFixed(2)}</TableCell>
+                      <TableCell className="text-right">{fmt(Number(r.total_sales_tax))}</TableCell>
+                      <TableCell className="text-right">{fmt(Number(r.total_service_tax))}</TableCell>
+                      <TableCell className="text-right font-bold">{fmt(Number(r.total_tax))}</TableCell>
                       <TableCell>
                         <Badge variant={r.status === 'submitted' ? 'default' : r.status === 'draft' ? 'secondary' : 'outline'}>
                           {r.status}
@@ -288,9 +290,9 @@ const SSTPage = () => {
                     <TableHead>Doc #</TableHead>
                     <TableHead>Type</TableHead>
                     <TableHead>Date</TableHead>
-                    <TableHead className="text-right">Subtotal (RM)</TableHead>
-                    <TableHead className="text-right">Tax (RM)</TableHead>
-                    <TableHead className="text-right">Total (RM)</TableHead>
+                    <TableHead className="text-right">Subtotal ({symbol})</TableHead>
+                    <TableHead className="text-right">Tax ({symbol})</TableHead>
+                    <TableHead className="text-right">Total ({symbol})</TableHead>
                     <TableHead>Status</TableHead>
                   </TableRow>
                 </TableHeader>
@@ -302,18 +304,18 @@ const SSTPage = () => {
                       <TableCell className="font-medium">{t.number}</TableCell>
                       <TableCell><Badge variant="outline">{t.type}</Badge></TableCell>
                       <TableCell>{t.date}</TableCell>
-                      <TableCell className="text-right">{t.subtotal.toFixed(2)}</TableCell>
-                      <TableCell className="text-right">{t.tax.toFixed(2)}</TableCell>
-                      <TableCell className="text-right font-medium">{t.total.toFixed(2)}</TableCell>
+                      <TableCell className="text-right">{fmt(t.subtotal)}</TableCell>
+                      <TableCell className="text-right">{fmt(t.tax)}</TableCell>
+                      <TableCell className="text-right font-medium">{fmt(t.total)}</TableCell>
                       <TableCell><Badge variant={t.status === 'paid' ? 'default' : 'secondary'}>{t.status}</Badge></TableCell>
                     </TableRow>
                   ))}
                   {taxTransactions.length > 0 && (
                     <TableRow className="bg-muted/50 font-bold">
                       <TableCell colSpan={3}>Total</TableCell>
-                      <TableCell className="text-right">{taxTransactions.reduce((s, t) => s + t.subtotal, 0).toFixed(2)}</TableCell>
-                      <TableCell className="text-right">{taxTransactions.reduce((s, t) => s + t.tax, 0).toFixed(2)}</TableCell>
-                      <TableCell className="text-right">{taxTransactions.reduce((s, t) => s + t.total, 0).toFixed(2)}</TableCell>
+                      <TableCell className="text-right">{fmt(taxTransactions.reduce((s, t) => s + t.subtotal, 0))}</TableCell>
+                      <TableCell className="text-right">{fmt(taxTransactions.reduce((s, t) => s + t.tax, 0))}</TableCell>
+                      <TableCell className="text-right">{fmt(taxTransactions.reduce((s, t) => s + t.total, 0))}</TableCell>
                       <TableCell></TableCell>
                     </TableRow>
                   )}

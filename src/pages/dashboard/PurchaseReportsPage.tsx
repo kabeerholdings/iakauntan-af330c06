@@ -12,7 +12,7 @@ import { Printer } from 'lucide-react';
 
 const PurchaseReportsPage = () => {
   const { selectedCompany } = useCompany();
-  const { fmt } = useCurrency();
+  const { fmt, symbol } = useCurrency();
   const [docs, setDocs] = useState<any[]>([]);
   const [dateFrom, setDateFrom] = useState(() => {
     const d = new Date(); d.setMonth(0, 1);
@@ -91,13 +91,13 @@ const PurchaseReportsPage = () => {
         <Card>
           <CardContent className="p-4">
             <p className="text-xs text-muted-foreground">Total Purchases</p>
-            <p className="text-2xl font-bold text-foreground">RM {totalPurchases.toFixed(2)}</p>
+            <p className="text-2xl font-bold text-foreground">{fmt(totalPurchases)}</p>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="p-4">
             <p className="text-xs text-muted-foreground">Total Tax</p>
-            <p className="text-2xl font-bold text-foreground">RM {totalTax.toFixed(2)}</p>
+            <p className="text-2xl font-bold text-foreground">{fmt(totalTax)}</p>
           </CardContent>
         </Card>
         <Card>
@@ -145,9 +145,9 @@ const PurchaseReportsPage = () => {
               <TableRow>
                 <TableHead>Month</TableHead>
                 <TableHead className="text-right">Documents</TableHead>
-                <TableHead className="text-right">Purchases (RM)</TableHead>
-                <TableHead className="text-right">Tax (RM)</TableHead>
-                <TableHead className="text-right">Total (RM)</TableHead>
+                <TableHead className="text-right">Purchases ({symbol})</TableHead>
+                <TableHead className="text-right">Tax ({symbol})</TableHead>
+                <TableHead className="text-right">Total ({symbol})</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -159,17 +159,17 @@ const PurchaseReportsPage = () => {
                     <TableRow key={m.month}>
                       <TableCell className="font-medium">{m.month}</TableCell>
                       <TableCell className="text-right">{m.count}</TableCell>
-                      <TableCell className="text-right">{m.purchases.toFixed(2)}</TableCell>
-                      <TableCell className="text-right">{m.tax.toFixed(2)}</TableCell>
-                      <TableCell className="text-right font-medium">{(m.purchases + m.tax).toFixed(2)}</TableCell>
+                      <TableCell className="text-right">{fmt(m.purchases)}</TableCell>
+                      <TableCell className="text-right">{fmt(m.tax)}</TableCell>
+                      <TableCell className="text-right font-medium">{fmt(m.purchases + m.tax)}</TableCell>
                     </TableRow>
                   ))}
                   <TableRow className="bg-muted/50 font-bold">
                     <TableCell>Total</TableCell>
                     <TableCell className="text-right">{totalCount}</TableCell>
-                    <TableCell className="text-right">{totalPurchases.toFixed(2)}</TableCell>
-                    <TableCell className="text-right">{totalTax.toFixed(2)}</TableCell>
-                    <TableCell className="text-right">{(totalPurchases + totalTax).toFixed(2)}</TableCell>
+                    <TableCell className="text-right">{fmt(totalPurchases)}</TableCell>
+                    <TableCell className="text-right">{fmt(totalTax)}</TableCell>
+                    <TableCell className="text-right">{fmt(totalPurchases + totalTax)}</TableCell>
                   </TableRow>
                 </>
               )}

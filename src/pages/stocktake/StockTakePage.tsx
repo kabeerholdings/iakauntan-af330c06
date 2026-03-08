@@ -297,7 +297,7 @@ const StockTakePage = () => {
                         ) : l.counted_qty}
                       </TableCell>
                       <TableCell className={l.variance < 0 ? 'text-destructive font-semibold' : l.variance > 0 ? 'text-green-600 font-semibold' : ''}>{l.variance > 0 ? '+' : ''}{l.variance}</TableCell>
-                      <TableCell className={l.variance_value < 0 ? 'text-destructive' : ''}>RM {(l.variance_value || 0).toFixed(2)}</TableCell>
+                      <TableCell className={l.variance_value < 0 ? 'text-destructive' : ''}>{fmt(l.variance_value || 0)}</TableCell>
                     </TableRow>
                   ))}
                   {takeLines.length === 0 && <TableRow><TableCell colSpan={6} className="text-center text-muted-foreground py-8">Scan items to start counting</TableCell></TableRow>}
@@ -321,7 +321,7 @@ const StockTakePage = () => {
                       <TableCell>{i.name}</TableCell>
                       <TableCell>{i.barcode || '-'}</TableCell>
                       <TableCell>{i.base_uom || '-'}</TableCell>
-                      <TableCell>RM {(i.selling_price || 0).toFixed(2)}</TableCell>
+                      <TableCell>{fmt(i.selling_price || 0)}</TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
@@ -348,8 +348,8 @@ const StockTakePage = () => {
                 <p className="font-bold text-lg">{priceCheckResult.name}</p>
                 <p className="text-sm text-muted-foreground">Code: {priceCheckResult.code}</p>
                 {priceCheckResult.barcode && <p className="text-sm text-muted-foreground">Barcode: {priceCheckResult.barcode}</p>}
-                <p className="text-2xl font-bold text-primary">RM {(priceCheckResult.selling_price || 0).toFixed(2)}</p>
-                <p className="text-sm text-muted-foreground">Cost: RM {(priceCheckResult.purchase_price || 0).toFixed(2)}</p>
+                <p className="text-2xl font-bold text-primary">{fmt(priceCheckResult.selling_price || 0)}</p>
+                <p className="text-sm text-muted-foreground">Cost: {fmt(priceCheckResult.purchase_price || 0)}</p>
                 <p className="text-sm text-muted-foreground">UOM: {priceCheckResult.base_uom || 'units'}</p>
               </CardContent></Card>
             )}

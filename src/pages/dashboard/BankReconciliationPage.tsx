@@ -237,7 +237,7 @@ const BankReconciliationPage = () => {
             <div>
               <p className="text-sm text-muted-foreground">Reconciled</p>
               <p className="text-2xl font-bold font-display text-primary">{reconciledCount}</p>
-              <p className="text-xs text-muted-foreground">RM {reconciledAmount.toFixed(2)}</p>
+              <p className="text-xs text-muted-foreground">{fmt(reconciledAmount)}</p>
             </div>
           </CardContent>
         </Card>
@@ -247,7 +247,7 @@ const BankReconciliationPage = () => {
             <div>
               <p className="text-sm text-muted-foreground">Unreconciled</p>
               <p className="text-2xl font-bold font-display text-destructive">{unreconciledCount}</p>
-              <p className="text-xs text-muted-foreground">RM {unreconciledAmount.toFixed(2)}</p>
+              <p className="text-xs text-muted-foreground">{fmt(unreconciledAmount)}</p>
             </div>
           </CardContent>
         </Card>
@@ -345,7 +345,7 @@ const BankReconciliationPage = () => {
                       <TableCell className="font-mono text-xs">{p.reference || '—'}</TableCell>
                       <TableCell className="capitalize">{p.payment_type}</TableCell>
                       <TableCell>{(p.contacts as any)?.name || '—'}</TableCell>
-                      <TableCell className="text-right font-medium">RM {Number(p.amount).toFixed(2)}</TableCell>
+                      <TableCell className="text-right font-medium">{fmt(Number(p.amount))}</TableCell>
                       <TableCell>
                         {isMatched
                           ? <Badge variant="default"><Link2 className="h-3 w-3 mr-1" /> Matched</Badge>
@@ -387,7 +387,7 @@ const BankReconciliationPage = () => {
                 <SelectContent>
                   {unmatchedPays.map(p => (
                     <SelectItem key={p.id} value={p.id}>
-                      {p.payment_date} — {p.reference || '—'} — RM {Number(p.amount).toFixed(2)} ({p.payment_type})
+                      {p.payment_date} — {p.reference || '—'} — {fmt(Number(p.amount))} ({p.payment_type})
                     </SelectItem>
                   ))}
                 </SelectContent>

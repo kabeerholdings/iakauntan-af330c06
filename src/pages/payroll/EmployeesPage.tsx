@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useCompany } from '@/contexts/CompanyContext';
+import { useCurrency } from '@/hooks/useCurrency';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -16,6 +17,7 @@ import { useCustomFields, saveCustomFieldValues } from '@/components/CustomField
 
 const EmployeesPage = () => {
   const { selectedCompany } = useCompany();
+  const { fmt } = useCurrency();
   const [employees, setEmployees] = useState<any[]>([]);
   const [search, setSearch] = useState('');
   const [open, setOpen] = useState(false);
@@ -269,7 +271,7 @@ const EmployeesPage = () => {
                   <TableCell>{e.ic_no || '—'}</TableCell>
                   <TableCell>{e.department || '—'}</TableCell>
                   <TableCell>{e.position || '—'}</TableCell>
-                  <TableCell className="text-right">RM {Number(e.basic_salary).toFixed(2)}</TableCell>
+                  <TableCell className="text-right">{fmt(Number(e.basic_salary))}</TableCell>
                   <TableCell>{e.join_date}</TableCell>
                   <TableCell>{e.is_active ? <Badge>Active</Badge> : <Badge variant="secondary">Resigned</Badge>}</TableCell>
                 </TableRow>
