@@ -175,16 +175,32 @@ const CustomizationPage = () => {
       position_placement: fieldForm.position_placement || 'after',
     };
 
+    // Snapshot for rollback
+    const previousFields = [...customFields];
+
     if (editingFieldId) {
+      // Optimistic update
+      setCustomFields(prev => prev.map(f => f.id === editingFieldId ? { ...f, ...payload } : f));
+      closeFieldDialog();
+
       const { error } = await supabase.from('custom_fields').update(payload).eq('id', editingFieldId);
-      if (error) { toast.error(error.message); return; }
+      if (error) {
+        toast.error(error.message);
+        setCustomFields(previousFields); // rollback
+        return;
+      }
       toast.success('Custom field updated');
     } else {
-      const { error } = await supabase.from('custom_fields').insert(payload);
-      if (error) { toast.error(error.message); return; }
+      closeFieldDialog();
+      const { data, error } = await supabase.from('custom_fields').insert(payload).select().single();
+      if (error) {
+        toast.error(error.message);
+        return;
+      }
+      setCustomFields(prev => [...prev, data]);
       toast.success('Custom field created');
     }
-    closeFieldDialog();
+    // Re-fetch to ensure consistency
     fetchAll();
   };
 
