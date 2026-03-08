@@ -32,6 +32,10 @@ import PayrollReportsPage from "./pages/payroll/PayrollReportsPage";
 import FastEntryPage from "./pages/dashboard/FastEntryPage";
 import BankReconciliationPage from "./pages/dashboard/BankReconciliationPage";
 import DocumentsPage from "./pages/dashboard/DocumentsPage";
+import BOMPage from "./pages/manufacturing/BOMPage";
+import JobOrdersPage from "./pages/manufacturing/JobOrdersPage";
+import AssemblyPage from "./pages/manufacturing/AssemblyPage";
+import MRPReportsPage from "./pages/manufacturing/MRPReportsPage";
 import AdminPage from "./pages/admin/AdminPage";
 import NotFound from "./pages/NotFound";
 
