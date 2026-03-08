@@ -145,9 +145,9 @@ const PurchaseReportsPage = () => {
               <TableRow>
                 <TableHead>Month</TableHead>
                 <TableHead className="text-right">Documents</TableHead>
-                <TableHead className="text-right">Purchases (RM)</TableHead>
-                <TableHead className="text-right">Tax (RM)</TableHead>
-                <TableHead className="text-right">Total (RM)</TableHead>
+                <TableHead className="text-right">Purchases ({symbol})</TableHead>
+                <TableHead className="text-right">Tax ({symbol})</TableHead>
+                <TableHead className="text-right">Total ({symbol})</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
