@@ -29,6 +29,9 @@ import EmployeesPage from "./pages/payroll/EmployeesPage";
 import PayrollProcessPage from "./pages/payroll/PayrollProcessPage";
 import LeavePage from "./pages/payroll/LeavePage";
 import PayrollReportsPage from "./pages/payroll/PayrollReportsPage";
+import FastEntryPage from "./pages/dashboard/FastEntryPage";
+import BankReconciliationPage from "./pages/dashboard/BankReconciliationPage";
+import DocumentsPage from "./pages/dashboard/DocumentsPage";
 import AdminPage from "./pages/admin/AdminPage";
 import NotFound from "./pages/NotFound";
 
