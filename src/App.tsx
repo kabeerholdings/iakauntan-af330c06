@@ -50,6 +50,7 @@ import SecurityLockPage from "./pages/dashboard/SecurityLockPage";
 import InventoryReportsPage from "./pages/dashboard/InventoryReportsPage";
 import AdvancedReportsPage from "./pages/dashboard/AdvancedReportsPage";
 import DocumentTemplatesPage from "./pages/dashboard/DocumentTemplatesPage";
+import PaymentMethodsPage from "./pages/dashboard/PaymentMethodsPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
