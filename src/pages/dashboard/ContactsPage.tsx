@@ -52,15 +52,24 @@ const ContactsPage = () => {
       bank_account_no: form.bank_account_no || null,
     };
 
+    let entityId = editingId;
     if (editingId) {
       const { error } = await supabase.from('contacts').update(payload).eq('id', editingId);
       if (error) { toast.error(error.message); return; }
       toast.success('Contact updated');
     } else {
-      const { error } = await supabase.from('contacts').insert(payload);
+      const { data, error } = await supabase.from('contacts').insert(payload).select('id').single();
       if (error) { toast.error(error.message); return; }
+      entityId = data.id;
       toast.success('Contact added');
     }
+
+    // Save custom field values
+    const cfEntityType = form.type === 'supplier' ? 'supplier' : 'customer';
+    if (entityId) {
+      await saveCustomFieldValues(selectedCompany.id, cfEntityType, entityId, customValues);
+    }
+
     closeDialog();
     fetchData();
   };
