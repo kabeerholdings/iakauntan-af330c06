@@ -45,6 +45,8 @@ const ChartOfAccountsPage = () => {
     toast.success('Account created');
     setOpen(false);
     setForm({ code: '', name: '', account_type: 'asset', description: '' });
+    setCustomType('');
+    setShowCustomType(false);
     fetchData();
   };
 
