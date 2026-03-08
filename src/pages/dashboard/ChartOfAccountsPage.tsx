@@ -80,6 +80,7 @@ const ChartOfAccountsPage = () => {
         name: form.name,
         account_type: form.account_type,
         description: form.description || null,
+        is_active: form.is_active,
       }).eq('id', editingId);
       if (error) { toast.error(error.message); return; }
       toast.success('Account updated');
