@@ -266,6 +266,7 @@ const ReportsPage = () => {
 };
 
 const LedgerReport = ({ companyId, dateFrom, dateTo }: { companyId: string; dateFrom: string; dateTo: string }) => {
+  const { fmt } = useCurrency();
   const [accounts, setAccounts] = useState<any[]>([]);
   const [selectedAccount, setSelectedAccount] = useState('');
   const [lines, setLines] = useState<any[]>([]);
