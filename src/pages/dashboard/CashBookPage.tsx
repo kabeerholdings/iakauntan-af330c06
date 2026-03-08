@@ -219,7 +219,7 @@ const CashBookPage = () => {
               <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
               <XAxis dataKey="month" tick={{ fontSize: 10 }} />
               <YAxis tick={{ fontSize: 10 }} />
-              <Tooltip formatter={(v: number) => `RM ${v.toFixed(2)}`} />
+              <Tooltip formatter={(v: number) => fmt(v)} />
               <Legend />
               <Bar dataKey="receipts" fill="hsl(var(--primary))" name="Receipts" radius={[4, 4, 0, 0]} />
               <Bar dataKey="payments" fill="hsl(var(--muted-foreground))" name="Payments" radius={[4, 4, 0, 0]} />
