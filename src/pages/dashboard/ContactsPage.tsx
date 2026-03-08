@@ -121,6 +121,7 @@ const ContactsPage = () => {
           <DialogContent className="max-w-2xl max-h-[85vh] overflow-y-auto">
             <DialogHeader><DialogTitle className="font-display">{editingId ? 'Edit Contact' : 'Add Contact'}</DialogTitle></DialogHeader>
             <div className="space-y-4">
+              {renderFieldsFor('name', 'before')}
               <div className="grid grid-cols-2 gap-4">
                 <div><Label>Name</Label><Input value={form.name} onChange={e => setForm(f => ({ ...f, name: e.target.value }))} /></div>
                 <div>
@@ -135,18 +136,31 @@ const ContactsPage = () => {
                   </Select>
                 </div>
               </div>
+              {renderFieldsFor('name', 'after')}
+              {renderFieldsFor('email', 'before')}
               <div className="grid grid-cols-2 gap-4">
                 <div><Label>Email</Label><Input value={form.email} onChange={e => setForm(f => ({ ...f, email: e.target.value }))} /></div>
                 <div><Label>Phone</Label><Input value={form.phone} onChange={e => setForm(f => ({ ...f, phone: e.target.value }))} /></div>
               </div>
+              {renderFieldsFor('email', 'after')}
+              {renderFieldsFor('phone', 'after')}
+              {renderFieldsFor('tax_id', 'before')}
               <div><Label>Tax ID / SSM</Label><Input value={form.tax_id} onChange={e => setForm(f => ({ ...f, tax_id: e.target.value }))} /></div>
+              {renderFieldsFor('tax_id', 'after')}
+              {renderFieldsFor('address', 'before')}
               <div><Label>Address</Label><Input value={form.address} onChange={e => setForm(f => ({ ...f, address: e.target.value }))} /></div>
+              {renderFieldsFor('address', 'after')}
+              {renderFieldsFor('city', 'before')}
               <div className="grid grid-cols-3 gap-4">
                 <div><Label>City</Label><Input value={form.city} onChange={e => setForm(f => ({ ...f, city: e.target.value }))} /></div>
                 <div><Label>State</Label><Input value={form.state} onChange={e => setForm(f => ({ ...f, state: e.target.value }))} /></div>
                 <div><Label>Postcode</Label><Input value={form.postcode} onChange={e => setForm(f => ({ ...f, postcode: e.target.value }))} /></div>
               </div>
+              {renderFieldsFor('city', 'after')}
+              {renderFieldsFor('state', 'after')}
+              {renderFieldsFor('postcode', 'after')}
 
+              {renderFieldsFor('credit_limit', 'before')}
               <div className="border-t border-border pt-4">
                 <h3 className="font-medium text-foreground mb-3">Credit Control</h3>
                 <div className="grid grid-cols-3 gap-4">
@@ -155,6 +169,8 @@ const ContactsPage = () => {
                   <div><Label>Overdue Limit (RM)</Label><Input type="number" value={form.overdue_limit} onChange={e => setForm(f => ({ ...f, overdue_limit: e.target.value }))} /></div>
                 </div>
               </div>
+              {renderFieldsFor('credit_limit', 'after')}
+              {renderFieldsFor('credit_terms', 'after')}
 
               <div className="border-t border-border pt-4">
                 <h3 className="font-medium text-foreground mb-3">Bank Details</h3>
@@ -164,12 +180,7 @@ const ContactsPage = () => {
                 </div>
               </div>
 
-              <CustomFieldsSection
-                entityType={form.type === 'supplier' ? 'supplier' : 'customer'}
-                entityId={editingId}
-                values={customValues}
-                onChange={setCustomValues}
-              />
+              {renderUnpositionedFields()}
 
               <Button onClick={handleCreate} className="w-full">{editingId ? 'Update Contact' : 'Add Contact'}</Button>
             </div>

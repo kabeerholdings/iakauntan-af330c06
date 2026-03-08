@@ -231,7 +231,7 @@ const EmployeesPage = () => {
                 </div>
               </TabsContent>
             </Tabs>
-            <CustomFieldsSection entityType="employee" values={customValues} onChange={setCustomValues} />
+            {renderUnpositionedFields()}
             <Button onClick={handleCreate} className="w-full mt-4">Add Employee</Button>
           </DialogContent>
         </Dialog>

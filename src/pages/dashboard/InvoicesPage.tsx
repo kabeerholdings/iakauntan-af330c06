@@ -185,7 +185,8 @@ const InvoicesPage = () => {
                   <Button onClick={handleCreate}>Create Invoice</Button>
                 </div>
 
-                <CustomFieldsSection entityType="invoice" values={customValues} onChange={setCustomValues} />
+                {renderFieldsFor('notes', 'after')}
+                {renderUnpositionedFields()}
               </div>
             </DialogContent>
           </Dialog>
