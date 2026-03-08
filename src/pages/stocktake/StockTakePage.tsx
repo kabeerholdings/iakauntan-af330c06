@@ -311,15 +311,15 @@ const StockTakePage = () => {
             <CardContent>
               <p className="text-muted-foreground mb-4">Verify item types, quantities, shelf locations and batch numbers for order fulfillment.</p>
               <Table>
-                <TableHeader><TableRow><TableHead>Item Code</TableHead><TableHead>Item Name</TableHead><TableHead>Barcode</TableHead><TableHead>Qty on Hand</TableHead><TableHead>Location</TableHead></TableRow></TableHeader>
+                <TableHeader><TableRow><TableHead>Item Code</TableHead><TableHead>Item Name</TableHead><TableHead>Barcode</TableHead><TableHead>UOM</TableHead><TableHead>Min Price</TableHead></TableRow></TableHeader>
                 <TableBody>
                   {stockItems.slice(0, 50).map(i => (
                     <TableRow key={i.id}>
                       <TableCell className="font-medium">{i.code}</TableCell>
                       <TableCell>{i.name}</TableCell>
                       <TableCell>{i.barcode || '-'}</TableCell>
-                      <TableCell>{i.quantity_on_hand || 0}</TableCell>
-                      <TableCell>{i.location || '-'}</TableCell>
+                      <TableCell>{i.base_uom || '-'}</TableCell>
+                      <TableCell>RM {(i.selling_price || 0).toFixed(2)}</TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
