@@ -60,7 +60,7 @@ const FixedAssetsPage = () => {
 
   useEffect(() => { fetchData(); }, [selectedCompany]);
 
-  const fmt = (n: number) => formatCurrency(n, selectedCompany?.base_currency);
+  
 
   const handleCreateType = async () => {
     if (!selectedCompany || !typeForm.name) { toast.error('Name required'); return; }

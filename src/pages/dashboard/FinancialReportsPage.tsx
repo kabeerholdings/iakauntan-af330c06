@@ -152,7 +152,7 @@ const FinancialReportsPage = () => {
           <p className="text-xs text-muted-foreground">Net Income</p>
           {(() => {
             const net = balances.filter(b => b.account_type === 'revenue').reduce((s, b) => s + b.balance, 0) - balances.filter(b => b.account_type === 'expense').reduce((s, b) => s + b.balance, 0);
-            return <p className={`text-xl font-bold ${net >= 0 ? 'text-primary' : 'text-destructive'}`}>RM {Math.abs(net).toFixed(2)}</p>;
+            return <p className={`text-xl font-bold ${net >= 0 ? 'text-primary' : 'text-destructive'}`}>{fmt(Math.abs(net))}</p>;
           })()}
         </CardContent></Card>
         <Card><CardContent className="p-4">

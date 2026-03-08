@@ -254,7 +254,7 @@ const FastEntryPage = () => {
               <tfoot>
                 <tr className="bg-muted/50 font-bold">
                   <td colSpan={7} className="p-2 text-right">Grand Total:</td>
-                  <td className="p-2 text-right">RM {grandTotal.toFixed(2)}</td>
+                  <td className="p-2 text-right">{fmt(grandTotal)}</td>
                   <td></td>
                 </tr>
               </tfoot>
