@@ -38,6 +38,86 @@ const FIELD_TYPES = [
 
 const MODULES = ['General', 'GL/AR/AP', 'Sales/Purchase/Stock', 'Payroll', 'Manufacturing'];
 
+// Native fields per entity type for positioning reference
+const NATIVE_FIELDS: Record<string, { value: string; label: string }[]> = {
+  customer: [
+    { value: 'name', label: 'Name' },
+    { value: 'email', label: 'Email' },
+    { value: 'phone', label: 'Phone' },
+    { value: 'address', label: 'Address' },
+    { value: 'city', label: 'City' },
+    { value: 'state', label: 'State' },
+    { value: 'postcode', label: 'Postcode' },
+    { value: 'tax_id', label: 'Tax ID' },
+    { value: 'credit_limit', label: 'Credit Limit' },
+    { value: 'credit_terms', label: 'Credit Terms' },
+  ],
+  supplier: [
+    { value: 'name', label: 'Name' },
+    { value: 'email', label: 'Email' },
+    { value: 'phone', label: 'Phone' },
+    { value: 'address', label: 'Address' },
+    { value: 'city', label: 'City' },
+    { value: 'state', label: 'State' },
+    { value: 'postcode', label: 'Postcode' },
+    { value: 'tax_id', label: 'Tax ID' },
+    { value: 'credit_limit', label: 'Credit Limit' },
+    { value: 'credit_terms', label: 'Credit Terms' },
+  ],
+  stock_item: [
+    { value: 'item_code', label: 'Item Code' },
+    { value: 'description', label: 'Description' },
+    { value: 'category', label: 'Category' },
+    { value: 'unit_price', label: 'Unit Price' },
+    { value: 'cost_price', label: 'Cost Price' },
+    { value: 'quantity_on_hand', label: 'Qty On Hand' },
+    { value: 'reorder_level', label: 'Reorder Level' },
+    { value: 'uom', label: 'UOM' },
+  ],
+  invoice: [
+    { value: 'invoice_number', label: 'Invoice Number' },
+    { value: 'invoice_date', label: 'Invoice Date' },
+    { value: 'due_date', label: 'Due Date' },
+    { value: 'contact_id', label: 'Customer' },
+    { value: 'currency', label: 'Currency' },
+    { value: 'notes', label: 'Notes' },
+    { value: 'subtotal', label: 'Subtotal' },
+    { value: 'total_amount', label: 'Total Amount' },
+  ],
+  quotation: [
+    { value: 'doc_number', label: 'Document Number' },
+    { value: 'doc_date', label: 'Document Date' },
+    { value: 'contact_id', label: 'Customer' },
+    { value: 'notes', label: 'Notes' },
+    { value: 'total_amount', label: 'Total Amount' },
+  ],
+  purchase_order: [
+    { value: 'doc_number', label: 'Document Number' },
+    { value: 'doc_date', label: 'Document Date' },
+    { value: 'contact_id', label: 'Supplier' },
+    { value: 'notes', label: 'Notes' },
+    { value: 'total_amount', label: 'Total Amount' },
+  ],
+  delivery_order: [
+    { value: 'doc_number', label: 'Document Number' },
+    { value: 'doc_date', label: 'Document Date' },
+    { value: 'contact_id', label: 'Customer' },
+    { value: 'notes', label: 'Notes' },
+  ],
+  employee: [
+    { value: 'employee_no', label: 'Employee No' },
+    { value: 'first_name', label: 'First Name' },
+    { value: 'last_name', label: 'Last Name' },
+    { value: 'ic_no', label: 'IC No' },
+    { value: 'email', label: 'Email' },
+    { value: 'phone', label: 'Phone' },
+    { value: 'department', label: 'Department' },
+    { value: 'position', label: 'Position' },
+    { value: 'join_date', label: 'Join Date' },
+    { value: 'basic_salary', label: 'Basic Salary' },
+  ],
+};
+
 const CustomizationPage = () => {
   const { selectedCompany } = useCompany();
   const { user } = useAuth();
