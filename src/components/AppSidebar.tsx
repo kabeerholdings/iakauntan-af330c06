@@ -93,7 +93,29 @@ export function AppSidebar() {
   const { state } = useSidebar();
   const collapsed = state === 'collapsed';
   const { signOut } = useAuth();
-  const { companies, selectedCompany, setSelectedCompany } = useCompany();
+  const { companies, selectedCompany, setSelectedCompany, refetchCompanies } = useCompany();
+  const [showCreateCompany, setShowCreateCompany] = useState(false);
+  const [newCompany, setNewCompany] = useState({ name: '', registration_no: '', tax_id: '' });
+  const [creating, setCreating] = useState(false);
+
+  const handleCreateCompany = async () => {
+    if (!newCompany.name.trim()) { toast.error('Company name is required'); return; }
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) return;
+    setCreating(true);
+    const { error } = await supabase.from('companies').insert({
+      name: newCompany.name.trim(),
+      registration_no: newCompany.registration_no.trim() || null,
+      tax_id: newCompany.tax_id.trim() || null,
+      owner_id: user.id,
+    });
+    setCreating(false);
+    if (error) { toast.error(error.message); return; }
+    toast.success('Company created');
+    setShowCreateCompany(false);
+    setNewCompany({ name: '', registration_no: '', tax_id: '' });
+    await refetchCompanies();
+  };
 
   const renderItems = (items: { title: string; url: string; icon: any }[]) => (
     <SidebarMenu>
