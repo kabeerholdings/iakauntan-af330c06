@@ -6,12 +6,9 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow, TableFoo
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Label } from '@/components/ui/label';
+import { formatCurrency } from '@/lib/utils';
 
 const months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
-const fmt = (n: number, currency?: string) => {
-  const { formatCurrency } = require('@/lib/utils');
-  return formatCurrency(n, currency);
-};
 
 const PayrollReportsPage = () => {
   const { selectedCompany } = useCompany();
