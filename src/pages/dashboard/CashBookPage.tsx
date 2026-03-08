@@ -1,4 +1,5 @@
 import { useEffect, useState, useMemo } from 'react';
+import { useCurrency } from '@/hooks/useCurrency';
 import { supabase } from '@/integrations/supabase/client';
 import { useCompany } from '@/contexts/CompanyContext';
 import { useAuth } from '@/contexts/AuthContext';
@@ -19,6 +20,7 @@ import { useNavigate } from 'react-router-dom';
 
 const CashBookPage = () => {
   const { selectedCompany } = useCompany();
+  const { fmt } = useCurrency();
   const { user } = useAuth();
   const navigate = useNavigate();
   const [entries, setEntries] = useState<any[]>([]);
@@ -163,7 +165,7 @@ const CashBookPage = () => {
             </TableCell>
             <TableCell>{e.contacts?.name || e.payee_name || '—'}</TableCell>
             <TableCell className="text-muted-foreground max-w-[200px] truncate">{e.description || '—'}</TableCell>
-            <TableCell className="text-right font-medium">RM {(+e.total_amount).toFixed(2)}</TableCell>
+            <TableCell className="text-right font-medium">{fmt(+e.total_amount)}</TableCell>
             <TableCell>
               <Badge variant={e.status === 'void' ? 'destructive' : e.status === 'applied' ? 'default' : 'secondary'}>{e.status}</Badge>
             </TableCell>
@@ -217,7 +219,7 @@ const CashBookPage = () => {
               <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
               <XAxis dataKey="month" tick={{ fontSize: 10 }} />
               <YAxis tick={{ fontSize: 10 }} />
-              <Tooltip formatter={(v: number) => `RM ${v.toFixed(2)}`} />
+              <Tooltip formatter={(v: number) => fmt(v)} />
               <Legend />
               <Bar dataKey="receipts" fill="hsl(var(--primary))" name="Receipts" radius={[4, 4, 0, 0]} />
               <Bar dataKey="payments" fill="hsl(var(--muted-foreground))" name="Payments" radius={[4, 4, 0, 0]} />
@@ -228,9 +230,9 @@ const CashBookPage = () => {
 
       {/* Totals Row */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-        <Card><CardHeader className="pb-2"><CardTitle className="text-sm text-muted-foreground">Total Receipts</CardTitle></CardHeader><CardContent><p className="text-2xl font-bold text-primary">RM {totalReceipts.toFixed(2)}</p></CardContent></Card>
-        <Card><CardHeader className="pb-2"><CardTitle className="text-sm text-muted-foreground">Total Payments</CardTitle></CardHeader><CardContent><p className="text-2xl font-bold text-destructive">RM {totalPayments.toFixed(2)}</p></CardContent></Card>
-        <Card><CardHeader className="pb-2"><CardTitle className="text-sm text-muted-foreground">Net Cash Flow</CardTitle></CardHeader><CardContent><p className={`text-2xl font-bold ${totalReceipts - totalPayments >= 0 ? 'text-primary' : 'text-destructive'}`}>RM {(totalReceipts - totalPayments).toFixed(2)}</p></CardContent></Card>
+        <Card><CardHeader className="pb-2"><CardTitle className="text-sm text-muted-foreground">Total Receipts</CardTitle></CardHeader><CardContent><p className="text-2xl font-bold text-primary">{fmt(totalReceipts)}</p></CardContent></Card>
+        <Card><CardHeader className="pb-2"><CardTitle className="text-sm text-muted-foreground">Total Payments</CardTitle></CardHeader><CardContent><p className="text-2xl font-bold text-destructive">{fmt(totalPayments)}</p></CardContent></Card>
+        <Card><CardHeader className="pb-2"><CardTitle className="text-sm text-muted-foreground">Net Cash Flow</CardTitle></CardHeader><CardContent><p className={`text-2xl font-bold ${totalReceipts - totalPayments >= 0 ? 'text-primary' : 'text-destructive'}`}>{fmt(totalReceipts - totalPayments)}</p></CardContent></Card>
       </div>
 
       {/* Listing */}

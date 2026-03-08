@@ -1,4 +1,5 @@
 import { useEffect, useState, useMemo } from 'react';
+import { useCurrency } from '@/hooks/useCurrency';
 import { supabase } from '@/integrations/supabase/client';
 import { useCompany } from '@/contexts/CompanyContext';
 import { Button } from '@/components/ui/button';
@@ -19,6 +20,7 @@ import DocumentPrintPreview from '@/components/DocumentPrintPreview';
 
 const InvoicesPage = () => {
   const { selectedCompany } = useCompany();
+  const { fmt, symbol } = useCurrency();
   const navigate = useNavigate();
   const [invoices, setInvoices] = useState<any[]>([]);
   const [contacts, setContacts] = useState<any[]>([]);
@@ -204,7 +206,7 @@ const InvoicesPage = () => {
               <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
               <XAxis dataKey="month" tick={{ fontSize: 10 }} />
               <YAxis tick={{ fontSize: 10 }} />
-              <Tooltip formatter={(v: number) => `RM ${v.toFixed(2)}`} />
+              <Tooltip formatter={(v: number) => fmt(v)} />
               <Bar dataKey="paid" stackId="a" fill="hsl(var(--primary))" name="Paid" />
               <Bar dataKey="unpaid" stackId="a" fill="hsl(var(--muted-foreground))" name="Unpaid" />
               <Bar dataKey="partial" stackId="a" fill="hsl(var(--accent-foreground))" name="Partial" />
@@ -236,7 +238,7 @@ const InvoicesPage = () => {
                   <TableCell className="font-medium">{inv.invoice_number}</TableCell>
                   <TableCell>{inv.contacts?.name || '—'}</TableCell>
                   <TableCell>{inv.invoice_date}</TableCell>
-                  <TableCell className="text-right">RM {Number(inv.total_amount).toFixed(2)}</TableCell>
+                  <TableCell className="text-right">{fmt(Number(inv.total_amount))}</TableCell>
                   <TableCell><Badge variant={statusColor(inv.status)}>{inv.status}</Badge></TableCell>
                   <TableCell>
                     {inv.einvoice_status ? (

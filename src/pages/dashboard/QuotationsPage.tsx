@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useCurrency } from '@/hooks/useCurrency';
 import { supabase } from '@/integrations/supabase/client';
 import { useCompany } from '@/contexts/CompanyContext';
 import { useAuth } from '@/contexts/AuthContext';
@@ -18,6 +19,7 @@ const statusColors: Record<string, string> = { draft: 'secondary', sent: 'defaul
 
 const QuotationsPage = () => {
   const { selectedCompany } = useCompany();
+  const { fmt } = useCurrency();
   const { user } = useAuth();
   const [quotations, setQuotations] = useState<any[]>([]);
   const [contacts, setContacts] = useState<any[]>([]);
@@ -141,7 +143,7 @@ const QuotationsPage = () => {
                   <TableCell className="font-mono font-medium">{q.quotation_number}</TableCell>
                   <TableCell>{q.contacts?.name || '—'}</TableCell>
                   <TableCell>{q.valid_until || '—'}</TableCell>
-                  <TableCell className="text-right font-medium">RM {(+q.total_amount).toFixed(2)}</TableCell>
+                  <TableCell className="text-right font-medium">{fmt(+q.total_amount)}</TableCell>
                   <TableCell><Badge variant={(statusColors[q.status] || 'secondary') as any}>{q.status}</Badge></TableCell>
                   <TableCell className="flex gap-1">
                     <Button variant="ghost" size="sm" onClick={() => handlePrintPreview(q)}>
@@ -193,9 +195,9 @@ const QuotationsPage = () => {
             <div><Label>Notes</Label><Input value={form.notes} onChange={e => setForm(f => ({ ...f, notes: e.target.value }))} /></div>
             <div className="flex justify-between items-center pt-2 border-t border-border">
               <div className="text-sm space-x-4">
-                <span>Subtotal: <strong>RM {subtotal.toFixed(2)}</strong></span>
-                <span>Tax: <strong>RM {taxTotal.toFixed(2)}</strong></span>
-                <span>Total: <strong>RM {(subtotal + taxTotal).toFixed(2)}</strong></span>
+                <span>Subtotal: <strong>{fmt(subtotal)}</strong></span>
+                <span>Tax: <strong>{fmt(taxTotal)}</strong></span>
+                <span>Total: <strong>{fmt(subtotal + taxTotal)}</strong></span>
               </div>
               <Button onClick={handleCreate}>Create Quotation</Button>
             </div>

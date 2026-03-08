@@ -6,12 +6,13 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow, TableFoo
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Label } from '@/components/ui/label';
+import { formatCurrency } from '@/lib/utils';
 
 const months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
-const fmt = (n: number) => `RM ${Number(n).toFixed(2)}`;
 
 const PayrollReportsPage = () => {
   const { selectedCompany } = useCompany();
+  const fmt = (n: number) => formatCurrency(n, selectedCompany?.base_currency);
   const [periods, setPeriods] = useState<any[]>([]);
   const [selectedPeriodId, setSelectedPeriodId] = useState('');
   const [payslips, setPayslips] = useState<any[]>([]);

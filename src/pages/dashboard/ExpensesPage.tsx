@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useCurrency } from '@/hooks/useCurrency';
 import { supabase } from '@/integrations/supabase/client';
 import { useCompany } from '@/contexts/CompanyContext';
 import { Button } from '@/components/ui/button';
@@ -13,6 +14,7 @@ import { toast } from 'sonner';
 
 const ExpensesPage = () => {
   const { selectedCompany } = useCompany();
+  const { fmt, symbol } = useCurrency();
   const [expenses, setExpenses] = useState<any[]>([]);
   const [open, setOpen] = useState(false);
   const [form, setForm] = useState({ description: '', amount: '', expense_date: new Date().toISOString().split('T')[0], category: '', tax_amount: '0' });
@@ -55,7 +57,7 @@ const ExpensesPage = () => {
             <div className="space-y-4">
               <div><Label>Description</Label><Input value={form.description} onChange={e => setForm(f => ({ ...f, description: e.target.value }))} /></div>
               <div className="grid grid-cols-2 gap-4">
-                <div><Label>Amount (RM)</Label><Input type="number" value={form.amount} onChange={e => setForm(f => ({ ...f, amount: e.target.value }))} /></div>
+                <div><Label>Amount ({symbol})</Label><Input type="number" value={form.amount} onChange={e => setForm(f => ({ ...f, amount: e.target.value }))} /></div>
                 <div><Label>Tax Amount</Label><Input type="number" value={form.tax_amount} onChange={e => setForm(f => ({ ...f, tax_amount: e.target.value }))} /></div>
               </div>
               <div className="grid grid-cols-2 gap-4">
@@ -87,7 +89,7 @@ const ExpensesPage = () => {
                   <TableCell>{e.expense_date}</TableCell>
                   <TableCell className="font-medium">{e.description}</TableCell>
                   <TableCell>{e.category || '—'}</TableCell>
-                  <TableCell>RM {Number(e.amount).toFixed(2)}</TableCell>
+                  <TableCell>{fmt(Number(e.amount))}</TableCell>
                   <TableCell><Badge variant="secondary">{e.status}</Badge></TableCell>
                 </TableRow>
               ))}

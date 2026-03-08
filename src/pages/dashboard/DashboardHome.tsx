@@ -1,4 +1,5 @@
 import { useEffect, useState, useMemo } from 'react';
+import { formatCurrency } from '@/lib/utils';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { useCompany } from '@/contexts/CompanyContext';
 import { supabase } from '@/integrations/supabase/client';
@@ -203,7 +204,7 @@ const DashboardHome = () => {
       .reduce((s, i) => s + (Number(i.total_amount) || 0), 0);
   }, [currentInvoices]);
 
-  const fmt = (n: number) => `RM ${n.toLocaleString('en-MY', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+  const fmt = (n: number) => formatCurrency(n, selectedCompany?.base_currency);
 
   if (!selectedCompany) {
     return (
