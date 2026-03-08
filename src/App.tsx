@@ -60,6 +60,7 @@ import SalesReportsPage from "./pages/dashboard/SalesReportsPage";
 import FinancialReportsPage from "./pages/dashboard/FinancialReportsPage";
 import KnockOffPage from "./pages/dashboard/KnockOffPage";
 import ApiIntegrationPage from "./pages/dashboard/ApiIntegrationPage";
+import PurchaseReportsPage from "./pages/dashboard/PurchaseReportsPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
