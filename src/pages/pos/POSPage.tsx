@@ -243,7 +243,7 @@ const POSPage = () => {
       {/* Payment Dialog */}
       <Dialog open={paymentOpen} onOpenChange={setPaymentOpen}>
         <DialogContent>
-          <DialogHeader><DialogTitle>Payment - RM {grandTotal.toFixed(2)}</DialogTitle></DialogHeader>
+          <DialogHeader><DialogTitle>Payment - {fmt(grandTotal)}</DialogTitle></DialogHeader>
           <div className="space-y-4">
             <div className="flex items-center gap-3"><Banknote className="h-5 w-5 text-muted-foreground" /><div className="flex-1"><Label>Cash</Label><Input type="number" value={paymentAmounts.cash} onChange={e => setPaymentAmounts({ ...paymentAmounts, cash: e.target.value })} placeholder="0.00" /></div></div>
             <div className="flex items-center gap-3"><CreditCard className="h-5 w-5 text-muted-foreground" /><div className="flex-1"><Label>Card</Label><Input type="number" value={paymentAmounts.card} onChange={e => setPaymentAmounts({ ...paymentAmounts, card: e.target.value })} placeholder="0.00" /></div></div>
