@@ -131,8 +131,8 @@ const XStoreDashboard = () => {
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <Card><CardContent className="pt-6"><div className="flex items-center gap-3"><Store className="h-8 w-8 text-primary" /><div><p className="text-sm text-muted-foreground">Connected Stores</p><p className="text-2xl font-bold">{stores.length}</p></div></div></CardContent></Card>
         <Card><CardContent className="pt-6"><div className="flex items-center gap-3"><ShoppingBag className="h-8 w-8 text-primary" /><div><p className="text-sm text-muted-foreground">Total Orders</p><p className="text-2xl font-bold">{totalOrders}</p></div></div></CardContent></Card>
-        <Card><CardContent className="pt-6"><div className="flex items-center gap-3"><TrendingUp className="h-8 w-8 text-primary" /><div><p className="text-sm text-muted-foreground">Total Sales</p><p className="text-2xl font-bold">RM {totalSales.toFixed(2)}</p></div></div></CardContent></Card>
-        <Card><CardContent className="pt-6"><div className="flex items-center gap-3"><DollarSign className="h-8 w-8 text-primary" /><div><p className="text-sm text-muted-foreground">Seller Payout</p><p className="text-2xl font-bold">RM {totalPayout.toFixed(2)}</p></div></div></CardContent></Card>
+        <Card><CardContent className="pt-6"><div className="flex items-center gap-3"><TrendingUp className="h-8 w-8 text-primary" /><div><p className="text-sm text-muted-foreground">Total Sales</p><p className="text-2xl font-bold">{fmt(totalSales)}</p></div></div></CardContent></Card>
+        <Card><CardContent className="pt-6"><div className="flex items-center gap-3"><DollarSign className="h-8 w-8 text-primary" /><div><p className="text-sm text-muted-foreground">Seller Payout</p><p className="text-2xl font-bold">{fmt(totalPayout)}</p></div></div></CardContent></Card>
       </div>
 
       {/* Charts */}
