@@ -44,6 +44,12 @@ import StockTakePage from "./pages/stocktake/StockTakePage";
 import WellnessPOSPage from "./pages/wellness/WellnessPOSPage";
 import AICloudPage from "./pages/cloud/AICloudPage";
 import CustomizationPage from "./pages/customization/CustomizationPage";
+import CommissionPage from "./pages/dashboard/CommissionPage";
+import BatchMessagesPage from "./pages/dashboard/BatchMessagesPage";
+import SecurityLockPage from "./pages/dashboard/SecurityLockPage";
+import InventoryReportsPage from "./pages/dashboard/InventoryReportsPage";
+import AdvancedReportsPage from "./pages/dashboard/AdvancedReportsPage";
+import DocumentTemplatesPage from "./pages/dashboard/DocumentTemplatesPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
