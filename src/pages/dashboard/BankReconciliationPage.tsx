@@ -237,7 +237,7 @@ const BankReconciliationPage = () => {
             <div>
               <p className="text-sm text-muted-foreground">Reconciled</p>
               <p className="text-2xl font-bold font-display text-primary">{reconciledCount}</p>
-              <p className="text-xs text-muted-foreground">RM {reconciledAmount.toFixed(2)}</p>
+              <p className="text-xs text-muted-foreground">{fmt(reconciledAmount)}</p>
             </div>
           </CardContent>
         </Card>
