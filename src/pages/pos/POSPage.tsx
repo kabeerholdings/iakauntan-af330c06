@@ -249,8 +249,8 @@ const POSPage = () => {
             <div className="flex items-center gap-3"><CreditCard className="h-5 w-5 text-muted-foreground" /><div className="flex-1"><Label>Card</Label><Input type="number" value={paymentAmounts.card} onChange={e => setPaymentAmounts({ ...paymentAmounts, card: e.target.value })} placeholder="0.00" /></div></div>
             <div className="flex items-center gap-3"><Smartphone className="h-5 w-5 text-muted-foreground" /><div className="flex-1"><Label>E-Wallet</Label><Input type="number" value={paymentAmounts.ewallet} onChange={e => setPaymentAmounts({ ...paymentAmounts, ewallet: e.target.value })} placeholder="0.00" /></div></div>
             <Separator />
-            <div className="flex justify-between"><span>Paid</span><span className="font-bold">RM {totalPaid.toFixed(2)}</span></div>
-            <div className="flex justify-between"><span>Change</span><span className="font-bold text-primary">RM {changeAmount.toFixed(2)}</span></div>
+            <div className="flex justify-between"><span>Paid</span><span className="font-bold">{fmt(totalPaid)}</span></div>
+            <div className="flex justify-between"><span>Change</span><span className="font-bold text-primary">{fmt(changeAmount)}</span></div>
             <div className="grid grid-cols-4 gap-2">
               {[grandTotal, 10, 20, 50, 100, 200].map(amt => (
                 <Button key={amt} variant="outline" size="sm" onClick={() => setPaymentAmounts({ ...paymentAmounts, cash: String(amt) })}>
