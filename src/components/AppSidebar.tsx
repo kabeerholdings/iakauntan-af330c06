@@ -68,6 +68,8 @@ const managementItems = [
   { title: 'Expenses', url: '/dashboard/expenses', icon: CreditCard },
   { title: 'Projects', url: '/dashboard/projects', icon: FolderKanban },
   { title: 'Currency Rates', url: '/dashboard/currency-rates', icon: DollarSign },
+  { title: 'Commission', url: '/dashboard/commission', icon: Calculator },
+  { title: 'Advanced Reports', url: '/dashboard/advanced-reports', icon: TrendingUp },
 ];
 
 const otherItems = [
