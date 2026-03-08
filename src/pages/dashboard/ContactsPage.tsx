@@ -218,7 +218,9 @@ const ContactsPage = () => {
                           </AlertDialog>
                         </div>
                       </TableCell>
+                    </TableRow>
                   ))}
+
                 </TableBody>
               </Table>
             </CardContent>
