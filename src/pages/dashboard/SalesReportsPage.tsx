@@ -190,9 +190,9 @@ const SalesReportsPage = () => {
                       <TableRow className="font-bold border-t-2">
                         <TableCell>Total</TableCell>
                         <TableCell className="text-right">{invoices.length}</TableCell>
-                        <TableCell className="text-right font-mono">{totalSales.toFixed(2)}</TableCell>
-                        <TableCell className="text-right font-mono">{totalTax.toFixed(2)}</TableCell>
-                        <TableCell className="text-right font-mono">{totalAmount.toFixed(2)}</TableCell>
+                        <TableCell className="text-right font-mono">{fmt(totalSales)}</TableCell>
+                        <TableCell className="text-right font-mono">{fmt(totalTax)}</TableCell>
+                        <TableCell className="text-right font-mono">{fmt(totalAmount)}</TableCell>
                       </TableRow>
                     </>
                   )}
