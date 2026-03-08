@@ -171,6 +171,8 @@ const CustomizationPage = () => {
       field_type: fieldForm.field_type,
       is_required: fieldForm.is_required,
       field_options: options,
+      position_reference: fieldForm.position_reference || null,
+      position_placement: fieldForm.position_placement || 'after',
     };
 
     if (editingFieldId) {
