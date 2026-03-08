@@ -135,7 +135,7 @@ const SSTPage = () => {
         <Card>
           <CardContent className="p-4">
             <p className="text-xs text-muted-foreground">Tax Collected</p>
-            <p className="text-2xl font-bold text-foreground">RM {taxPaymentCollection.toFixed(2)}</p>
+            <p className="text-2xl font-bold text-foreground">{fmt(taxPaymentCollection)}</p>
           </CardContent>
         </Card>
         <Card>
