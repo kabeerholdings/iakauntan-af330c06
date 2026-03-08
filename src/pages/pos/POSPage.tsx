@@ -254,7 +254,7 @@ const POSPage = () => {
             <div className="grid grid-cols-4 gap-2">
               {[grandTotal, 10, 20, 50, 100, 200].map(amt => (
                 <Button key={amt} variant="outline" size="sm" onClick={() => setPaymentAmounts({ ...paymentAmounts, cash: String(amt) })}>
-                  {amt === grandTotal ? 'Exact' : `RM ${amt}`}
+                  {amt === grandTotal ? 'Exact' : fmt(amt)}
                 </Button>
               ))}
             </div>
