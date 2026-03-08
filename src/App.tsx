@@ -70,6 +70,9 @@ const App = () => (
               <Route path="payroll" element={<PayrollProcessPage />} />
               <Route path="leave" element={<LeavePage />} />
               <Route path="payroll-reports" element={<PayrollReportsPage />} />
+              <Route path="fast-entry" element={<FastEntryPage />} />
+              <Route path="bank-reconciliation" element={<BankReconciliationPage />} />
+              <Route path="documents" element={<DocumentsPage />} />
             </Route>
             <Route path="/admin" element={<DashboardLayout />}>
               <Route index element={<AdminPage />} />

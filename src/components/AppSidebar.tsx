@@ -31,9 +31,12 @@ const stockItems = [
 ];
 
 const accountingItems = [
+  { title: 'Fast Entry', url: '/dashboard/fast-entry', icon: Zap },
   { title: 'Chart of Accounts', url: '/dashboard/chart-of-accounts', icon: BookOpen },
   { title: 'Journal Entries', url: '/dashboard/journal-entries', icon: Receipt },
+  { title: 'Bank Reconciliation', url: '/dashboard/bank-reconciliation', icon: Landmark },
   { title: 'Reports', url: '/dashboard/reports', icon: BarChart3 },
+  { title: 'Documents', url: '/dashboard/documents', icon: Paperclip },
 ];
 
 const payrollItems = [
