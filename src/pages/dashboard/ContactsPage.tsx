@@ -150,7 +150,7 @@ const ContactsPage = () => {
                 </div>
               </div>
 
-              <Button onClick={handleCreate} className="w-full">Add Contact</Button>
+              <Button onClick={handleCreate} className="w-full">{editingId ? 'Update Contact' : 'Add Contact'}</Button>
             </div>
           </DialogContent>
         </Dialog>
