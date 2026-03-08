@@ -7,16 +7,14 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow, TableFooter } from '@/components/ui/table';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
-import { BarChart3, TrendingUp, Clock, FileText, Package, DollarSign } from 'lucide-react';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LineChart, Line } from 'recharts';
-import { format, subYears, startOfYear, endOfYear } from 'date-fns';
+import { BarChart3, TrendingUp, Clock, FileText, Package, DollarSign, Users } from 'lucide-react';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
+import { format } from 'date-fns';
 
 const AdvancedReportsPage = () => {
   const { selectedCompany } = useCompany();
   const [sales, setSales] = useState<any[]>([]);
-  const [purchases, setPurchases] = useState<any[]>([]);
   const [invoices, setInvoices] = useState<any[]>([]);
   const [contacts, setContacts] = useState<any[]>([]);
   const [items, setItems] = useState<any[]>([]);
@@ -25,15 +23,13 @@ const AdvancedReportsPage = () => {
 
   const fetchData = async () => {
     if (!selectedCompany) return;
-    const [s, p, i, c, si] = await Promise.all([
+    const [s, i, c, si] = await Promise.all([
       supabase.from('sales_documents').select('*, contacts(name)').eq('company_id', selectedCompany.id).gte('doc_date', dateFrom).lte('doc_date', dateTo).order('doc_date', { ascending: false }),
-      supabase.from('sales_documents').select('*, contacts(name)').eq('company_id', selectedCompany.id).eq('doc_type', 'purchase_order').gte('doc_date', dateFrom).lte('doc_date', dateTo),
       supabase.from('invoices').select('*, contacts(name)').eq('company_id', selectedCompany.id).order('due_date'),
       supabase.from('contacts').select('*').eq('company_id', selectedCompany.id),
       supabase.from('stock_items').select('*').eq('company_id', selectedCompany.id),
     ]);
     setSales(s.data || []);
-    setPurchases(p.data || []);
     setInvoices(i.data || []);
     setContacts(c.data || []);
     setItems(si.data || []);
@@ -45,34 +41,40 @@ const AdvancedReportsPage = () => {
 
   // Yearly Sales Analysis
   const yearlySalesData = useMemo(() => {
-    const months = Array.from({ length: 12 }, (_, i) => {
+    const thisYr = String(new Date().getFullYear());
+    const lastYr = String(new Date().getFullYear() - 1);
+    return Array.from({ length: 12 }, (_, i) => {
       const monthStr = String(i + 1).padStart(2, '0');
-      const thisYear = sales.filter(s => s.doc_date?.substring(5, 7) === monthStr && s.doc_date?.substring(0, 4) === String(new Date().getFullYear()));
-      const lastYear = sales.filter(s => s.doc_date?.substring(5, 7) === monthStr && s.doc_date?.substring(0, 4) === String(new Date().getFullYear() - 1));
+      const thisYear = sales.filter(s => s.doc_date?.substring(5, 7) === monthStr && s.doc_date?.substring(0, 4) === thisYr);
+      const lastYear = sales.filter(s => s.doc_date?.substring(5, 7) === monthStr && s.doc_date?.substring(0, 4) === lastYr);
       return {
         month: format(new Date(2024, i), 'MMM'),
         thisYear: thisYear.reduce((s, d) => s + (Number(d.total_amount) || 0), 0),
         lastYear: lastYear.reduce((s, d) => s + (Number(d.total_amount) || 0), 0),
       };
     });
-    return months;
   }, [sales]);
 
-  // Price History (items with price changes)
+  const yearlyTotals = useMemo(() => ({
+    thisYear: yearlySalesData.reduce((s, m) => s + m.thisYear, 0),
+    lastYear: yearlySalesData.reduce((s, m) => s + m.lastYear, 0),
+  }), [yearlySalesData]);
+
+  // Price History with margin analysis
   const priceHistory = useMemo(() => {
     return items.map(item => ({
-      code: item.code,
-      name: item.name,
+      code: item.code, name: item.name,
       currentPrice: Number(item.selling_price) || 0,
       purchasePrice: Number(item.purchase_price) || 0,
       margin: ((Number(item.selling_price) || 0) - (Number(item.purchase_price) || 0)),
       marginPct: (Number(item.selling_price) || 0) > 0
         ? (((Number(item.selling_price) || 0) - (Number(item.purchase_price) || 0)) / (Number(item.selling_price) || 0) * 100)
         : 0,
+      category: item.stock_categories?.name || '—',
     })).sort((a, b) => b.margin - a.margin);
   }, [items]);
 
-  // Outstanding Lists
+  // Outstanding Invoices with aging buckets
   const outstandingInvoices = useMemo(() => {
     return invoices.filter(i => i.status !== 'paid' && i.status !== 'void').map(inv => ({
       ...inv,
@@ -82,15 +84,40 @@ const AdvancedReportsPage = () => {
 
   const totalOutstanding = outstandingInvoices.reduce((s, i) => s + (Number(i.total_amount) || 0), 0);
 
-  // Picking List (pending sales orders)
+  // Aging buckets summary
+  const agingBuckets = useMemo(() => {
+    const buckets = { current: 0, '1-30': 0, '31-60': 0, '61-90': 0, '90+': 0 };
+    outstandingInvoices.forEach(inv => {
+      const amt = Number(inv.total_amount) || 0;
+      if (inv.daysOverdue === 0) buckets.current += amt;
+      else if (inv.daysOverdue <= 30) buckets['1-30'] += amt;
+      else if (inv.daysOverdue <= 60) buckets['31-60'] += amt;
+      else if (inv.daysOverdue <= 90) buckets['61-90'] += amt;
+      else buckets['90+'] += amt;
+    });
+    return buckets;
+  }, [outstandingInvoices]);
+
+  // Top Customers by sales
+  const topCustomers = useMemo(() => {
+    const map = new Map<string, { name: string; total: number; count: number }>();
+    sales.forEach(s => {
+      const name = (s as any).contacts?.name || 'Unknown';
+      const existing = map.get(name) || { name, total: 0, count: 0 };
+      existing.total += Number(s.total_amount) || 0;
+      existing.count++;
+      map.set(name, existing);
+    });
+    return Array.from(map.values()).sort((a, b) => b.total - a.total).slice(0, 10);
+  }, [sales]);
+
+  // Picking List
   const pickingList = useMemo(() => {
     return sales.filter(s => s.doc_type === 'sales_order' && s.status === 'confirmed')
       .map(so => ({
-        docNo: so.doc_number,
-        date: so.doc_date,
+        docNo: so.doc_number, date: so.doc_date,
         customer: (so as any).contacts?.name || '—',
-        amount: Number(so.total_amount) || 0,
-        status: so.status,
+        amount: Number(so.total_amount) || 0, status: so.status,
       }));
   }, [sales]);
 
@@ -105,31 +132,56 @@ const AdvancedReportsPage = () => {
           </div>
           <div>
             <h1 className="font-display text-2xl font-bold text-foreground">Advanced Sales & Purchase Reports</h1>
-            <p className="text-sm text-muted-foreground">Price History, Yearly Analysis, Picking List, Outstanding Lists</p>
+            <p className="text-sm text-muted-foreground">Price History, Yearly Analysis, Picking List, Outstanding, Top Customers</p>
           </div>
         </div>
       </div>
 
-      <div className="flex items-end gap-4">
+      <div className="flex items-end gap-4 flex-wrap">
         <div><Label>From</Label><Input type="date" value={dateFrom} onChange={e => setDateFrom(e.target.value)} /></div>
         <div><Label>To</Label><Input type="date" value={dateTo} onChange={e => setDateTo(e.target.value)} /></div>
         <Button onClick={fetchData}>Refresh</Button>
       </div>
 
+      {/* Summary Cards */}
+      <div className="grid sm:grid-cols-5 gap-4">
+        <Card className="shadow-card"><CardContent className="pt-6">
+          <p className="text-sm text-muted-foreground">This Year Sales</p>
+          <p className="text-xl font-bold font-display text-primary">{fmt(yearlyTotals.thisYear)}</p>
+        </CardContent></Card>
+        <Card className="shadow-card"><CardContent className="pt-6">
+          <p className="text-sm text-muted-foreground">Last Year Sales</p>
+          <p className="text-xl font-bold font-display">{fmt(yearlyTotals.lastYear)}</p>
+        </CardContent></Card>
+        <Card className="shadow-card"><CardContent className="pt-6">
+          <p className="text-sm text-muted-foreground">YoY Growth</p>
+          <p className={`text-xl font-bold font-display ${yearlyTotals.lastYear > 0 && yearlyTotals.thisYear > yearlyTotals.lastYear ? 'text-primary' : 'text-destructive'}`}>
+            {yearlyTotals.lastYear > 0 ? `${((yearlyTotals.thisYear - yearlyTotals.lastYear) / yearlyTotals.lastYear * 100).toFixed(1)}%` : '—'}
+          </p>
+        </CardContent></Card>
+        <Card className="shadow-card"><CardContent className="pt-6">
+          <p className="text-sm text-muted-foreground">Outstanding</p>
+          <p className="text-xl font-bold font-display text-destructive">{fmt(totalOutstanding)}</p>
+        </CardContent></Card>
+        <Card className="shadow-card"><CardContent className="pt-6">
+          <p className="text-sm text-muted-foreground">Pending Pick</p>
+          <p className="text-xl font-bold font-display">{pickingList.length}</p>
+        </CardContent></Card>
+      </div>
+
       <Tabs defaultValue="yearly">
         <TabsList className="flex-wrap">
-          <TabsTrigger value="yearly">Yearly Sales Analysis</TabsTrigger>
+          <TabsTrigger value="yearly">Yearly Sales</TabsTrigger>
+          <TabsTrigger value="top-customers">Top Customers</TabsTrigger>
           <TabsTrigger value="price">Price History</TabsTrigger>
-          <TabsTrigger value="outstanding">Outstanding Lists</TabsTrigger>
+          <TabsTrigger value="outstanding">Outstanding</TabsTrigger>
           <TabsTrigger value="picking">Picking List</TabsTrigger>
         </TabsList>
 
         {/* Yearly Sales */}
         <TabsContent value="yearly" className="mt-4">
           <Card className="shadow-card">
-            <CardHeader>
-              <CardTitle className="font-display">Yearly Sales Analysis — This Year vs Last Year</CardTitle>
-            </CardHeader>
+            <CardHeader><CardTitle className="font-display">Yearly Sales — This Year vs Last Year</CardTitle></CardHeader>
             <CardContent>
               <ResponsiveContainer width="100%" height={350}>
                 <BarChart data={yearlySalesData}>
@@ -137,6 +189,7 @@ const AdvancedReportsPage = () => {
                   <XAxis dataKey="month" className="text-xs" />
                   <YAxis className="text-xs" tickFormatter={(v) => `${(v / 1000).toFixed(0)}k`} />
                   <Tooltip formatter={(v: number) => fmt(v)} />
+                  <Legend />
                   <Bar dataKey="thisYear" name="This Year" fill="hsl(var(--primary))" radius={[4, 4, 0, 0]} />
                   <Bar dataKey="lastYear" name="Last Year" fill="hsl(var(--muted-foreground))" radius={[4, 4, 0, 0]} opacity={0.4} />
                 </BarChart>
@@ -144,10 +197,8 @@ const AdvancedReportsPage = () => {
               <Table className="mt-4">
                 <TableHeader>
                   <TableRow>
-                    <TableHead>Month</TableHead>
-                    <TableHead className="text-right">This Year</TableHead>
-                    <TableHead className="text-right">Last Year</TableHead>
-                    <TableHead className="text-right">Change</TableHead>
+                    <TableHead>Month</TableHead><TableHead className="text-right">This Year</TableHead>
+                    <TableHead className="text-right">Last Year</TableHead><TableHead className="text-right">Change</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -158,12 +209,57 @@ const AdvancedReportsPage = () => {
                         <TableCell className="font-medium">{m.month}</TableCell>
                         <TableCell className="text-right">{fmt(m.thisYear)}</TableCell>
                         <TableCell className="text-right text-muted-foreground">{fmt(m.lastYear)}</TableCell>
-                        <TableCell className={`text-right ${change >= 0 ? 'text-emerald-600' : 'text-destructive'}`}>
+                        <TableCell className={`text-right ${change >= 0 ? 'text-primary' : 'text-destructive'}`}>
                           {change !== 0 ? `${change >= 0 ? '+' : ''}${change.toFixed(1)}%` : '—'}
                         </TableCell>
                       </TableRow>
                     );
                   })}
+                </TableBody>
+                <TableFooter>
+                  <TableRow className="font-bold">
+                    <TableCell>Total</TableCell>
+                    <TableCell className="text-right">{fmt(yearlyTotals.thisYear)}</TableCell>
+                    <TableCell className="text-right">{fmt(yearlyTotals.lastYear)}</TableCell>
+                    <TableCell className="text-right">
+                      {yearlyTotals.lastYear > 0 ? `${((yearlyTotals.thisYear - yearlyTotals.lastYear) / yearlyTotals.lastYear * 100).toFixed(1)}%` : '—'}
+                    </TableCell>
+                  </TableRow>
+                </TableFooter>
+              </Table>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        {/* Top Customers */}
+        <TabsContent value="top-customers" className="mt-4">
+          <Card className="shadow-card">
+            <CardHeader>
+              <CardTitle className="font-display">Top 10 Customers by Sales</CardTitle>
+              <CardDescription>Ranked by total sales amount in selected period</CardDescription>
+            </CardHeader>
+            <CardContent className="p-0">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>#</TableHead><TableHead>Customer</TableHead>
+                    <TableHead className="text-right">Total Sales</TableHead>
+                    <TableHead className="text-right">Transactions</TableHead>
+                    <TableHead className="text-right">Avg per Txn</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {topCustomers.length === 0 ? (
+                    <TableRow><TableCell colSpan={5} className="text-center text-muted-foreground py-8">No sales data</TableCell></TableRow>
+                  ) : topCustomers.map((c, i) => (
+                    <TableRow key={i}>
+                      <TableCell><Badge variant={i < 3 ? 'default' : 'secondary'}>{i + 1}</Badge></TableCell>
+                      <TableCell className="font-medium">{c.name}</TableCell>
+                      <TableCell className="text-right font-medium">{fmt(c.total)}</TableCell>
+                      <TableCell className="text-right">{c.count}</TableCell>
+                      <TableCell className="text-right text-muted-foreground">{fmt(c.count > 0 ? c.total / c.count : 0)}</TableCell>
+                    </TableRow>
+                  ))}
                 </TableBody>
               </Table>
             </CardContent>
@@ -173,18 +269,14 @@ const AdvancedReportsPage = () => {
         {/* Price History */}
         <TabsContent value="price" className="mt-4">
           <Card className="shadow-card">
-            <CardHeader>
-              <CardTitle className="font-display">Item Price History & Margin Analysis</CardTitle>
-            </CardHeader>
+            <CardHeader><CardTitle className="font-display">Item Price History & Margin Analysis</CardTitle></CardHeader>
             <CardContent className="p-0">
               <Table>
                 <TableHeader>
                   <TableRow>
                     <TableHead>Code</TableHead><TableHead>Item</TableHead>
-                    <TableHead className="text-right">Selling Price</TableHead>
-                    <TableHead className="text-right">Purchase Price</TableHead>
-                    <TableHead className="text-right">Margin</TableHead>
-                    <TableHead className="text-right">Margin %</TableHead>
+                    <TableHead className="text-right">Selling</TableHead><TableHead className="text-right">Purchase</TableHead>
+                    <TableHead className="text-right">Margin</TableHead><TableHead className="text-right">Margin %</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -198,7 +290,7 @@ const AdvancedReportsPage = () => {
                       <TableCell className="text-right">{fmt(item.purchasePrice)}</TableCell>
                       <TableCell className="text-right font-medium">{fmt(item.margin)}</TableCell>
                       <TableCell className="text-right">
-                        <Badge variant={item.marginPct > 20 ? 'default' : 'secondary'}>{item.marginPct.toFixed(1)}%</Badge>
+                        <Badge variant={item.marginPct > 20 ? 'default' : item.marginPct >= 0 ? 'secondary' : 'destructive'}>{item.marginPct.toFixed(1)}%</Badge>
                       </TableCell>
                     </TableRow>
                   ))}
@@ -209,7 +301,17 @@ const AdvancedReportsPage = () => {
         </TabsContent>
 
         {/* Outstanding */}
-        <TabsContent value="outstanding" className="mt-4">
+        <TabsContent value="outstanding" className="mt-4 space-y-4">
+          <div className="grid sm:grid-cols-5 gap-3">
+            {Object.entries(agingBuckets).map(([band, amount]) => (
+              <Card key={band} className="shadow-card">
+                <CardContent className="pt-4 pb-3">
+                  <p className="text-xs text-muted-foreground uppercase">{band === 'current' ? 'Current' : `${band} days`}</p>
+                  <p className="text-lg font-bold font-display">{fmt(amount)}</p>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
           <Card className="shadow-card">
             <CardHeader>
               <div className="flex items-center justify-between">
@@ -241,7 +343,7 @@ const AdvancedReportsPage = () => {
                       <TableCell>{inv.due_date || '—'}</TableCell>
                       <TableCell className="text-right font-medium">{fmt(Number(inv.total_amount))}</TableCell>
                       <TableCell>
-                        <Badge variant={inv.daysOverdue > 30 ? 'destructive' : inv.daysOverdue > 0 ? 'secondary' : 'default'}>
+                        <Badge variant={inv.daysOverdue > 60 ? 'destructive' : inv.daysOverdue > 30 ? 'secondary' : 'default'}>
                           {inv.daysOverdue > 0 ? `${inv.daysOverdue} days` : 'Current'}
                         </Badge>
                       </TableCell>
@@ -259,7 +361,7 @@ const AdvancedReportsPage = () => {
           <Card className="shadow-card">
             <CardHeader>
               <CardTitle className="font-display">Picking List — Confirmed Sales Orders</CardTitle>
-              <CardDescription>Orders ready for fulfillment</CardDescription>
+              <CardDescription>Orders ready for fulfillment ({pickingList.length} pending)</CardDescription>
             </CardHeader>
             <CardContent className="p-0">
               <Table>
@@ -282,6 +384,15 @@ const AdvancedReportsPage = () => {
                     </TableRow>
                   ))}
                 </TableBody>
+                {pickingList.length > 0 && (
+                  <TableFooter>
+                    <TableRow className="font-bold">
+                      <TableCell colSpan={3}>Total</TableCell>
+                      <TableCell className="text-right">{fmt(pickingList.reduce((s, p) => s + p.amount, 0))}</TableCell>
+                      <TableCell />
+                    </TableRow>
+                  </TableFooter>
+                )}
               </Table>
             </CardContent>
           </Card>
