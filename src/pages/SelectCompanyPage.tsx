@@ -103,27 +103,11 @@ const SelectCompanyPage = ({ companies, onSelect, onCompanyCreated }: SelectComp
         </div>
 
         <Dialog open={showCreate} onOpenChange={setShowCreate}>
-          <DialogContent>
+          <DialogContent className="max-w-lg max-h-[85vh] overflow-y-auto">
             <DialogHeader>
               <DialogTitle className="font-display">Add New Company</DialogTitle>
             </DialogHeader>
-            <div className="space-y-4">
-              <div>
-                <Label>Company Name *</Label>
-                <Input value={form.name} onChange={e => setForm(f => ({ ...f, name: e.target.value }))} placeholder="My Business Sdn Bhd" />
-              </div>
-              <div>
-                <Label>SSM Registration No.</Label>
-                <Input value={form.registration_no} onChange={e => setForm(f => ({ ...f, registration_no: e.target.value }))} placeholder="202301012345" />
-              </div>
-              <div>
-                <Label>Tax Identification No. (TIN)</Label>
-                <Input value={form.tax_id} onChange={e => setForm(f => ({ ...f, tax_id: e.target.value }))} placeholder="C12345678" />
-              </div>
-              <Button onClick={handleCreate} disabled={creating} className="w-full">
-                {creating ? 'Creating...' : 'Create Company'}
-              </Button>
-            </div>
+            <CreateCompanyForm onSubmit={handleCreate} loading={creating} />
           </DialogContent>
         </Dialog>
       </div>
