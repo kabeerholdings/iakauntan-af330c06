@@ -9,19 +9,6 @@ import { toast } from 'sonner';
 interface Company {
   id: string;
   name: string;
-  registration_no: string | null;
-  tax_id: string | null;
-  einvoice_tin: string | null;
-  email: string | null;
-  phone: string | null;
-  address_line1: string | null;
-  address_line2: string | null;
-  city: string | null;
-  state: string | null;
-  postcode: string | null;
-  country: string | null;
-  website: string | null;
-  msic_code: string | null;
   [key: string]: any;
 }
 
