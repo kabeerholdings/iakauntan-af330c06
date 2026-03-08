@@ -133,6 +133,7 @@ export function AppSidebar() {
   );
 
   return (
+    <>
     <Sidebar collapsible="icon" className="border-r-0">
       <div className="p-4 flex items-center gap-2">
         <img src={logoImg} alt="iAkauntan" className="h-8 w-8" />
