@@ -26,9 +26,8 @@ const SelectCompanyPage = ({ companies, onSelect, onCompanyCreated }: SelectComp
   const { user, signOut } = useAuth();
   const [showCreate, setShowCreate] = useState(false);
   const [creating, setCreating] = useState(false);
-  const [form, setForm] = useState({ name: '', registration_no: '', tax_id: '' });
 
-  const handleCreate = async () => {
+  const handleCreate = async (form: CreateCompanyFormData) => {
     if (!form.name.trim()) { toast.error('Company name is required'); return; }
     if (!user) return;
     setCreating(true);
@@ -36,13 +35,18 @@ const SelectCompanyPage = ({ companies, onSelect, onCompanyCreated }: SelectComp
       name: form.name.trim(),
       registration_no: form.registration_no.trim() || null,
       tax_id: form.tax_id.trim() || null,
+      tax_system: form.tax_system,
+      fiscal_year_start_date: form.fiscal_year_start_date || null,
+      actual_data_start_date: form.actual_data_start_date || null,
+      base_currency: form.base_currency,
+      inventory_system: form.inventory_system,
+      sample_coa: form.sample_coa,
       owner_id: user.id,
     });
     setCreating(false);
     if (error) { toast.error(error.message); return; }
     toast.success('Company created');
     setShowCreate(false);
-    setForm({ name: '', registration_no: '', tax_id: '' });
     await onCompanyCreated();
   };
 
