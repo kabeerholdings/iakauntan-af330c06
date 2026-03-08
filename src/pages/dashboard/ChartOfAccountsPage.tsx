@@ -4,6 +4,7 @@ import { useCompany } from '@/contexts/CompanyContext';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Switch } from '@/components/ui/switch';
 import { Card, CardContent } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
@@ -20,7 +21,7 @@ const ChartOfAccountsPage = () => {
   const [accounts, setAccounts] = useState<any[]>([]);
   const [open, setOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
-  const [form, setForm] = useState({ code: '', name: '', account_type: 'asset', description: '' });
+  const [form, setForm] = useState({ code: '', name: '', account_type: 'asset', description: '', is_active: true });
   const [customType, setCustomType] = useState('');
   const [showCustomType, setShowCustomType] = useState(false);
 
@@ -36,7 +37,7 @@ const ChartOfAccountsPage = () => {
   useEffect(() => { fetchData(); }, [selectedCompany]);
 
   const resetForm = () => {
-    setForm({ code: '', name: '', account_type: 'asset', description: '' });
+    setForm({ code: '', name: '', account_type: 'asset', description: '', is_active: true });
     setCustomType('');
     setShowCustomType(false);
     setEditingId(null);
@@ -54,6 +55,7 @@ const ChartOfAccountsPage = () => {
       name: account.name,
       account_type: account.account_type,
       description: account.description || '',
+      is_active: account.is_active ?? true,
     });
     if (isCustom) {
       setShowCustomType(true);
@@ -78,6 +80,7 @@ const ChartOfAccountsPage = () => {
         name: form.name,
         account_type: form.account_type,
         description: form.description || null,
+        is_active: form.is_active,
       }).eq('id', editingId);
       if (error) { toast.error(error.message); return; }
       toast.success('Account updated');
@@ -139,6 +142,12 @@ const ChartOfAccountsPage = () => {
               )}
               <div><Label>Account Name</Label><Input value={form.name} onChange={e => setForm(f => ({ ...f, name: e.target.value }))} placeholder="Cash at Bank" /></div>
               <div><Label>Description</Label><Input value={form.description} onChange={e => setForm(f => ({ ...f, description: e.target.value }))} /></div>
+              {editingId && (
+                <div className="flex items-center justify-between">
+                  <Label>Active</Label>
+                  <Switch checked={form.is_active} onCheckedChange={v => setForm(f => ({ ...f, is_active: v }))} />
+                </div>
+              )}
               <Button onClick={handleSave} className="w-full">{editingId ? 'Update Account' : 'Add Account'}</Button>
             </div>
           </DialogContent>
