@@ -1396,6 +1396,200 @@ export type Database = {
           },
         ]
       }
+      debit_note_lines: {
+        Row: {
+          account_id: string | null
+          created_at: string | null
+          debit_note_id: string
+          description: string
+          id: string
+          line_total: number | null
+          quantity: number | null
+          tax_amount: number | null
+          tax_rate: number | null
+          unit_price: number | null
+        }
+        Insert: {
+          account_id?: string | null
+          created_at?: string | null
+          debit_note_id: string
+          description: string
+          id?: string
+          line_total?: number | null
+          quantity?: number | null
+          tax_amount?: number | null
+          tax_rate?: number | null
+          unit_price?: number | null
+        }
+        Update: {
+          account_id?: string | null
+          created_at?: string | null
+          debit_note_id?: string
+          description?: string
+          id?: string
+          line_total?: number | null
+          quantity?: number | null
+          tax_amount?: number | null
+          tax_rate?: number | null
+          unit_price?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "debit_note_lines_account_id_fkey"
+            columns: ["account_id"]
+            isOneToOne: false
+            referencedRelation: "chart_of_accounts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "debit_note_lines_debit_note_id_fkey"
+            columns: ["debit_note_id"]
+            isOneToOne: false
+            referencedRelation: "debit_notes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      debit_notes: {
+        Row: {
+          company_id: string
+          contact_id: string | null
+          created_at: string | null
+          created_by: string | null
+          currency: string | null
+          id: string
+          invoice_id: string | null
+          note_date: string | null
+          note_number: string
+          note_type: string | null
+          reason: string | null
+          status: string | null
+          subtotal: number | null
+          tax_amount: number | null
+          total_amount: number | null
+          updated_at: string | null
+        }
+        Insert: {
+          company_id: string
+          contact_id?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          currency?: string | null
+          id?: string
+          invoice_id?: string | null
+          note_date?: string | null
+          note_number: string
+          note_type?: string | null
+          reason?: string | null
+          status?: string | null
+          subtotal?: number | null
+          tax_amount?: number | null
+          total_amount?: number | null
+          updated_at?: string | null
+        }
+        Update: {
+          company_id?: string
+          contact_id?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          currency?: string | null
+          id?: string
+          invoice_id?: string | null
+          note_date?: string | null
+          note_number?: string
+          note_type?: string | null
+          reason?: string | null
+          status?: string | null
+          subtotal?: number | null
+          tax_amount?: number | null
+          total_amount?: number | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "debit_notes_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "debit_notes_contact_id_fkey"
+            columns: ["contact_id"]
+            isOneToOne: false
+            referencedRelation: "contacts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "debit_notes_invoice_id_fkey"
+            columns: ["invoice_id"]
+            isOneToOne: false
+            referencedRelation: "invoices"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      depreciation_entries: {
+        Row: {
+          accumulated_total: number | null
+          amount: number
+          asset_id: string
+          company_id: string
+          created_at: string | null
+          depreciation_date: string
+          id: string
+          journal_entry_id: string | null
+          net_book_value: number | null
+          period_label: string | null
+        }
+        Insert: {
+          accumulated_total?: number | null
+          amount?: number
+          asset_id: string
+          company_id: string
+          created_at?: string | null
+          depreciation_date: string
+          id?: string
+          journal_entry_id?: string | null
+          net_book_value?: number | null
+          period_label?: string | null
+        }
+        Update: {
+          accumulated_total?: number | null
+          amount?: number
+          asset_id?: string
+          company_id?: string
+          created_at?: string | null
+          depreciation_date?: string
+          id?: string
+          journal_entry_id?: string | null
+          net_book_value?: number | null
+          period_label?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "depreciation_entries_asset_id_fkey"
+            columns: ["asset_id"]
+            isOneToOne: false
+            referencedRelation: "fixed_assets"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "depreciation_entries_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "depreciation_entries_journal_entry_id_fkey"
+            columns: ["journal_entry_id"]
+            isOneToOne: false
+            referencedRelation: "journal_entries"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       document_attachments: {
         Row: {
           company_id: string
@@ -1792,6 +1986,177 @@ export type Database = {
           {
             foreignKeyName: "expenses_contact_id_fkey"
             columns: ["contact_id"]
+            isOneToOne: false
+            referencedRelation: "contacts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      fixed_asset_types: {
+        Row: {
+          accumulated_dep_account_id: string | null
+          asset_account_id: string | null
+          company_id: string
+          created_at: string | null
+          depreciation_account_id: string | null
+          depreciation_method: string
+          depreciation_rate: number | null
+          id: string
+          name: string
+          updated_at: string | null
+          useful_life_years: number
+        }
+        Insert: {
+          accumulated_dep_account_id?: string | null
+          asset_account_id?: string | null
+          company_id: string
+          created_at?: string | null
+          depreciation_account_id?: string | null
+          depreciation_method?: string
+          depreciation_rate?: number | null
+          id?: string
+          name: string
+          updated_at?: string | null
+          useful_life_years?: number
+        }
+        Update: {
+          accumulated_dep_account_id?: string | null
+          asset_account_id?: string | null
+          company_id?: string
+          created_at?: string | null
+          depreciation_account_id?: string | null
+          depreciation_method?: string
+          depreciation_rate?: number | null
+          id?: string
+          name?: string
+          updated_at?: string | null
+          useful_life_years?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fixed_asset_types_accumulated_dep_account_id_fkey"
+            columns: ["accumulated_dep_account_id"]
+            isOneToOne: false
+            referencedRelation: "chart_of_accounts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fixed_asset_types_asset_account_id_fkey"
+            columns: ["asset_account_id"]
+            isOneToOne: false
+            referencedRelation: "chart_of_accounts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fixed_asset_types_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fixed_asset_types_depreciation_account_id_fkey"
+            columns: ["depreciation_account_id"]
+            isOneToOne: false
+            referencedRelation: "chart_of_accounts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      fixed_assets: {
+        Row: {
+          accumulated_depreciation: number | null
+          asset_code: string
+          asset_name: string
+          asset_type_id: string | null
+          company_id: string
+          created_at: string | null
+          created_by: string | null
+          depreciation_method: string | null
+          description: string | null
+          disposal_amount: number | null
+          disposal_date: string | null
+          disposal_gain_loss: number | null
+          id: string
+          location: string | null
+          net_book_value: number | null
+          purchase_cost: number
+          purchase_date: string
+          residual_value: number | null
+          serial_number: string | null
+          status: string | null
+          supplier_id: string | null
+          updated_at: string | null
+          useful_life_years: number | null
+        }
+        Insert: {
+          accumulated_depreciation?: number | null
+          asset_code: string
+          asset_name: string
+          asset_type_id?: string | null
+          company_id: string
+          created_at?: string | null
+          created_by?: string | null
+          depreciation_method?: string | null
+          description?: string | null
+          disposal_amount?: number | null
+          disposal_date?: string | null
+          disposal_gain_loss?: number | null
+          id?: string
+          location?: string | null
+          net_book_value?: number | null
+          purchase_cost?: number
+          purchase_date?: string
+          residual_value?: number | null
+          serial_number?: string | null
+          status?: string | null
+          supplier_id?: string | null
+          updated_at?: string | null
+          useful_life_years?: number | null
+        }
+        Update: {
+          accumulated_depreciation?: number | null
+          asset_code?: string
+          asset_name?: string
+          asset_type_id?: string | null
+          company_id?: string
+          created_at?: string | null
+          created_by?: string | null
+          depreciation_method?: string | null
+          description?: string | null
+          disposal_amount?: number | null
+          disposal_date?: string | null
+          disposal_gain_loss?: number | null
+          id?: string
+          location?: string | null
+          net_book_value?: number | null
+          purchase_cost?: number
+          purchase_date?: string
+          residual_value?: number | null
+          serial_number?: string | null
+          status?: string | null
+          supplier_id?: string | null
+          updated_at?: string | null
+          useful_life_years?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fixed_assets_asset_type_id_fkey"
+            columns: ["asset_type_id"]
+            isOneToOne: false
+            referencedRelation: "fixed_asset_types"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fixed_assets_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fixed_assets_supplier_id_fkey"
+            columns: ["supplier_id"]
             isOneToOne: false
             referencedRelation: "contacts"
             referencedColumns: ["id"]
@@ -2779,6 +3144,57 @@ export type Database = {
           },
         ]
       }
+      opening_balances: {
+        Row: {
+          account_id: string
+          balance_date: string
+          company_id: string
+          created_at: string | null
+          created_by: string | null
+          credit_amount: number | null
+          debit_amount: number | null
+          id: string
+          updated_at: string | null
+        }
+        Insert: {
+          account_id: string
+          balance_date: string
+          company_id: string
+          created_at?: string | null
+          created_by?: string | null
+          credit_amount?: number | null
+          debit_amount?: number | null
+          id?: string
+          updated_at?: string | null
+        }
+        Update: {
+          account_id?: string
+          balance_date?: string
+          company_id?: string
+          created_at?: string | null
+          created_by?: string | null
+          credit_amount?: number | null
+          debit_amount?: number | null
+          id?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "opening_balances_account_id_fkey"
+            columns: ["account_id"]
+            isOneToOne: false
+            referencedRelation: "chart_of_accounts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "opening_balances_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       payment_allocations: {
         Row: {
           amount: number
@@ -2884,6 +3300,47 @@ export type Database = {
           },
           {
             foreignKeyName: "payment_methods_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      payment_terms: {
+        Row: {
+          company_id: string
+          created_at: string | null
+          days: number
+          description: string | null
+          id: string
+          is_active: boolean | null
+          is_default: boolean | null
+          name: string
+        }
+        Insert: {
+          company_id: string
+          created_at?: string | null
+          days?: number
+          description?: string | null
+          id?: string
+          is_active?: boolean | null
+          is_default?: boolean | null
+          name: string
+        }
+        Update: {
+          company_id?: string
+          created_at?: string | null
+          days?: number
+          description?: string | null
+          id?: string
+          is_active?: boolean | null
+          is_default?: boolean | null
+          name?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "payment_terms_company_id_fkey"
             columns: ["company_id"]
             isOneToOne: false
             referencedRelation: "companies"
