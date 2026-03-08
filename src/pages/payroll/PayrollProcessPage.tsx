@@ -110,7 +110,7 @@ const PayrollProcessPage = () => {
     fetchPayslips(selectedPeriod.id);
   };
 
-  const fmt = (n: number) => `RM ${Number(n).toFixed(2)}`;
+  const { fmt } = useCurrency();
 
   const totals = payslips.reduce((acc, p) => ({
     basic: acc.basic + +p.basic_salary, gross: acc.gross + +p.gross_pay, net: acc.net + +p.net_pay,

@@ -137,7 +137,7 @@ const CommissionPage = () => {
     setGenerating(false);
   };
 
-  const fmt = (n: number) => `RM ${Number(n).toLocaleString('en-MY', { minimumFractionDigits: 2 })}`;
+  const { fmt } = useCurrency();
   const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 
   if (!selectedCompany) return <p className="text-muted-foreground">Select a company first.</p>;
