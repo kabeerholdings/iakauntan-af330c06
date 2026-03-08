@@ -58,6 +58,7 @@ const accountingItems = [
   { title: 'Chart of Accounts', url: '/dashboard/chart-of-accounts', icon: BookOpen },
   { title: 'Journal Entries', url: '/dashboard/journal-entries', icon: Receipt },
   { title: 'Bank Reconciliation', url: '/dashboard/bank-reconciliation', icon: Landmark },
+  { title: 'Payment Methods', url: '/dashboard/payment-methods', icon: CreditCard },
   { title: 'Reports', url: '/dashboard/reports', icon: BarChart3 },
   { title: 'Documents', url: '/dashboard/documents', icon: Paperclip },
   { title: 'AI Easy Scan', url: '/dashboard/ai-scanner', icon: Brain },

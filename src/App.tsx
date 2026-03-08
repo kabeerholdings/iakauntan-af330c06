@@ -50,6 +50,7 @@ import SecurityLockPage from "./pages/dashboard/SecurityLockPage";
 import InventoryReportsPage from "./pages/dashboard/InventoryReportsPage";
 import AdvancedReportsPage from "./pages/dashboard/AdvancedReportsPage";
 import DocumentTemplatesPage from "./pages/dashboard/DocumentTemplatesPage";
+import PaymentMethodsPage from "./pages/dashboard/PaymentMethodsPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -107,6 +108,7 @@ const App = () => (
               <Route path="inventory-reports" element={<InventoryReportsPage />} />
               <Route path="advanced-reports" element={<AdvancedReportsPage />} />
               <Route path="document-templates" element={<DocumentTemplatesPage />} />
+              <Route path="payment-methods" element={<PaymentMethodsPage />} />
             </Route>
             <Route path="/admin" element={<DashboardLayout />}>
               <Route index element={<AdminPage />} />
