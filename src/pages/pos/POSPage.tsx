@@ -188,7 +188,7 @@ const POSPage = () => {
                 <CardContent className="p-3">
                   <p className="font-medium text-sm truncate">{item.name}</p>
                   <p className="text-xs text-muted-foreground">{item.code}</p>
-                  <p className="text-primary font-bold mt-1">RM {(item.selling_price || 0).toFixed(2)}</p>
+                  <p className="text-primary font-bold mt-1">{fmt(item.selling_price || 0)}</p>
                   {item.barcode && <p className="text-xs text-muted-foreground truncate">{item.barcode}</p>}
                 </CardContent>
               </Card>
