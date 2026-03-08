@@ -188,7 +188,90 @@ const InventoryReportsPage = () => {
           </Card>
         </TabsContent>
 
-        {/* Month End Balance */}
+        {/* Stock Balance by Location */}
+        <TabsContent value="stock-balance" className="mt-4">
+          <Card className="shadow-card">
+            <CardHeader>
+              <CardTitle className="font-display">Stock Balance by Location</CardTitle>
+            </CardHeader>
+            <CardContent className="p-0">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Code</TableHead>
+                    <TableHead>Item Name</TableHead>
+                    <TableHead>Warehouse</TableHead>
+                    <TableHead className="text-right">Quantity</TableHead>
+                    <TableHead className="text-right">Unit Cost</TableHead>
+                    <TableHead className="text-right">Total Value</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {balances.length === 0 ? (
+                    <TableRow><TableCell colSpan={6} className="text-center text-muted-foreground py-8">No stock balances</TableCell></TableRow>
+                  ) : balances.map((b, i) => (
+                    <TableRow key={i}>
+                      <TableCell className="font-mono">{b.stock_items?.code}</TableCell>
+                      <TableCell className="font-medium">{b.stock_items?.name}</TableCell>
+                      <TableCell>{b.warehouses?.name || 'Default'}</TableCell>
+                      <TableCell className="text-right">{Number(b.quantity)}</TableCell>
+                      <TableCell className="text-right">{fmt(Number(b.unit_cost || 0))}</TableCell>
+                      <TableCell className="text-right font-medium">{fmt(Number(b.quantity) * Number(b.unit_cost || 0))}</TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        {/* Product Profit Margin */}
+        <TabsContent value="profit-margin" className="mt-4">
+          <Card className="shadow-card">
+            <CardHeader>
+              <CardTitle className="font-display">Product Profit Margin</CardTitle>
+            </CardHeader>
+            <CardContent className="p-0">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Code</TableHead>
+                    <TableHead>Product Name</TableHead>
+                    <TableHead className="text-right">Selling Price</TableHead>
+                    <TableHead className="text-right">Cost Price</TableHead>
+                    <TableHead className="text-right">Profit</TableHead>
+                    <TableHead className="text-right">Margin %</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {items.length === 0 ? (
+                    <TableRow><TableCell colSpan={6} className="text-center text-muted-foreground py-8">No products</TableCell></TableRow>
+                  ) : items.map(item => {
+                    const sell = Number(item.selling_price) || 0;
+                    const cost = Number(item.purchase_price || item.cost_price) || 0;
+                    const profit = sell - cost;
+                    const margin = sell > 0 ? (profit / sell * 100) : 0;
+                    return (
+                      <TableRow key={item.id}>
+                        <TableCell className="font-mono">{item.code}</TableCell>
+                        <TableCell className="font-medium">{item.name}</TableCell>
+                        <TableCell className="text-right">{fmt(sell)}</TableCell>
+                        <TableCell className="text-right">{fmt(cost)}</TableCell>
+                        <TableCell className={`text-right font-medium ${profit >= 0 ? 'text-primary' : 'text-destructive'}`}>{fmt(profit)}</TableCell>
+                        <TableCell className="text-right">
+                          <Badge variant={margin >= 20 ? 'default' : margin >= 0 ? 'secondary' : 'destructive'}>
+                            {margin.toFixed(1)}%
+                          </Badge>
+                        </TableCell>
+                      </TableRow>
+                    );
+                  })}
+                </TableBody>
+              </Table>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
         <TabsContent value="month-end" className="mt-4">
           <Card className="shadow-card">
             <CardHeader>
