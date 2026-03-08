@@ -262,9 +262,9 @@ const SSTPage = () => {
                       <TableCell className="font-medium">{r.return_period}</TableCell>
                       <TableCell>{r.period_from}</TableCell>
                       <TableCell>{r.period_to}</TableCell>
-                      <TableCell className="text-right">{Number(r.total_sales_tax).toFixed(2)}</TableCell>
-                      <TableCell className="text-right">{Number(r.total_service_tax).toFixed(2)}</TableCell>
-                      <TableCell className="text-right font-bold">{Number(r.total_tax).toFixed(2)}</TableCell>
+                      <TableCell className="text-right">{fmt(Number(r.total_sales_tax))}</TableCell>
+                      <TableCell className="text-right">{fmt(Number(r.total_service_tax))}</TableCell>
+                      <TableCell className="text-right font-bold">{fmt(Number(r.total_tax))}</TableCell>
                       <TableCell>
                         <Badge variant={r.status === 'submitted' ? 'default' : r.status === 'draft' ? 'secondary' : 'outline'}>
                           {r.status}
