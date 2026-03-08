@@ -63,13 +63,30 @@ const ChartOfAccountsPage = () => {
                 <div><Label>Code</Label><Input value={form.code} onChange={e => setForm(f => ({ ...f, code: e.target.value }))} placeholder="1000" /></div>
                 <div>
                   <Label>Type</Label>
-                  <Select value={form.account_type} onValueChange={v => setForm(f => ({ ...f, account_type: v }))}>
+                  <Select value={showCustomType ? '__other__' : form.account_type} onValueChange={v => {
+                    if (v === '__other__') {
+                      setShowCustomType(true);
+                      setForm(f => ({ ...f, account_type: customType || '' }));
+                    } else {
+                      setShowCustomType(false);
+                      setCustomType('');
+                      setForm(f => ({ ...f, account_type: v }));
+                    }
+                  }}>
                     <SelectTrigger><SelectValue /></SelectTrigger>
                     <SelectContent>
                       {accountTypes.map(t => <SelectItem key={t} value={t}>{t.charAt(0).toUpperCase() + t.slice(1)}</SelectItem>)}
+                      <SelectItem value="__other__">Other (Custom)</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
+              </div>
+              {showCustomType && (
+                <div>
+                  <Label>Custom Type Name</Label>
+                  <Input value={customType} onChange={e => { setCustomType(e.target.value); setForm(f => ({ ...f, account_type: e.target.value.toLowerCase().trim() })); }} placeholder="e.g. contra-asset" />
+                </div>
+              )}
               </div>
               <div><Label>Account Name</Label><Input value={form.name} onChange={e => setForm(f => ({ ...f, name: e.target.value }))} placeholder="Cash at Bank" /></div>
               <div><Label>Description</Label><Input value={form.description} onChange={e => setForm(f => ({ ...f, description: e.target.value }))} /></div>
