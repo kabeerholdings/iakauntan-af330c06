@@ -109,7 +109,7 @@ const PurchaseReportsPage = () => {
         <Card>
           <CardContent className="p-4">
             <p className="text-xs text-muted-foreground">Returns</p>
-            <p className="text-2xl font-bold text-foreground">{returnsSummary.count} (RM {returnsSummary.total.toFixed(2)})</p>
+            <p className="text-2xl font-bold text-foreground">{returnsSummary.count} ({fmt(returnsSummary.total)})</p>
           </CardContent>
         </Card>
       </div>
