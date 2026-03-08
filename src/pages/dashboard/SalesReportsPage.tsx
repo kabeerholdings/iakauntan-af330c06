@@ -14,6 +14,7 @@ import { Printer, TrendingUp, TrendingDown } from 'lucide-react';
 
 const SalesReportsPage = () => {
   const { selectedCompany } = useCompany();
+  const { fmt } = useCurrency();
   const [invoices, setInvoices] = useState<any[]>([]);
   const [invoiceLines, setInvoiceLines] = useState<any[]>([]);
   const [stockItems, setStockItems] = useState<any[]>([]);
