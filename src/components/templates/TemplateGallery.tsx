@@ -224,9 +224,9 @@ function TemplatePreviewMini({ template }: { template: ReportTemplate }) {
       <div className="mt-auto pt-1 flex justify-between items-end">
         {template.hasQrCode && <div className="w-6 h-6 border border-muted rounded-sm flex items-center justify-center"><QrCode className="h-3 w-3 text-muted-foreground" /></div>}
         <div className="text-right ml-auto">
-          <div className="text-muted-foreground">Subtotal: RM 400.00</div>
-          {template.hasSst && <div className="text-muted-foreground">SST 6%: RM 24.00</div>}
-          <div className="font-bold" style={{ color: c, fontSize: '7px' }}>Total: RM {template.hasSst ? '424.00' : '400.00'}</div>
+          <div className="text-muted-foreground">Subtotal: 400.00</div>
+          {template.hasSst && <div className="text-muted-foreground">SST 6%: 24.00</div>}
+          <div className="font-bold" style={{ color: c, fontSize: '7px' }}>Total: {template.hasSst ? '424.00' : '400.00'}</div>
         </div>
       </div>
     </div>

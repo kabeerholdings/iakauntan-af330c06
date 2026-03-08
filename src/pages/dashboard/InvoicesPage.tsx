@@ -317,7 +317,7 @@ const InvoicesPage = () => {
             <div><Label>Notes</Label><Input value={form.notes} onChange={e => setForm(f => ({ ...f, notes: e.target.value }))} placeholder="Optional notes" /></div>
             <div className="flex justify-between items-center pt-2 border-t border-border">
               <div className="text-lg font-semibold font-display text-foreground">
-                Total: RM {form.lines.reduce((s, l) => s + l.quantity * l.unit_price * (1 + l.tax_rate / 100), 0).toFixed(2)}
+                Total: {fmt(form.lines.reduce((s, l) => s + l.quantity * l.unit_price * (1 + l.tax_rate / 100), 0))}
               </div>
               <Button onClick={handleCreate}>Create Invoice</Button>
             </div>
