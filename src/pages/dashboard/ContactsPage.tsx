@@ -13,7 +13,7 @@ import { Badge } from '@/components/ui/badge';
 import { Plus, Search, Pencil, Trash2 } from 'lucide-react';
 import { toast } from 'sonner';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
-import CustomFieldsSection, { saveCustomFieldValues } from '@/components/CustomFieldsSection';
+import { useCustomFields, saveCustomFieldValues } from '@/components/CustomFieldsSection';
 
 const emptyForm = {
   name: '', email: '', phone: '', type: 'customer', tax_id: '',
