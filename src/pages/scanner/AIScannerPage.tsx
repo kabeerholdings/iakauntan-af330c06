@@ -171,7 +171,7 @@ const AIScannerPage = () => {
                   <TableCell>{d.document_type ? <Badge variant="outline">{d.document_type}</Badge> : '-'}</TableCell>
                   <TableCell>{d.supplier_name || '-'}</TableCell>
                   <TableCell>{d.document_date || '-'}</TableCell>
-                  <TableCell>{d.total_amount ? `RM ${Number(d.total_amount).toFixed(2)}` : '-'}</TableCell>
+                  <TableCell>{d.total_amount ? fmt(Number(d.total_amount)) : '-'}</TableCell>
                   <TableCell><Badge variant={d.scan_status === 'completed' ? 'default' : d.scan_status === 'failed' ? 'destructive' : 'secondary'}>{d.scan_status}</Badge></TableCell>
                   <TableCell>
                     <div className="flex gap-1">

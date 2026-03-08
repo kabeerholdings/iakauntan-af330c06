@@ -361,7 +361,7 @@ const WellnessPOSPage = () => {
                   <TableCell className="font-medium">{(c.employees as any) ? `${(c.employees as any).first_name} ${(c.employees as any).last_name}` : '-'}</TableCell>
                   <TableCell>{c.service_name || '-'}</TableCell>
                   <TableCell>{c.commission_rate}%</TableCell>
-                  <TableCell>RM {(c.commission_amount || 0).toFixed(2)}</TableCell>
+                  <TableCell>{fmt(c.commission_amount || 0)}</TableCell>
                   <TableCell>{c.period_month}/{c.period_year}</TableCell>
                   <TableCell><Badge variant={c.status === 'paid' ? 'default' : 'secondary'}>{c.status}</Badge></TableCell>
                 </TableRow>

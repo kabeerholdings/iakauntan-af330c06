@@ -277,7 +277,7 @@ const POSPage = () => {
                     <p className="font-medium">{b.transaction_number}</p>
                     <p className="text-sm text-muted-foreground">{b.customer_name || 'Walk-in'} • {b.held_at ? new Date(b.held_at).toLocaleTimeString() : ''}</p>
                   </div>
-                  <p className="font-bold">RM {(b.total_amount || 0).toFixed(2)}</p>
+                  <p className="font-bold">{fmt(b.total_amount || 0)}</p>
                 </CardContent>
               </Card>
             ))}
