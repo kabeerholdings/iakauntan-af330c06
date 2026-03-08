@@ -301,7 +301,7 @@ const WellnessPOSPage = () => {
                   <div className="space-y-1 text-sm">
                     <p><span className="text-muted-foreground">Sessions:</span> {p.total_sessions}</p>
                     <p><span className="text-muted-foreground">Validity:</span> {p.validity_days} days</p>
-                    <p className="text-xl font-bold text-primary mt-2">RM {(p.price || 0).toFixed(2)}</p>
+                    <p className="text-xl font-bold text-primary mt-2">{fmt(p.price || 0)}</p>
                   </div>
                 </CardContent>
               </Card>
