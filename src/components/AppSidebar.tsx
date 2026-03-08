@@ -70,6 +70,8 @@ const managementItems = [
 ];
 
 const otherItems = [
+  { title: 'AI Cloud Backup', url: '/dashboard/ai-cloud', icon: Cloud },
+  { title: 'Customization', url: '/dashboard/customization', icon: Puzzle },
   { title: 'e-Invoice', url: '/dashboard/einvoice', icon: Globe },
   { title: 'Settings', url: '/dashboard/settings', icon: Settings },
 ];
