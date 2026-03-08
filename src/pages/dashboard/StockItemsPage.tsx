@@ -166,6 +166,7 @@ const StockItemsPage = () => {
                   <div><Label>Barcode</Label><Input value={form.barcode} onChange={e => setForm(f => ({ ...f, barcode: e.target.value }))} /></div>
                   <div><Label>Tax Rate (%)</Label><Input type="number" value={form.tax_rate} onChange={e => setForm(f => ({ ...f, tax_rate: e.target.value }))} /></div>
                 </div>
+                <CustomFieldsSection entityType="stock_item" values={customValues} onChange={setCustomValues} />
                 <Button onClick={handleCreateItem} className="w-full">Add Item</Button>
               </div>
             </DialogContent>
