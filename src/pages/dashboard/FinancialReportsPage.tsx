@@ -146,7 +146,7 @@ const FinancialReportsPage = () => {
         </CardContent></Card>
         <Card><CardContent className="p-4">
           <p className="text-xs text-muted-foreground">Total Expenses</p>
-          <p className="text-xl font-bold text-foreground">RM {balances.filter(b => b.account_type === 'expense').reduce((s, b) => s + b.balance, 0).toFixed(2)}</p>
+          <p className="text-xl font-bold text-foreground">{fmt(balances.filter(b => b.account_type === 'expense').reduce((s, b) => s + b.balance, 0))}</p>
         </CardContent></Card>
         <Card><CardContent className="p-4">
           <p className="text-xs text-muted-foreground">Net Income</p>
