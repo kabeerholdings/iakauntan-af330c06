@@ -3,7 +3,7 @@ import {
   LayoutDashboard, FileText, Receipt, BookOpen, Users, Globe, Settings, Building2, LogOut,
   ChevronDown, BarChart3, CreditCard, Package, ShoppingCart, Truck, Wallet, FolderKanban, DollarSign,
   UserCheck, Calculator, CalendarDays, ClipboardList, Zap, Landmark, Paperclip, Factory, Layers, Hammer, PieChart,
-  Store, ScanBarcode, Brain, Sparkles, Heart, Cloud, Puzzle, Mail, Shield, Palette, TrendingUp, Plus
+  Store, ScanBarcode, Brain, Sparkles, Heart, Cloud, Puzzle, Mail, Shield, Palette, TrendingUp, Plus, Pencil
 } from 'lucide-react';
 import { NavLink } from '@/components/NavLink';
 import { useAuth } from '@/contexts/AuthContext';
@@ -21,6 +21,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { toast } from 'sonner';
+import EditCompanyDialog from '@/components/EditCompanyDialog';
 import logoImg from '@/assets/logo.png';
 
 const mainItems = [
@@ -95,6 +96,7 @@ export function AppSidebar() {
   const { signOut } = useAuth();
   const { companies, selectedCompany, setSelectedCompany, refetchCompanies } = useCompany();
   const [showCreateCompany, setShowCreateCompany] = useState(false);
+  const [showEditCompany, setShowEditCompany] = useState(false);
   const [newCompany, setNewCompany] = useState({ name: '', registration_no: '', tax_id: '' });
   const [creating, setCreating] = useState(false);
 
@@ -155,6 +157,12 @@ export function AppSidebar() {
                 </DropdownMenuItem>
               ))}
               <DropdownMenuSeparator />
+              {selectedCompany && (
+                <DropdownMenuItem onClick={() => setShowEditCompany(true)}>
+                  <Pencil className="h-4 w-4 mr-2" />
+                  Edit Company
+                </DropdownMenuItem>
+              )}
               <DropdownMenuItem onClick={() => setShowCreateCompany(true)}>
                 <Plus className="h-4 w-4 mr-2" />
                 Add New Company
@@ -239,6 +247,13 @@ export function AppSidebar() {
         </div>
       </DialogContent>
     </Dialog>
+
+    <EditCompanyDialog
+      company={selectedCompany}
+      open={showEditCompany}
+      onOpenChange={setShowEditCompany}
+      onSaved={refetchCompanies}
+    />
     </>
   );
 }

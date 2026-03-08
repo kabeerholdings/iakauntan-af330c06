@@ -11,8 +11,9 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
-import { Plus, Shield, Eye, EyeOff } from 'lucide-react';
+import { Plus, Shield, Eye, EyeOff, Pencil } from 'lucide-react';
 import { toast } from 'sonner';
+import EditCompanyDialog from '@/components/EditCompanyDialog';
 
 const SettingsPage = () => {
   const { profile } = useAuth();
@@ -20,6 +21,7 @@ const SettingsPage = () => {
   const { user } = useAuth();
   const [newCompany, setNewCompany] = useState({ name: '', registration_no: '', tax_id: '', einvoice_tin: '' });
   const [openNew, setOpenNew] = useState(false);
+  const [editCompany, setEditCompany] = useState<any>(null);
 
   // LHDN credentials state
   const [lhdnCreds, setLhdnCreds] = useState({ client_id: '', client_secret: '', environment: 'sandbox' });
@@ -165,6 +167,9 @@ const SettingsPage = () => {
                       <p className="font-semibold text-foreground">{c.name}</p>
                       <p className="text-sm text-muted-foreground">{c.registration_no || 'No SSM'} • {c.tax_id || 'No TIN'}</p>
                     </div>
+                    <Button variant="ghost" size="sm" onClick={() => setEditCompany(c)}>
+                      <Pencil className="h-4 w-4" />
+                    </Button>
                   </div>
                 </CardContent>
               </Card>
@@ -287,6 +292,13 @@ const SettingsPage = () => {
           )}
         </TabsContent>
       </Tabs>
+
+      <EditCompanyDialog
+        company={editCompany}
+        open={!!editCompany}
+        onOpenChange={(open) => { if (!open) setEditCompany(null); }}
+        onSaved={refetchCompanies}
+      />
     </div>
   );
 };
