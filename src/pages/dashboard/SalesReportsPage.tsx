@@ -182,9 +182,9 @@ const SalesReportsPage = () => {
                         <TableRow key={m.month}>
                           <TableCell className="font-medium">{m.month}</TableCell>
                           <TableCell className="text-right">{m.count}</TableCell>
-                          <TableCell className="text-right font-mono">{m.sales.toFixed(2)}</TableCell>
-                          <TableCell className="text-right font-mono">{m.tax.toFixed(2)}</TableCell>
-                          <TableCell className="text-right font-mono font-semibold">{(m.sales + m.tax).toFixed(2)}</TableCell>
+                          <TableCell className="text-right font-mono">{fmt(m.sales)}</TableCell>
+                          <TableCell className="text-right font-mono">{fmt(m.tax)}</TableCell>
+                          <TableCell className="text-right font-mono font-semibold">{fmt(m.sales + m.tax)}</TableCell>
                         </TableRow>
                       ))}
                       <TableRow className="font-bold border-t-2">
