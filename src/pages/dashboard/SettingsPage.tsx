@@ -167,6 +167,9 @@ const SettingsPage = () => {
                       <p className="font-semibold text-foreground">{c.name}</p>
                       <p className="text-sm text-muted-foreground">{c.registration_no || 'No SSM'} • {c.tax_id || 'No TIN'}</p>
                     </div>
+                    <Button variant="ghost" size="sm" onClick={() => setEditCompany(c)}>
+                      <Pencil className="h-4 w-4" />
+                    </Button>
                   </div>
                 </CardContent>
               </Card>
