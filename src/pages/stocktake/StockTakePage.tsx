@@ -321,7 +321,7 @@ const StockTakePage = () => {
                       <TableCell>{i.name}</TableCell>
                       <TableCell>{i.barcode || '-'}</TableCell>
                       <TableCell>{i.base_uom || '-'}</TableCell>
-                      <TableCell>RM {(i.selling_price || 0).toFixed(2)}</TableCell>
+                      <TableCell>{fmt(i.selling_price || 0)}</TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
