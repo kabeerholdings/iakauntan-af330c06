@@ -91,9 +91,9 @@ const DebtorStatementTab = ({ invoices, contacts, payments, dateFrom, dateTo }: 
                     <TableCell>{t.date}</TableCell>
                     <TableCell className="font-mono text-sm">{t.ref}</TableCell>
                     <TableCell className="text-muted-foreground">{t.description}</TableCell>
-                    <TableCell className="text-right font-mono">{t.debit > 0 ? `RM ${t.debit.toFixed(2)}` : ''}</TableCell>
-                    <TableCell className="text-right font-mono">{t.credit > 0 ? `RM ${t.credit.toFixed(2)}` : ''}</TableCell>
-                    <TableCell className="text-right font-mono font-medium">RM {t.balance.toFixed(2)}</TableCell>
+                    <TableCell className="text-right font-mono">{t.debit > 0 ? fmt(t.debit) : ''}</TableCell>
+                    <TableCell className="text-right font-mono">{t.credit > 0 ? fmt(t.credit) : ''}</TableCell>
+                    <TableCell className="text-right font-mono font-medium">{fmt(t.balance)}</TableCell>
                   </TableRow>
                 ))}
                 <TableRow className="font-bold border-t-2">
