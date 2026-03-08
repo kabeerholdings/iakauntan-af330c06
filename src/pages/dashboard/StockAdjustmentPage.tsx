@@ -51,9 +51,10 @@ const StockAdjustmentPage = () => {
     if (error) { toast.error(error.message); return; }
     if (data) {
       await supabase.from('stock_adjustment_lines').insert(
-        form.lines.filter(l => l.stock_item_id).map(l => ({
-          stock_adjustment_id: data.id, stock_item_id: l.stock_item_id,
-          quantity: +l.quantity || 0, unit_cost: +l.unit_cost || 0, reason: l.reason || null,
+        form.lines.filter(l => l.stock_item_id && l.warehouse_id).map(l => ({
+          adjustment_id: data.id, stock_item_id: l.stock_item_id,
+          warehouse_id: l.warehouse_id,
+          quantity: +l.quantity || 0, unit_cost: +l.unit_cost || 0, description: l.description || null,
         }))
       );
     }
