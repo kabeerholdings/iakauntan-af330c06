@@ -231,7 +231,7 @@ const CustomizationPage = () => {
                   <TableCell className="font-mono text-xs">{f.field_name}</TableCell>
                   <TableCell><Badge variant="secondary">{f.field_type}</Badge></TableCell>
                   <TableCell>{f.is_required ? '✓' : '-'}</TableCell>
-                  <TableCell><Button size="sm" variant="ghost" onClick={() => deleteField(f.id)}><Trash2 className="h-3 w-3" /></Button></TableCell>
+                  <TableCell><div className="flex gap-1"><Button size="sm" variant="ghost" onClick={() => openEditField(f)}><Edit className="h-3 w-3" /></Button><Button size="sm" variant="ghost" onClick={() => deleteField(f.id)}><Trash2 className="h-3 w-3" /></Button></div></TableCell>
                 </TableRow>
               ))}
               {customFields.length === 0 && <TableRow><TableCell colSpan={6} className="text-center text-muted-foreground py-8">No custom fields. Create your first DIY field.</TableCell></TableRow>}
