@@ -10,7 +10,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { useCompany } from '@/contexts/CompanyContext';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
-import { Upload, CheckCircle, XCircle, Link2, Unlink } from 'lucide-react';
+import { Upload, CheckCircle, XCircle, Link2, Unlink, ArrowRightLeft } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Textarea } from '@/components/ui/textarea';
 
@@ -45,6 +45,9 @@ const BankReconciliationPage = () => {
   const [payments, setPayments] = useState<PaymentRecord[]>([]);
   const [loading, setLoading] = useState(false);
   const [showImport, setShowImport] = useState(false);
+  const [showManualMatch, setShowManualMatch] = useState(false);
+  const [manualStmtId, setManualStmtId] = useState('');
+  const [manualPayId, setManualPayId] = useState('');
   const [csvText, setCsvText] = useState('');
   const [dateFrom, setDateFrom] = useState(() => { const d = new Date(); d.setMonth(d.getMonth() - 1); return d.toISOString().split('T')[0]; });
   const [dateTo, setDateTo] = useState(() => new Date().toISOString().split('T')[0]);
@@ -99,7 +102,6 @@ const BankReconciliationPage = () => {
     }).filter(r => r.debit_amount > 0 || r.credit_amount > 0);
 
     if (rows.length === 0) { toast.error('No valid rows found'); return; }
-
     const { error } = await supabase.from('bank_statements').insert(rows);
     if (error) { toast.error(error.message); return; }
     toast.success(`Imported ${rows.length} bank statement entries`);
@@ -135,8 +137,29 @@ const BankReconciliationPage = () => {
         if (idx > -1) unmatchedPayments.splice(idx, 1);
       }
     }
-
     toast.success(`Auto-matched ${matched} entries`);
+    fetchData();
+  };
+
+  const manualMatch = async () => {
+    if (!manualStmtId || !manualPayId) { toast.error('Select both a statement and payment'); return; }
+    await supabase.from('bank_statements').update({
+      is_reconciled: true,
+      matched_payment_id: manualPayId,
+    }).eq('id', manualStmtId);
+    toast.success('Manually matched');
+    setShowManualMatch(false);
+    setManualStmtId('');
+    setManualPayId('');
+    fetchData();
+  };
+
+  const unmatch = async (stmtId: string) => {
+    await supabase.from('bank_statements').update({
+      is_reconciled: false,
+      matched_payment_id: null,
+    }).eq('id', stmtId);
+    toast.success('Unmatched');
     fetchData();
   };
 
@@ -152,6 +175,11 @@ const BankReconciliationPage = () => {
 
   const reconciledCount = statements.filter(s => s.is_reconciled).length;
   const unreconciledCount = statements.filter(s => !s.is_reconciled).length;
+  const reconciledAmount = statements.filter(s => s.is_reconciled).reduce((s, st) => s + (st.debit_amount || 0) + (st.credit_amount || 0), 0);
+  const unreconciledAmount = statements.filter(s => !s.is_reconciled).reduce((s, st) => s + (st.debit_amount || 0) + (st.credit_amount || 0), 0);
+
+  const unmatchedStmts = statements.filter(s => !s.is_reconciled);
+  const unmatchedPays = payments.filter(p => !statements.some(s => s.matched_payment_id === p.id));
 
   if (!selectedCompany) return <p className="text-muted-foreground">Select a company first.</p>;
 
@@ -160,7 +188,7 @@ const BankReconciliationPage = () => {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="font-display text-2xl font-bold text-foreground">Bank Reconciliation</h1>
-          <p className="text-sm text-muted-foreground">Match bank statements with accounting records automatically</p>
+          <p className="text-sm text-muted-foreground">Match bank statements with accounting records</p>
         </div>
         <div className="flex gap-2">
           <Dialog open={showImport} onOpenChange={setShowImport}>
@@ -175,6 +203,7 @@ const BankReconciliationPage = () => {
             </DialogContent>
           </Dialog>
           <Button onClick={autoMatch} variant="secondary"><Link2 className="h-4 w-4 mr-2" /> Auto Match</Button>
+          <Button onClick={() => setShowManualMatch(true)} variant="outline"><ArrowRightLeft className="h-4 w-4 mr-2" /> Manual Match</Button>
         </div>
       </div>
 
@@ -193,7 +222,7 @@ const BankReconciliationPage = () => {
       </div>
 
       {/* Summary */}
-      <div className="grid sm:grid-cols-3 gap-4">
+      <div className="grid sm:grid-cols-4 gap-4">
         <Card className="shadow-card">
           <CardContent className="pt-6">
             <p className="text-sm text-muted-foreground">Total Entries</p>
@@ -202,20 +231,30 @@ const BankReconciliationPage = () => {
         </Card>
         <Card className="shadow-card">
           <CardContent className="pt-6 flex items-center gap-3">
-            <CheckCircle className="h-8 w-8 text-emerald-500" />
+            <CheckCircle className="h-8 w-8 text-primary" />
             <div>
               <p className="text-sm text-muted-foreground">Reconciled</p>
-              <p className="text-2xl font-bold font-display text-emerald-600">{reconciledCount}</p>
+              <p className="text-2xl font-bold font-display text-primary">{reconciledCount}</p>
+              <p className="text-xs text-muted-foreground">RM {reconciledAmount.toFixed(2)}</p>
             </div>
           </CardContent>
         </Card>
         <Card className="shadow-card">
           <CardContent className="pt-6 flex items-center gap-3">
-            <XCircle className="h-8 w-8 text-amber-500" />
+            <XCircle className="h-8 w-8 text-destructive" />
             <div>
               <p className="text-sm text-muted-foreground">Unreconciled</p>
-              <p className="text-2xl font-bold font-display text-amber-600">{unreconciledCount}</p>
+              <p className="text-2xl font-bold font-display text-destructive">{unreconciledCount}</p>
+              <p className="text-xs text-muted-foreground">RM {unreconciledAmount.toFixed(2)}</p>
             </div>
+          </CardContent>
+        </Card>
+        <Card className="shadow-card">
+          <CardContent className="pt-6">
+            <p className="text-sm text-muted-foreground">Match Rate</p>
+            <p className="text-2xl font-bold font-display">
+              {statements.length > 0 ? Math.round((reconciledCount / statements.length) * 100) : 0}%
+            </p>
           </CardContent>
         </Card>
       </div>
@@ -237,15 +276,16 @@ const BankReconciliationPage = () => {
                 <TableHead className="text-right">Credit</TableHead>
                 <TableHead className="text-right">Balance</TableHead>
                 <TableHead>Status</TableHead>
+                <TableHead className="w-[80px]"></TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {statements.length === 0 ? (
-                <TableRow><TableCell colSpan={8} className="text-center text-muted-foreground py-8">
+                <TableRow><TableCell colSpan={9} className="text-center text-muted-foreground py-8">
                   {selectedAccount ? 'No bank statement entries. Import a CSV to get started.' : 'Select a bank account'}
                 </TableCell></TableRow>
               ) : statements.map(s => (
-                <TableRow key={s.id} className={s.is_reconciled ? 'bg-emerald-50/50 dark:bg-emerald-950/20' : ''}>
+                <TableRow key={s.id} className={s.is_reconciled ? 'bg-primary/5' : ''}>
                   <TableCell>
                     <Checkbox checked={s.is_reconciled} onCheckedChange={() => toggleReconcile(s)} />
                   </TableCell>
@@ -257,9 +297,16 @@ const BankReconciliationPage = () => {
                   <TableCell className="text-right font-medium">{fmt(s.balance)}</TableCell>
                   <TableCell>
                     {s.is_reconciled
-                      ? <Badge variant="default" className="bg-emerald-600">Matched</Badge>
-                      : <Badge variant="outline" className="text-amber-600 border-amber-300">Pending</Badge>
+                      ? <Badge variant="default">Matched</Badge>
+                      : <Badge variant="outline" className="text-destructive border-destructive/30">Pending</Badge>
                     }
+                  </TableCell>
+                  <TableCell>
+                    {s.is_reconciled && (
+                      <Button variant="ghost" size="sm" onClick={() => unmatch(s.id)} className="text-xs">
+                        <Unlink className="h-3 w-3 mr-1" />Unmatch
+                      </Button>
+                    )}
                   </TableCell>
                 </TableRow>
               ))}
@@ -291,7 +338,7 @@ const BankReconciliationPage = () => {
                 {payments.map(p => {
                   const isMatched = statements.some(s => s.matched_payment_id === p.id);
                   return (
-                    <TableRow key={p.id} className={isMatched ? 'bg-emerald-50/50 dark:bg-emerald-950/20' : ''}>
+                    <TableRow key={p.id} className={isMatched ? 'bg-primary/5' : ''}>
                       <TableCell>{p.payment_date}</TableCell>
                       <TableCell className="font-mono text-xs">{p.reference || '—'}</TableCell>
                       <TableCell className="capitalize">{p.payment_type}</TableCell>
@@ -299,7 +346,7 @@ const BankReconciliationPage = () => {
                       <TableCell className="text-right font-medium">RM {Number(p.amount).toFixed(2)}</TableCell>
                       <TableCell>
                         {isMatched
-                          ? <Badge variant="default" className="bg-emerald-600"><Link2 className="h-3 w-3 mr-1" /> Matched</Badge>
+                          ? <Badge variant="default"><Link2 className="h-3 w-3 mr-1" /> Matched</Badge>
                           : <Badge variant="outline"><Unlink className="h-3 w-3 mr-1" /> Unmatched</Badge>
                         }
                       </TableCell>
@@ -311,6 +358,43 @@ const BankReconciliationPage = () => {
           </CardContent>
         </Card>
       )}
+
+      {/* Manual Match Dialog */}
+      <Dialog open={showManualMatch} onOpenChange={setShowManualMatch}>
+        <DialogContent className="max-w-lg">
+          <DialogHeader><DialogTitle className="font-display">Manual Match</DialogTitle></DialogHeader>
+          <p className="text-sm text-muted-foreground mb-2">Select an unreconciled bank statement and an unmatched payment to link them.</p>
+          <div className="space-y-4">
+            <div>
+              <Label>Bank Statement Entry</Label>
+              <Select value={manualStmtId} onValueChange={setManualStmtId}>
+                <SelectTrigger><SelectValue placeholder="Select statement" /></SelectTrigger>
+                <SelectContent>
+                  {unmatchedStmts.map(s => (
+                    <SelectItem key={s.id} value={s.id}>
+                      {s.statement_date} — {s.reference || s.description || '—'} — {fmt(s.debit_amount > 0 ? s.debit_amount : s.credit_amount)}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div>
+              <Label>Payment / Receipt</Label>
+              <Select value={manualPayId} onValueChange={setManualPayId}>
+                <SelectTrigger><SelectValue placeholder="Select payment" /></SelectTrigger>
+                <SelectContent>
+                  {unmatchedPays.map(p => (
+                    <SelectItem key={p.id} value={p.id}>
+                      {p.payment_date} — {p.reference || '—'} — RM {Number(p.amount).toFixed(2)} ({p.payment_type})
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <Button onClick={manualMatch} className="w-full">Match</Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
