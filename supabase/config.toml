@@ -2,3 +2,6 @@ project_id = "tqsrqvcmisiiutnaowzo"
 
 [functions.lhdn-myinvois]
 verify_jwt = false
+
+[functions.ai-document-scan]
+verify_jwt = false
