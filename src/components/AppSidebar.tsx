@@ -1,19 +1,26 @@
+import { useState } from 'react';
 import {
   LayoutDashboard, FileText, Receipt, BookOpen, Users, Globe, Settings, Building2, LogOut,
   ChevronDown, BarChart3, CreditCard, Package, ShoppingCart, Truck, Wallet, FolderKanban, DollarSign,
   UserCheck, Calculator, CalendarDays, ClipboardList, Zap, Landmark, Paperclip, Factory, Layers, Hammer, PieChart,
-  Store, ScanBarcode, Brain, Sparkles, Heart, Cloud, Puzzle, Mail, Shield, Palette, TrendingUp
+  Store, ScanBarcode, Brain, Sparkles, Heart, Cloud, Puzzle, Mail, Shield, Palette, TrendingUp, Plus
 } from 'lucide-react';
 import { NavLink } from '@/components/NavLink';
 import { useAuth } from '@/contexts/AuthContext';
 import { useCompany } from '@/contexts/CompanyContext';
+import { supabase } from '@/integrations/supabase/client';
 import {
   Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent, SidebarGroupLabel,
   SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarFooter, useSidebar,
 } from '@/components/ui/sidebar';
 import {
-  DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger,
+  DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { toast } from 'sonner';
 import logoImg from '@/assets/logo.png';
 
 const mainItems = [
@@ -86,7 +93,29 @@ export function AppSidebar() {
   const { state } = useSidebar();
   const collapsed = state === 'collapsed';
   const { signOut } = useAuth();
-  const { companies, selectedCompany, setSelectedCompany } = useCompany();
+  const { companies, selectedCompany, setSelectedCompany, refetchCompanies } = useCompany();
+  const [showCreateCompany, setShowCreateCompany] = useState(false);
+  const [newCompany, setNewCompany] = useState({ name: '', registration_no: '', tax_id: '' });
+  const [creating, setCreating] = useState(false);
+
+  const handleCreateCompany = async () => {
+    if (!newCompany.name.trim()) { toast.error('Company name is required'); return; }
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) return;
+    setCreating(true);
+    const { error } = await supabase.from('companies').insert({
+      name: newCompany.name.trim(),
+      registration_no: newCompany.registration_no.trim() || null,
+      tax_id: newCompany.tax_id.trim() || null,
+      owner_id: user.id,
+    });
+    setCreating(false);
+    if (error) { toast.error(error.message); return; }
+    toast.success('Company created');
+    setShowCreateCompany(false);
+    setNewCompany({ name: '', registration_no: '', tax_id: '' });
+    await refetchCompanies();
+  };
 
   const renderItems = (items: { title: string; url: string; icon: any }[]) => (
     <SidebarMenu>
@@ -104,6 +133,7 @@ export function AppSidebar() {
   );
 
   return (
+    <>
     <Sidebar collapsible="icon" className="border-r-0">
       <div className="p-4 flex items-center gap-2">
         <img src={logoImg} alt="iAkauntan" className="h-8 w-8" />
@@ -124,6 +154,11 @@ export function AppSidebar() {
                   {c.name}
                 </DropdownMenuItem>
               ))}
+              <DropdownMenuSeparator />
+              <DropdownMenuItem onClick={() => setShowCreateCompany(true)}>
+                <Plus className="h-4 w-4 mr-2" />
+                Add New Company
+              </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
@@ -179,5 +214,31 @@ export function AppSidebar() {
         </SidebarMenu>
       </SidebarFooter>
     </Sidebar>
+
+    <Dialog open={showCreateCompany} onOpenChange={setShowCreateCompany}>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle className="font-display">Add New Company</DialogTitle>
+        </DialogHeader>
+        <div className="space-y-4">
+          <div>
+            <Label>Company Name *</Label>
+            <Input value={newCompany.name} onChange={e => setNewCompany(f => ({ ...f, name: e.target.value }))} placeholder="My Business Sdn Bhd" />
+          </div>
+          <div>
+            <Label>SSM Registration No.</Label>
+            <Input value={newCompany.registration_no} onChange={e => setNewCompany(f => ({ ...f, registration_no: e.target.value }))} placeholder="202301012345" />
+          </div>
+          <div>
+            <Label>Tax Identification No. (TIN)</Label>
+            <Input value={newCompany.tax_id} onChange={e => setNewCompany(f => ({ ...f, tax_id: e.target.value }))} placeholder="C12345678" />
+          </div>
+          <Button onClick={handleCreateCompany} disabled={creating} className="w-full">
+            {creating ? 'Creating...' : 'Create Company'}
+          </Button>
+        </div>
+      </DialogContent>
+    </Dialog>
+    </>
   );
 }
