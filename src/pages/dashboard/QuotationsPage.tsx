@@ -19,6 +19,7 @@ const statusColors: Record<string, string> = { draft: 'secondary', sent: 'defaul
 
 const QuotationsPage = () => {
   const { selectedCompany } = useCompany();
+  const { fmt } = useCurrency();
   const { user } = useAuth();
   const [quotations, setQuotations] = useState<any[]>([]);
   const [contacts, setContacts] = useState<any[]>([]);

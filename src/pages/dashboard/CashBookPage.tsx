@@ -20,6 +20,7 @@ import { useNavigate } from 'react-router-dom';
 
 const CashBookPage = () => {
   const { selectedCompany } = useCompany();
+  const { fmt } = useCurrency();
   const { user } = useAuth();
   const navigate = useNavigate();
   const [entries, setEntries] = useState<any[]>([]);

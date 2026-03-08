@@ -14,6 +14,7 @@ import { toast } from 'sonner';
 
 const ExpensesPage = () => {
   const { selectedCompany } = useCompany();
+  const { fmt, symbol } = useCurrency();
   const [expenses, setExpenses] = useState<any[]>([]);
   const [open, setOpen] = useState(false);
   const [form, setForm] = useState({ description: '', amount: '', expense_date: new Date().toISOString().split('T')[0], category: '', tax_amount: '0' });

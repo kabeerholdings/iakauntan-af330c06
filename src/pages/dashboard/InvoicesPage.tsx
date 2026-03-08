@@ -20,6 +20,7 @@ import DocumentPrintPreview from '@/components/DocumentPrintPreview';
 
 const InvoicesPage = () => {
   const { selectedCompany } = useCompany();
+  const { fmt, symbol } = useCurrency();
   const navigate = useNavigate();
   const [invoices, setInvoices] = useState<any[]>([]);
   const [contacts, setContacts] = useState<any[]>([]);
