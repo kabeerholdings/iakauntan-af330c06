@@ -217,7 +217,7 @@ const XStoreDashboard = () => {
                   <TableCell className="font-medium">{p.product_name}</TableCell>
                   <TableCell>{p.sku || '-'}</TableCell>
                   <TableCell>{(p.marketplace_stores as any)?.store_name || '-'}</TableCell>
-                  <TableCell>RM {(p.price || 0).toFixed(2)}</TableCell>
+                  <TableCell>{fmt(p.price || 0)}</TableCell>
                   <TableCell>{p.stock_qty}</TableCell>
                   <TableCell><Badge variant={p.status === 'active' ? 'default' : 'secondary'}>{p.status}</Badge></TableCell>
                 </TableRow>
