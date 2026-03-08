@@ -30,7 +30,8 @@ const ContactsPage = () => {
   const [open, setOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [form, setForm] = useState({ ...emptyForm });
-  const [customValues, setCustomValues] = useState<Record<string, string>>({});
+  const cfEntityType = form.type === 'supplier' ? 'supplier' : 'customer';
+  const { values: customValues, setValues: setCustomValues, renderFieldsFor, renderUnpositionedFields } = useCustomFields(cfEntityType, editingId);
 
   const fetchData = async () => {
     if (!selectedCompany) return;

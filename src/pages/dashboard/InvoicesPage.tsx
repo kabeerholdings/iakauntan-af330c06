@@ -27,7 +27,7 @@ const InvoicesPage = () => {
     due_date: '', invoice_type: 'sales' as string, notes: '',
     lines: [{ description: '', quantity: 1, unit_price: 0, tax_rate: 0 }],
   });
-  const [customValues, setCustomValues] = useState<Record<string, string>>({});
+  const { values: customValues, setValues: setCustomValues, renderFieldsFor, renderUnpositionedFields } = useCustomFields('invoice');
 
   const fetchData = async () => {
     if (!selectedCompany) return;
