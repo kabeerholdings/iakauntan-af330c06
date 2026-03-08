@@ -114,6 +114,11 @@ const ChartOfAccountsPage = () => {
     <div>
       <div className="flex items-center justify-between mb-6">
         <h1 className="font-display text-2xl font-bold text-foreground">Chart of Accounts</h1>
+        <div className="flex items-center gap-3">
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+            <Input value={search} onChange={e => setSearch(e.target.value)} placeholder="Search accounts..." className="pl-9 w-64" />
+          </div>
         <Dialog open={open} onOpenChange={(v) => { setOpen(v); if (!v) resetForm(); }}>
           <DialogTrigger asChild><Button onClick={openCreate}><Plus className="h-4 w-4 mr-2" />Add Account</Button></DialogTrigger>
           <DialogContent>
