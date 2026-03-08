@@ -56,7 +56,7 @@ const StockTransferPage = () => {
     if (data) {
       await supabase.from('stock_transfer_lines').insert(
         form.lines.filter(l => l.stock_item_id).map(l => ({
-          stock_transfer_id: data.id, stock_item_id: l.stock_item_id,
+          transfer_id: data.id, stock_item_id: l.stock_item_id,
           quantity: +l.quantity || 0, unit_cost: +l.unit_cost || 0,
         }))
       );

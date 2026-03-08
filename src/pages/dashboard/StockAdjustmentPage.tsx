@@ -113,14 +113,18 @@ const StockAdjustmentPage = () => {
             <div>
               <Label className="mb-2 block">Items (positive qty = add, negative = deduct)</Label>
               {form.lines.map((l, i) => (
-                <div key={i} className="grid grid-cols-4 gap-2 mb-2">
+                <div key={i} className="grid grid-cols-5 gap-2 mb-2">
                   <select className="border border-input rounded-md px-3 py-2 text-sm bg-background" value={l.stock_item_id} onChange={e => updateLine(i, 'stock_item_id', e.target.value)}>
                     <option value="">Select item</option>
                     {stockItems.map(si => <option key={si.id} value={si.id}>{si.sku ? `${si.sku} - ` : ''}{si.name}</option>)}
                   </select>
+                  <select className="border border-input rounded-md px-3 py-2 text-sm bg-background" value={l.warehouse_id} onChange={e => updateLine(i, 'warehouse_id', e.target.value)}>
+                    <option value="">Warehouse</option>
+                    {warehouses.map(w => <option key={w.id} value={w.id}>{w.name}</option>)}
+                  </select>
                   <Input type="number" placeholder="Qty (+/-)" value={l.quantity || ''} onChange={e => updateLine(i, 'quantity', e.target.value)} />
                   <Input type="number" placeholder="Unit Cost" value={l.unit_cost || ''} onChange={e => updateLine(i, 'unit_cost', e.target.value)} />
-                  <Input placeholder="Reason" value={l.reason} onChange={e => updateLine(i, 'reason', e.target.value)} />
+                  <Input placeholder="Reason" value={l.description} onChange={e => updateLine(i, 'description', e.target.value)} />
                 </div>
               ))}
               <Button type="button" variant="outline" size="sm" onClick={addLine}><Plus className="h-3 w-3 mr-1" />Add Line</Button>
