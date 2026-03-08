@@ -74,7 +74,7 @@ const ReportsPage = () => {
   const totalLiabilities = liabilities.reduce((s, a) => s + a.balance, 0);
   const totalEquity = equity.reduce((s, a) => s + a.balance, 0) + netProfit;
 
-  const fmt = (n: number) => `RM ${Math.abs(n).toLocaleString('en-MY', { minimumFractionDigits: 2 })}`;
+  const { fmt } = useCurrency();
 
   return (
     <div>
