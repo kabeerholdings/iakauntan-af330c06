@@ -18,9 +18,10 @@ const StockAdjustmentPage = () => {
   const [adjustments, setAdjustments] = useState<any[]>([]);
   const [stockItems, setStockItems] = useState<any[]>([]);
   const [open, setOpen] = useState(false);
+  const [warehouses, setWarehouses] = useState<any[]>([]);
   const [form, setForm] = useState({
     adjustment_no: '', adjustment_date: new Date().toISOString().split('T')[0], description: '',
-    lines: [{ stock_item_id: '', quantity: 0, unit_cost: 0, reason: '' }],
+    lines: [{ stock_item_id: '', warehouse_id: '', quantity: 0, unit_cost: 0, description: '' }],
   });
 
   const fetchData = async () => {
