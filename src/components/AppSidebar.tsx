@@ -1,7 +1,7 @@
 import {
   LayoutDashboard, FileText, Receipt, BookOpen, Users, Globe, Settings, Building2, LogOut,
   ChevronDown, BarChart3, CreditCard, Package, ShoppingCart, Truck, Wallet, FolderKanban, DollarSign,
-  UserCheck, Calculator, CalendarDays, ClipboardList, Zap, Landmark, Paperclip
+  UserCheck, Calculator, CalendarDays, ClipboardList, Zap, Landmark, Paperclip, Factory, Layers, Hammer, PieChart
 } from 'lucide-react';
 import { NavLink } from '@/components/NavLink';
 import { useAuth } from '@/contexts/AuthContext';
@@ -28,6 +28,13 @@ const salesItems = [
 
 const stockItems = [
   { title: 'Stock / Inventory', url: '/dashboard/stock', icon: Package },
+];
+
+const manufacturingItems = [
+  { title: 'Bill of Materials', url: '/dashboard/bom', icon: Layers },
+  { title: 'Job Orders', url: '/dashboard/job-orders', icon: Hammer },
+  { title: 'Assembly', url: '/dashboard/assembly', icon: Factory },
+  { title: 'MRP Reports', url: '/dashboard/mrp-reports', icon: PieChart },
 ];
 
 const accountingItems = [
@@ -117,6 +124,10 @@ export function AppSidebar() {
         <SidebarGroup>
           <SidebarGroupLabel>Stock</SidebarGroupLabel>
           <SidebarGroupContent>{renderItems(stockItems)}</SidebarGroupContent>
+        </SidebarGroup>
+        <SidebarGroup>
+          <SidebarGroupLabel>Manufacturing</SidebarGroupLabel>
+          <SidebarGroupContent>{renderItems(manufacturingItems)}</SidebarGroupContent>
         </SidebarGroup>
         <SidebarGroup>
           <SidebarGroupLabel>Accounting</SidebarGroupLabel>

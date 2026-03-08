@@ -14,6 +14,175 @@ export type Database = {
   }
   public: {
     Tables: {
+      assemblies: {
+        Row: {
+          assembly_date: string | null
+          assembly_number: string
+          assembly_type: string
+          batch_no: string | null
+          bom_id: string | null
+          company_id: string
+          created_at: string
+          created_by: string | null
+          expiry_date: string | null
+          id: string
+          job_order_id: string | null
+          labour_cost: number | null
+          machine_cost: number | null
+          notes: string | null
+          overhead_cost: number | null
+          product_id: string
+          quantity: number
+          status: string | null
+          total_cost: number | null
+          total_material_cost: number | null
+          updated_at: string
+          warehouse_id: string | null
+        }
+        Insert: {
+          assembly_date?: string | null
+          assembly_number: string
+          assembly_type?: string
+          batch_no?: string | null
+          bom_id?: string | null
+          company_id: string
+          created_at?: string
+          created_by?: string | null
+          expiry_date?: string | null
+          id?: string
+          job_order_id?: string | null
+          labour_cost?: number | null
+          machine_cost?: number | null
+          notes?: string | null
+          overhead_cost?: number | null
+          product_id: string
+          quantity?: number
+          status?: string | null
+          total_cost?: number | null
+          total_material_cost?: number | null
+          updated_at?: string
+          warehouse_id?: string | null
+        }
+        Update: {
+          assembly_date?: string | null
+          assembly_number?: string
+          assembly_type?: string
+          batch_no?: string | null
+          bom_id?: string | null
+          company_id?: string
+          created_at?: string
+          created_by?: string | null
+          expiry_date?: string | null
+          id?: string
+          job_order_id?: string | null
+          labour_cost?: number | null
+          machine_cost?: number | null
+          notes?: string | null
+          overhead_cost?: number | null
+          product_id?: string
+          quantity?: number
+          status?: string | null
+          total_cost?: number | null
+          total_material_cost?: number | null
+          updated_at?: string
+          warehouse_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "assemblies_bom_id_fkey"
+            columns: ["bom_id"]
+            isOneToOne: false
+            referencedRelation: "bill_of_materials"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "assemblies_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "assemblies_job_order_id_fkey"
+            columns: ["job_order_id"]
+            isOneToOne: false
+            referencedRelation: "job_orders"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "assemblies_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "stock_items"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "assemblies_warehouse_id_fkey"
+            columns: ["warehouse_id"]
+            isOneToOne: false
+            referencedRelation: "warehouses"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      assembly_lines: {
+        Row: {
+          assembly_id: string
+          batch_no: string | null
+          created_at: string
+          id: string
+          quantity: number
+          stock_item_id: string
+          total_cost: number | null
+          unit_cost: number | null
+          warehouse_id: string | null
+        }
+        Insert: {
+          assembly_id: string
+          batch_no?: string | null
+          created_at?: string
+          id?: string
+          quantity?: number
+          stock_item_id: string
+          total_cost?: number | null
+          unit_cost?: number | null
+          warehouse_id?: string | null
+        }
+        Update: {
+          assembly_id?: string
+          batch_no?: string | null
+          created_at?: string
+          id?: string
+          quantity?: number
+          stock_item_id?: string
+          total_cost?: number | null
+          unit_cost?: number | null
+          warehouse_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "assembly_lines_assembly_id_fkey"
+            columns: ["assembly_id"]
+            isOneToOne: false
+            referencedRelation: "assemblies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "assembly_lines_stock_item_id_fkey"
+            columns: ["stock_item_id"]
+            isOneToOne: false
+            referencedRelation: "stock_items"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "assembly_lines_warehouse_id_fkey"
+            columns: ["warehouse_id"]
+            isOneToOne: false
+            referencedRelation: "warehouses"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       bank_statements: {
         Row: {
           balance: number | null
@@ -90,6 +259,135 @@ export type Database = {
             columns: ["matched_payment_id"]
             isOneToOne: false
             referencedRelation: "payments"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      bill_of_materials: {
+        Row: {
+          bom_code: string
+          bom_name: string
+          company_id: string
+          created_at: string
+          description: string | null
+          id: string
+          is_active: boolean | null
+          labour_cost: number | null
+          machine_cost: number | null
+          output_quantity: number
+          output_uom: string | null
+          overhead_cost: number | null
+          product_id: string
+          total_cost: number | null
+          total_material_cost: number | null
+          updated_at: string
+        }
+        Insert: {
+          bom_code: string
+          bom_name: string
+          company_id: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_active?: boolean | null
+          labour_cost?: number | null
+          machine_cost?: number | null
+          output_quantity?: number
+          output_uom?: string | null
+          overhead_cost?: number | null
+          product_id: string
+          total_cost?: number | null
+          total_material_cost?: number | null
+          updated_at?: string
+        }
+        Update: {
+          bom_code?: string
+          bom_name?: string
+          company_id?: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_active?: boolean | null
+          labour_cost?: number | null
+          machine_cost?: number | null
+          output_quantity?: number
+          output_uom?: string | null
+          overhead_cost?: number | null
+          product_id?: string
+          total_cost?: number | null
+          total_material_cost?: number | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "bill_of_materials_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "bill_of_materials_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "stock_items"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      bom_lines: {
+        Row: {
+          bom_id: string
+          created_at: string
+          effective_quantity: number | null
+          id: string
+          quantity: number
+          sort_order: number | null
+          stock_item_id: string
+          total_cost: number | null
+          unit_cost: number | null
+          uom: string | null
+          wastage_percent: number | null
+        }
+        Insert: {
+          bom_id: string
+          created_at?: string
+          effective_quantity?: number | null
+          id?: string
+          quantity?: number
+          sort_order?: number | null
+          stock_item_id: string
+          total_cost?: number | null
+          unit_cost?: number | null
+          uom?: string | null
+          wastage_percent?: number | null
+        }
+        Update: {
+          bom_id?: string
+          created_at?: string
+          effective_quantity?: number | null
+          id?: string
+          quantity?: number
+          sort_order?: number | null
+          stock_item_id?: string
+          total_cost?: number | null
+          unit_cost?: number | null
+          uom?: string | null
+          wastage_percent?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "bom_lines_bom_id_fkey"
+            columns: ["bom_id"]
+            isOneToOne: false
+            referencedRelation: "bill_of_materials"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "bom_lines_stock_item_id_fkey"
+            columns: ["stock_item_id"]
+            isOneToOne: false
+            referencedRelation: "stock_items"
             referencedColumns: ["id"]
           },
         ]
@@ -806,6 +1104,171 @@ export type Database = {
             columns: ["contact_id"]
             isOneToOne: false
             referencedRelation: "contacts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      job_order_lines: {
+        Row: {
+          created_at: string
+          id: string
+          issued_quantity: number | null
+          job_order_id: string
+          required_quantity: number
+          returned_quantity: number | null
+          stock_item_id: string
+          unit_cost: number | null
+          uom: string | null
+          wastage_quantity: number | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          issued_quantity?: number | null
+          job_order_id: string
+          required_quantity?: number
+          returned_quantity?: number | null
+          stock_item_id: string
+          unit_cost?: number | null
+          uom?: string | null
+          wastage_quantity?: number | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          issued_quantity?: number | null
+          job_order_id?: string
+          required_quantity?: number
+          returned_quantity?: number | null
+          stock_item_id?: string
+          unit_cost?: number | null
+          uom?: string | null
+          wastage_quantity?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "job_order_lines_job_order_id_fkey"
+            columns: ["job_order_id"]
+            isOneToOne: false
+            referencedRelation: "job_orders"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "job_order_lines_stock_item_id_fkey"
+            columns: ["stock_item_id"]
+            isOneToOne: false
+            referencedRelation: "stock_items"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      job_orders: {
+        Row: {
+          actual_end_date: string | null
+          actual_start_date: string | null
+          bom_id: string
+          company_id: string
+          completed_quantity: number | null
+          created_at: string
+          created_by: string | null
+          id: string
+          job_number: string
+          labour_cost: number | null
+          machine_cost: number | null
+          notes: string | null
+          overhead_cost: number | null
+          planned_end_date: string | null
+          planned_quantity: number
+          planned_start_date: string | null
+          priority: string | null
+          product_id: string
+          sales_order_id: string | null
+          status: string | null
+          updated_at: string
+          warehouse_id: string | null
+        }
+        Insert: {
+          actual_end_date?: string | null
+          actual_start_date?: string | null
+          bom_id: string
+          company_id: string
+          completed_quantity?: number | null
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          job_number: string
+          labour_cost?: number | null
+          machine_cost?: number | null
+          notes?: string | null
+          overhead_cost?: number | null
+          planned_end_date?: string | null
+          planned_quantity?: number
+          planned_start_date?: string | null
+          priority?: string | null
+          product_id: string
+          sales_order_id?: string | null
+          status?: string | null
+          updated_at?: string
+          warehouse_id?: string | null
+        }
+        Update: {
+          actual_end_date?: string | null
+          actual_start_date?: string | null
+          bom_id?: string
+          company_id?: string
+          completed_quantity?: number | null
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          job_number?: string
+          labour_cost?: number | null
+          machine_cost?: number | null
+          notes?: string | null
+          overhead_cost?: number | null
+          planned_end_date?: string | null
+          planned_quantity?: number
+          planned_start_date?: string | null
+          priority?: string | null
+          product_id?: string
+          sales_order_id?: string | null
+          status?: string | null
+          updated_at?: string
+          warehouse_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "job_orders_bom_id_fkey"
+            columns: ["bom_id"]
+            isOneToOne: false
+            referencedRelation: "bill_of_materials"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "job_orders_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "job_orders_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "stock_items"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "job_orders_sales_order_id_fkey"
+            columns: ["sales_order_id"]
+            isOneToOne: false
+            referencedRelation: "sales_documents"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "job_orders_warehouse_id_fkey"
+            columns: ["warehouse_id"]
+            isOneToOne: false
+            referencedRelation: "warehouses"
             referencedColumns: ["id"]
           },
         ]
