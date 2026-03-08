@@ -203,7 +203,7 @@ const DashboardHome = () => {
       .reduce((s, i) => s + (Number(i.total_amount) || 0), 0);
   }, [currentInvoices]);
 
-  const fmt = (n: number) => `RM ${n.toLocaleString('en-MY', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+  const fmt = (n: number) => formatCurrency(n, selectedCompany?.base_currency);
 
   if (!selectedCompany) {
     return (
