@@ -10,7 +10,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
-import { Plus, Pencil } from 'lucide-react';
+import { Plus, Pencil, Search } from 'lucide-react';
 import { toast } from 'sonner';
 
 const defaultAccountTypes = ['asset', 'liability', 'equity', 'revenue', 'expense'];
@@ -25,8 +25,15 @@ const ChartOfAccountsPage = () => {
   const [customType, setCustomType] = useState('');
   const [showCustomType, setShowCustomType] = useState(false);
 
+  const [search, setSearch] = useState('');
+
   const existingTypes = Array.from(new Set(accounts.map(a => a.account_type))).filter(t => !defaultAccountTypes.includes(t));
   const accountTypes = [...defaultAccountTypes, ...existingTypes];
+
+  const filteredAccounts = accounts.filter(a => {
+    const q = search.toLowerCase();
+    return !q || a.code.toLowerCase().includes(q) || a.name.toLowerCase().includes(q) || a.account_type.toLowerCase().includes(q) || (a.description || '').toLowerCase().includes(q);
+  });
 
   const fetchData = async () => {
     if (!selectedCompany) return;
@@ -107,6 +114,11 @@ const ChartOfAccountsPage = () => {
     <div>
       <div className="flex items-center justify-between mb-6">
         <h1 className="font-display text-2xl font-bold text-foreground">Chart of Accounts</h1>
+        <div className="flex items-center gap-3">
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+            <Input value={search} onChange={e => setSearch(e.target.value)} placeholder="Search accounts..." className="pl-9 w-64" />
+          </div>
         <Dialog open={open} onOpenChange={(v) => { setOpen(v); if (!v) resetForm(); }}>
           <DialogTrigger asChild><Button onClick={openCreate}><Plus className="h-4 w-4 mr-2" />Add Account</Button></DialogTrigger>
           <DialogContent>
@@ -152,6 +164,7 @@ const ChartOfAccountsPage = () => {
             </div>
           </DialogContent>
         </Dialog>
+        </div>
       </div>
       <Card className="shadow-card">
         <CardContent className="p-0">
@@ -167,9 +180,9 @@ const ChartOfAccountsPage = () => {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {accounts.length === 0 ? (
-                <TableRow><TableCell colSpan={6} className="text-center text-muted-foreground py-8">No accounts yet</TableCell></TableRow>
-              ) : accounts.map(a => (
+              {filteredAccounts.length === 0 ? (
+                <TableRow><TableCell colSpan={6} className="text-center text-muted-foreground py-8">{accounts.length === 0 ? 'No accounts yet' : 'No matching accounts'}</TableCell></TableRow>
+              ) : filteredAccounts.map(a => (
                 <TableRow key={a.id}>
                   <TableCell className="font-mono font-medium">{a.code}</TableCell>
                   <TableCell className="font-medium">{a.name}</TableCell>
