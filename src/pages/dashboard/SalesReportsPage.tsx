@@ -232,12 +232,12 @@ const SalesReportsPage = () => {
                           <TableCell className="font-mono font-medium">{d.invoice_number}</TableCell>
                           <TableCell>{d.invoice_date}</TableCell>
                           <TableCell>{d.contact_name}</TableCell>
-                          <TableCell className="text-right font-mono">{d.selling_total.toFixed(2)}</TableCell>
-                          <TableCell className="text-right font-mono text-muted-foreground">{d.cost_total.toFixed(2)}</TableCell>
+                          <TableCell className="text-right font-mono">{fmt(d.selling_total)}</TableCell>
+                          <TableCell className="text-right font-mono text-muted-foreground">{fmt(d.cost_total)}</TableCell>
                           <TableCell className={`text-right font-mono font-semibold ${d.profit >= 0 ? 'text-green-600' : 'text-red-600'}`}>
                             <span className="inline-flex items-center gap-1">
                               {d.profit >= 0 ? <TrendingUp className="h-3 w-3" /> : <TrendingDown className="h-3 w-3" />}
-                              {d.profit.toFixed(2)}
+                              {fmt(d.profit)}
                             </span>
                           </TableCell>
                           <TableCell className={`text-right font-mono ${d.margin >= 0 ? 'text-green-600' : 'text-red-600'}`}>{d.margin.toFixed(1)}%</TableCell>
