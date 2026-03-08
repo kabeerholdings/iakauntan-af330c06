@@ -36,7 +36,7 @@ interface PrintPreviewProps {
 
 const DocumentPrintPreview = ({
   open, onClose, documentType, documentNumber, documentDate, dueDate,
-  contactName, lines, subtotal, taxAmount, totalAmount, notes, currency = 'RM',
+  contactName, lines, subtotal, taxAmount, totalAmount, notes, currency = '',
   template, templates, company, onChangeTemplate, extraFields,
 }: PrintPreviewProps) => {
   const navigate = useNavigate();

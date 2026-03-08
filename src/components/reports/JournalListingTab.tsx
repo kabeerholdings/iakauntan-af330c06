@@ -46,8 +46,8 @@ const JournalListingTab = ({ journalEntries, journalLines, accounts }: Props) =>
                       <TableRow key={l.id}>
                         <TableCell className="font-mono text-sm">{acc ? `${acc.code} - ${acc.name}` : l.account_id}</TableCell>
                         <TableCell className="text-muted-foreground text-sm">{l.description || '—'}</TableCell>
-                        <TableCell className="text-right font-mono">{+l.debit > 0 ? `RM ${(+l.debit).toFixed(2)}` : ''}</TableCell>
-                        <TableCell className="text-right font-mono">{+l.credit > 0 ? `RM ${(+l.credit).toFixed(2)}` : ''}</TableCell>
+                        <TableCell className="text-right font-mono">{+l.debit > 0 ? fmt(+l.debit) : ''}</TableCell>
+                        <TableCell className="text-right font-mono">{+l.credit > 0 ? fmt(+l.credit) : ''}</TableCell>
                       </TableRow>
                     );
                   })}

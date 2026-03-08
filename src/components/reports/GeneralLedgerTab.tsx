@@ -39,9 +39,9 @@ const GeneralLedgerTab = ({ balances, journalLines, accounts }: Props) => (
                     <TableRow key={l.id}>
                       <TableCell>{l.journal_entries?.entry_date}</TableCell>
                       <TableCell className="text-muted-foreground">{l.description || '—'}</TableCell>
-                      <TableCell className="text-right font-mono">{+l.debit > 0 ? `RM ${(+l.debit).toFixed(2)}` : ''}</TableCell>
-                      <TableCell className="text-right font-mono">{+l.credit > 0 ? `RM ${(+l.credit).toFixed(2)}` : ''}</TableCell>
-                      <TableCell className="text-right font-mono font-medium">RM {runBal.toFixed(2)}</TableCell>
+                      <TableCell className="text-right font-mono">{+l.debit > 0 ? fmt(+l.debit) : ''}</TableCell>
+                      <TableCell className="text-right font-mono">{+l.credit > 0 ? fmt(+l.credit) : ''}</TableCell>
+                      <TableCell className="text-right font-mono font-medium">{fmt(runBal)}</TableCell>
                     </TableRow>
                   );
                 })}
