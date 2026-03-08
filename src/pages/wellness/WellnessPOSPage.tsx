@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
+import { useCurrency } from '@/hooks/useCurrency';
 import { useCompany } from '@/contexts/CompanyContext';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -17,6 +18,7 @@ const APPT_STATUSES = ['scheduled', 'confirmed', 'in_progress', 'completed', 'ca
 
 const WellnessPOSPage = () => {
   const { selectedCompany } = useCompany();
+  const { fmt } = useCurrency();
   const [services, setServices] = useState<any[]>([]);
   const [packages, setPackages] = useState<any[]>([]);
   const [memberships, setMemberships] = useState<any[]>([]);
@@ -158,7 +160,7 @@ const WellnessPOSPage = () => {
         <Card><CardContent className="pt-6"><div className="flex items-center gap-3"><Users className="h-8 w-8 text-primary" /><div><p className="text-sm text-muted-foreground">Members</p><p className="text-2xl font-bold">{memberships.length}</p></div></div></CardContent></Card>
         <Card><CardContent className="pt-6"><div className="flex items-center gap-3"><Gift className="h-8 w-8 text-primary" /><div><p className="text-sm text-muted-foreground">Packages</p><p className="text-2xl font-bold">{packages.length}</p></div></div></CardContent></Card>
         <Card><CardContent className="pt-6"><div className="flex items-center gap-3"><Award className="h-8 w-8 text-primary" /><div><p className="text-sm text-muted-foreground">Services</p><p className="text-2xl font-bold">{services.length}</p></div></div></CardContent></Card>
-        <Card><CardContent className="pt-6"><div className="flex items-center gap-3"><DollarSign className="h-8 w-8 text-primary" /><div><p className="text-sm text-muted-foreground">Commissions</p><p className="text-2xl font-bold">RM {totalCommissions.toFixed(2)}</p></div></div></CardContent></Card>
+        <Card><CardContent className="pt-6"><div className="flex items-center gap-3"><DollarSign className="h-8 w-8 text-primary" /><div><p className="text-sm text-muted-foreground">Commissions</p><p className="text-2xl font-bold">{fmt(totalCommissions)}</p></div></div></CardContent></Card>
       </div>
 
       <Tabs defaultValue="appointments">
@@ -187,7 +189,7 @@ const WellnessPOSPage = () => {
                   <div><Label>Service</Label>
                     <Select value={apptForm.service_id} onValueChange={v => setApptForm({ ...apptForm, service_id: v })}>
                       <SelectTrigger><SelectValue placeholder="Select service" /></SelectTrigger>
-                      <SelectContent>{services.map(s => <SelectItem key={s.id} value={s.id}>{s.name} (RM {s.price})</SelectItem>)}</SelectContent>
+                      <SelectContent>{services.map(s => <SelectItem key={s.id} value={s.id}>{s.name} ({fmt(s.price)})</SelectItem>)}</SelectContent>
                     </Select>
                   </div>
                   <div><Label>Therapist / Staff</Label>
@@ -218,7 +220,7 @@ const WellnessPOSPage = () => {
                   <TableCell>{(a.wellness_services as any)?.name || '-'}</TableCell>
                   <TableCell>{(a.employees as any) ? `${(a.employees as any).first_name} ${(a.employees as any).last_name}` : '-'}</TableCell>
                   <TableCell>{a.room_slot || '-'}</TableCell>
-                  <TableCell>RM {(a.price || 0).toFixed(2)}</TableCell>
+                  <TableCell>{fmt(a.price || 0)}</TableCell>
                   <TableCell><Badge variant={a.status === 'completed' ? 'default' : a.status === 'cancelled' ? 'destructive' : 'secondary'}>{a.status}</Badge></TableCell>
                   <TableCell>
                     <Select onValueChange={v => updateApptStatus(a.id, v)}>
@@ -261,7 +263,7 @@ const WellnessPOSPage = () => {
                   <TableCell className="font-medium">{s.name}</TableCell>
                   <TableCell>{s.category || '-'}</TableCell>
                   <TableCell>{s.duration_minutes} min</TableCell>
-                  <TableCell>RM {(s.price || 0).toFixed(2)}</TableCell>
+                  <TableCell>{fmt(s.price || 0)}</TableCell>
                   <TableCell>{s.commission_rate}%</TableCell>
                   <TableCell><Badge variant={s.is_active ? 'default' : 'secondary'}>{s.is_active ? 'Active' : 'Inactive'}</Badge></TableCell>
                 </TableRow>
@@ -299,7 +301,7 @@ const WellnessPOSPage = () => {
                   <div className="space-y-1 text-sm">
                     <p><span className="text-muted-foreground">Sessions:</span> {p.total_sessions}</p>
                     <p><span className="text-muted-foreground">Validity:</span> {p.validity_days} days</p>
-                    <p className="text-xl font-bold text-primary mt-2">RM {(p.price || 0).toFixed(2)}</p>
+                    <p className="text-xl font-bold text-primary mt-2">{fmt(p.price || 0)}</p>
                   </div>
                 </CardContent>
               </Card>
@@ -340,7 +342,7 @@ const WellnessPOSPage = () => {
                   <TableCell>{m.member_email || '-'}</TableCell>
                   <TableCell><Badge variant="outline">{m.membership_type}</Badge></TableCell>
                   <TableCell>{m.points_balance}</TableCell>
-                  <TableCell>RM {(m.credit_balance || 0).toFixed(2)}</TableCell>
+                  <TableCell>{fmt(m.credit_balance || 0)}</TableCell>
                   <TableCell><Badge variant={m.status === 'active' ? 'default' : 'secondary'}>{m.status}</Badge></TableCell>
                 </TableRow>
               ))}
@@ -359,7 +361,7 @@ const WellnessPOSPage = () => {
                   <TableCell className="font-medium">{(c.employees as any) ? `${(c.employees as any).first_name} ${(c.employees as any).last_name}` : '-'}</TableCell>
                   <TableCell>{c.service_name || '-'}</TableCell>
                   <TableCell>{c.commission_rate}%</TableCell>
-                  <TableCell>RM {(c.commission_amount || 0).toFixed(2)}</TableCell>
+                  <TableCell>{fmt(c.commission_amount || 0)}</TableCell>
                   <TableCell>{c.period_month}/{c.period_year}</TableCell>
                   <TableCell><Badge variant={c.status === 'paid' ? 'default' : 'secondary'}>{c.status}</Badge></TableCell>
                 </TableRow>

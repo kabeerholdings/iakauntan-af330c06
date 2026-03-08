@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { useCurrency } from '@/hooks/useCurrency';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow, TableFooter } from '@/components/ui/table';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
@@ -42,7 +43,7 @@ const OpeningBalancePage = () => {
 
   useEffect(() => { fetchData(); }, [selectedCompany]);
 
-  const fmt = (n: number) => `RM ${Number(n).toLocaleString('en-MY', { minimumFractionDigits: 2 })}`;
+  const { fmt } = useCurrency();
 
   const addEntry = () => setEntries(e => [...e, { account_id: '', debit: '', credit: '' }]);
   const updateEntry = (i: number, field: string, value: string) => setEntries(e => e.map((en, idx) => idx === i ? { ...en, [field]: value } : en));

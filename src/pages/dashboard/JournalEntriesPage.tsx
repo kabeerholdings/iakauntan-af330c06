@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
+import { useCurrency } from '@/hooks/useCurrency';
 import { useCompany } from '@/contexts/CompanyContext';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -14,6 +15,7 @@ import { useAuth } from '@/contexts/AuthContext';
 
 const JournalEntriesPage = () => {
   const { selectedCompany } = useCompany();
+  const { fmt } = useCurrency();
   const { user } = useAuth();
   const [entries, setEntries] = useState<any[]>([]);
   const [accounts, setAccounts] = useState<any[]>([]);
@@ -98,8 +100,8 @@ const JournalEntriesPage = () => {
               </div>
               <div className="flex justify-between items-center pt-2 border-t border-border">
                 <div className="text-sm space-x-4">
-                  <span>Debit: <strong>RM {totalDebit.toFixed(2)}</strong></span>
-                  <span>Credit: <strong>RM {totalCredit.toFixed(2)}</strong></span>
+                  <span>Debit: <strong>{fmt(totalDebit)}</strong></span>
+                  <span>Credit: <strong>{fmt(totalCredit)}</strong></span>
                   {Math.abs(totalDebit - totalCredit) > 0.01 && <span className="text-destructive font-medium">Unbalanced!</span>}
                 </div>
                 <Button onClick={handleCreate} disabled={Math.abs(totalDebit - totalCredit) > 0.01}>Post Entry</Button>

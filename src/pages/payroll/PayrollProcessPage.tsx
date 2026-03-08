@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
+import { useCurrency } from '@/hooks/useCurrency';
 import { useCompany } from '@/contexts/CompanyContext';
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
@@ -110,7 +111,7 @@ const PayrollProcessPage = () => {
     fetchPayslips(selectedPeriod.id);
   };
 
-  const fmt = (n: number) => `RM ${Number(n).toFixed(2)}`;
+  const { fmt } = useCurrency();
 
   const totals = payslips.reduce((acc, p) => ({
     basic: acc.basic + +p.basic_salary, gross: acc.gross + +p.gross_pay, net: acc.net + +p.net_pay,

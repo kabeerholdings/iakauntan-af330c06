@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
+import { useCurrency } from '@/hooks/useCurrency';
 import { useCompany } from '@/contexts/CompanyContext';
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
@@ -24,6 +25,7 @@ const docTypes = [
 
 const PurchaseDocumentsPage = () => {
   const { selectedCompany } = useCompany();
+  const { fmt, symbol } = useCurrency();
   const { user } = useAuth();
   const [docs, setDocs] = useState<any[]>([]);
   const [contacts, setContacts] = useState<any[]>([]);
@@ -225,7 +227,7 @@ const PurchaseDocumentsPage = () => {
                       <TableCell>{d.contacts?.name || '—'}</TableCell>
                       <TableCell>{d.doc_date}</TableCell>
                       <TableCell>{d.currency}</TableCell>
-                      <TableCell className="text-right font-mono">RM {Number(d.total_amount).toFixed(2)}</TableCell>
+                      <TableCell className="text-right font-mono">{fmt(Number(d.total_amount))}</TableCell>
                       <TableCell><Badge variant={statusColor(d.status)}>{d.status}</Badge></TableCell>
                       <TableCell>
                         <DropdownMenu>
@@ -329,9 +331,9 @@ const PurchaseDocumentsPage = () => {
             </div>
             <div className="flex justify-between items-center pt-2 border-t border-border">
               <div className="text-sm space-x-4">
-                <span>Subtotal: <strong>RM {subtotal.toFixed(2)}</strong></span>
-                <span>Tax: <strong>RM {taxTotal.toFixed(2)}</strong></span>
-                <span className="text-lg font-bold">Total: RM {total.toFixed(2)}</span>
+                <span>Subtotal: <strong>{fmt(subtotal)}</strong></span>
+                <span>Tax: <strong>{fmt(taxTotal)}</strong></span>
+                <span className="text-lg font-bold">Total: {fmt(total)}</span>
               </div>
               <Button onClick={handleCreate}>{editDoc ? 'Update' : 'Create'}</Button>
             </div>
@@ -356,7 +358,7 @@ const PurchaseDocumentsPage = () => {
           taxAmount={Number(previewDoc.tax_amount)}
           totalAmount={Number(previewDoc.total_amount)}
           notes={previewDoc.notes}
-          currency={previewDoc.currency === 'MYR' ? 'RM' : previewDoc.currency}
+          currency={symbol}
           template={selectedTemplate}
           templates={templates}
           company={selectedCompany}

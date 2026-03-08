@@ -1,6 +1,7 @@
 import { useEffect, useState, useMemo } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useCompany } from '@/contexts/CompanyContext';
+import { useCurrency } from '@/hooks/useCurrency';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -13,6 +14,7 @@ import { Printer, TrendingUp, TrendingDown } from 'lucide-react';
 
 const SalesReportsPage = () => {
   const { selectedCompany } = useCompany();
+  const { fmt } = useCurrency();
   const [invoices, setInvoices] = useState<any[]>([]);
   const [invoiceLines, setInvoiceLines] = useState<any[]>([]);
   const [stockItems, setStockItems] = useState<any[]>([]);
@@ -153,7 +155,7 @@ const SalesReportsPage = () => {
                       <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
                       <XAxis dataKey="month" className="text-xs" />
                       <YAxis className="text-xs" />
-                      <Tooltip formatter={(val: number) => `RM ${val.toFixed(2)}`} />
+                      <Tooltip formatter={(val: number) => fmt(val)} />
                       <Legend />
                       <Bar dataKey="sales" name="Sales" fill="hsl(var(--primary))" radius={[4, 4, 0, 0]} />
                       <Bar dataKey="tax" name="Tax" fill="hsl(var(--muted-foreground))" radius={[4, 4, 0, 0]} />

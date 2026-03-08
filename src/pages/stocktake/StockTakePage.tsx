@@ -1,5 +1,6 @@
 import { useEffect, useState, useRef } from 'react';
 import { supabase } from '@/integrations/supabase/client';
+import { useCurrency } from '@/hooks/useCurrency';
 import { useCompany } from '@/contexts/CompanyContext';
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
@@ -16,6 +17,7 @@ import { toast } from 'sonner';
 
 const StockTakePage = () => {
   const { selectedCompany } = useCompany();
+  const { fmt } = useCurrency();
   const { user } = useAuth();
   const [stockTakes, setStockTakes] = useState<any[]>([]);
   const [warehouses, setWarehouses] = useState<any[]>([]);
@@ -130,7 +132,7 @@ const StockTakePage = () => {
       const { data: adj, error: adjErr } = await supabase.from('stock_adjustments').insert({
         company_id: selectedCompany.id,
         reference: adjRef,
-        description: `Auto-generated from stock take ${selectedTake.take_number}. Total variance: RM ${totalVariance.toFixed(2)}`,
+        description: `Auto-generated from stock take ${selectedTake.take_number}. Total variance: ${fmt(totalVariance)}`,
         status: 'posted',
         created_by: user?.id,
       }).select().single();
@@ -254,7 +256,7 @@ const StockTakePage = () => {
               <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                 <Card><CardContent className="pt-4 flex items-center gap-3"><Package className="h-6 w-6 text-primary" /><div><p className="text-sm text-muted-foreground">Items Counted</p><p className="text-xl font-bold">{takeLines.length}</p></div></CardContent></Card>
                 <Card><CardContent className="pt-4 flex items-center gap-3"><AlertTriangle className="h-6 w-6 text-yellow-500" /><div><p className="text-sm text-muted-foreground">Variances</p><p className="text-xl font-bold">{itemsWithVariance}</p></div></CardContent></Card>
-                <Card><CardContent className="pt-4 flex items-center gap-3"><span className={`text-xl font-bold ${totalVariance < 0 ? 'text-destructive' : 'text-green-600'}`}>RM {totalVariance.toFixed(2)}</span><p className="text-sm text-muted-foreground">Variance Value</p></CardContent></Card>
+                <Card><CardContent className="pt-4 flex items-center gap-3"><span className={`text-xl font-bold ${totalVariance < 0 ? 'text-destructive' : 'text-green-600'}`}>{fmt(totalVariance)}</span><p className="text-sm text-muted-foreground">Variance Value</p></CardContent></Card>
                 <Card><CardContent className="pt-4 flex items-center gap-3">
                   <Badge variant={selectedTake.status === 'synced' ? 'default' : 'secondary'} className="text-sm">
                     {selectedTake.status === 'synced' ? '✓ Synced to Accounting' : selectedTake.status}

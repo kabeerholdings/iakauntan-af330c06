@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
+import { useCurrency } from '@/hooks/useCurrency';
 import { useCompany } from '@/contexts/CompanyContext';
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
@@ -17,6 +18,7 @@ import DocumentPrintPreview from '@/components/DocumentPrintPreview';
 
 const CreditNotesPage = () => {
   const { selectedCompany } = useCompany();
+  const { fmt } = useCurrency();
   const { user } = useAuth();
   const [notes, setNotes] = useState<any[]>([]);
   const [contacts, setContacts] = useState<any[]>([]);
@@ -123,7 +125,7 @@ const CreditNotesPage = () => {
             <TableCell><Badge variant={n.note_type === 'sales' ? 'default' : 'secondary'}>{n.note_type === 'sales' ? 'Credit Note' : 'Debit Note'}</Badge></TableCell>
             <TableCell>{n.contacts?.name || '—'}</TableCell>
             <TableCell className="text-muted-foreground">{n.reason || '—'}</TableCell>
-            <TableCell className="text-right font-medium">RM {(+n.total_amount).toFixed(2)}</TableCell>
+            <TableCell className="text-right font-medium">{fmt(+n.total_amount)}</TableCell>
             <TableCell><Badge variant={n.status === 'void' ? 'destructive' : n.status === 'posted' ? 'default' : 'secondary'}>{n.status}</Badge></TableCell>
             <TableCell>
               <Button variant="ghost" size="sm" onClick={() => handlePrintPreview(n)}>

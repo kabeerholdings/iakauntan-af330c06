@@ -14,6 +14,7 @@ interface Props {
 }
 
 const CreditorStatementTab = ({ invoices, contacts, payments, dateFrom, dateTo }: Props) => {
+  const { fmt } = useCurrency();
   const suppliers = useMemo(() => contacts.filter(c => c.type === 'supplier' || c.type === 'both'), [contacts]);
   const [selectedContact, setSelectedContact] = useState<string>('all');
 
@@ -87,14 +88,14 @@ const CreditorStatementTab = ({ invoices, contacts, payments, dateFrom, dateTo }
                     <TableCell>{t.date}</TableCell>
                     <TableCell className="font-mono text-sm">{t.ref}</TableCell>
                     <TableCell className="text-muted-foreground">{t.description}</TableCell>
-                    <TableCell className="text-right font-mono">{t.debit > 0 ? `RM ${t.debit.toFixed(2)}` : ''}</TableCell>
-                    <TableCell className="text-right font-mono">{t.credit > 0 ? `RM ${t.credit.toFixed(2)}` : ''}</TableCell>
-                    <TableCell className="text-right font-mono font-medium">RM {t.balance.toFixed(2)}</TableCell>
+                    <TableCell className="text-right font-mono">{t.debit > 0 ? fmt(t.debit) : ''}</TableCell>
+                    <TableCell className="text-right font-mono">{t.credit > 0 ? fmt(t.credit) : ''}</TableCell>
+                    <TableCell className="text-right font-mono font-medium">{fmt(t.balance)}</TableCell>
                   </TableRow>
                 ))}
                 <TableRow className="font-bold border-t-2">
                   <TableCell colSpan={5} className="text-right">Closing Balance</TableCell>
-                  <TableCell className="text-right font-mono">RM {closingBalance.toFixed(2)}</TableCell>
+                  <TableCell className="text-right font-mono">{fmt(closingBalance)}</TableCell>
                 </TableRow>
               </TableBody>
             </Table>

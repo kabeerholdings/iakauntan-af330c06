@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useCompany } from '@/contexts/CompanyContext';
+import { useCurrency } from '@/hooks/useCurrency';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -73,7 +74,7 @@ const ReportsPage = () => {
   const totalLiabilities = liabilities.reduce((s, a) => s + a.balance, 0);
   const totalEquity = equity.reduce((s, a) => s + a.balance, 0) + netProfit;
 
-  const fmt = (n: number) => `RM ${Math.abs(n).toLocaleString('en-MY', { minimumFractionDigits: 2 })}`;
+  const { fmt } = useCurrency();
 
   return (
     <div>
@@ -265,6 +266,7 @@ const ReportsPage = () => {
 };
 
 const LedgerReport = ({ companyId, dateFrom, dateTo }: { companyId: string; dateFrom: string; dateTo: string }) => {
+  const { fmt } = useCurrency();
   const [accounts, setAccounts] = useState<any[]>([]);
   const [selectedAccount, setSelectedAccount] = useState('');
   const [lines, setLines] = useState<any[]>([]);
@@ -317,9 +319,9 @@ const LedgerReport = ({ companyId, dateFrom, dateTo }: { companyId: string; date
                   <TableCell>{(l.journal_entries as any)?.entry_date}</TableCell>
                   <TableCell className="font-medium">{(l.journal_entries as any)?.reference || '—'}</TableCell>
                   <TableCell>{l.description || (l.journal_entries as any)?.description || '—'}</TableCell>
-                  <TableCell className="text-right">{+l.debit > 0 ? `RM ${Number(l.debit).toFixed(2)}` : '—'}</TableCell>
-                  <TableCell className="text-right">{+l.credit > 0 ? `RM ${Number(l.credit).toFixed(2)}` : '—'}</TableCell>
-                  <TableCell className="text-right font-medium">RM {runningBalance.toFixed(2)}</TableCell>
+                  <TableCell className="text-right">{+l.debit > 0 ? fmt(Number(l.debit)) : '—'}</TableCell>
+                  <TableCell className="text-right">{+l.credit > 0 ? fmt(Number(l.credit)) : '—'}</TableCell>
+                  <TableCell className="text-right font-medium">{fmt(runningBalance)}</TableCell>
                 </TableRow>
               );
             })}

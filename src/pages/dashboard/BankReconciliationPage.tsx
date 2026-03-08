@@ -1,5 +1,6 @@
 import { useEffect, useState, useMemo } from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { useCurrency } from '@/hooks/useCurrency';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -171,7 +172,8 @@ const BankReconciliationPage = () => {
     fetchData();
   };
 
-  const fmt = (n: number) => n > 0 ? `RM ${n.toLocaleString('en-MY', { minimumFractionDigits: 2 })}` : '—';
+  const { fmt: fmtCurrency } = useCurrency();
+  const fmt = (n: number) => n > 0 ? fmtCurrency(n) : '—';
 
   const reconciledCount = statements.filter(s => s.is_reconciled).length;
   const unreconciledCount = statements.filter(s => !s.is_reconciled).length;

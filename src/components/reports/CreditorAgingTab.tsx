@@ -77,7 +77,7 @@ const CreditorAgingTab = ({ invoices, contacts, payments, asOfDate }: Props) => 
                     <TableCell className="text-right font-mono">{fmt(d.d60)}</TableCell>
                     <TableCell className="text-right font-mono">{fmt(d.d90)}</TableCell>
                     <TableCell className="text-right font-mono">{fmt(d.over90)}</TableCell>
-                    <TableCell className="text-right font-mono font-semibold">RM {d.total.toFixed(2)}</TableCell>
+                    <TableCell className="text-right font-mono font-semibold">{fmtCurrency(d.total)}</TableCell>
                   </TableRow>
                 ))}
                 <TableRow className="font-bold border-t-2">
@@ -87,7 +87,7 @@ const CreditorAgingTab = ({ invoices, contacts, payments, asOfDate }: Props) => 
                   <TableCell className="text-right font-mono">{fmt(totals.d60)}</TableCell>
                   <TableCell className="text-right font-mono">{fmt(totals.d90)}</TableCell>
                   <TableCell className="text-right font-mono">{fmt(totals.over90)}</TableCell>
-                  <TableCell className="text-right font-mono">RM {totals.total.toFixed(2)}</TableCell>
+                  <TableCell className="text-right font-mono">{fmtCurrency(totals.total)}</TableCell>
                 </TableRow>
               </>
             )}

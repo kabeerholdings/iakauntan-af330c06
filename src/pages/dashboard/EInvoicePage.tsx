@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
+import { useCurrency } from '@/hooks/useCurrency';
 import { useCompany } from '@/contexts/CompanyContext';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
@@ -22,6 +23,7 @@ import { differenceInHours, differenceInMinutes, format } from 'date-fns';
 
 const EInvoicePage = () => {
   const { selectedCompany } = useCompany();
+  const { fmt } = useCurrency();
   const [invoices, setInvoices] = useState<any[]>([]);
   const [purchaseInvoices, setPurchaseInvoices] = useState<any[]>([]);
   const [loading, setLoading] = useState<string | null>(null);
@@ -302,7 +304,7 @@ const EInvoicePage = () => {
                       <TableRow key={inv.id}>
                         <TableCell className="font-medium">{inv.invoice_number}</TableCell>
                         <TableCell>{(inv.contacts as any)?.name || '—'}</TableCell>
-                        <TableCell>RM {Number(inv.total_amount).toFixed(2)}</TableCell>
+                        <TableCell>{fmt(Number(inv.total_amount))}</TableCell>
                         <TableCell><Badge variant={statusBadge(inv.einvoice_status)}>{inv.einvoice_status}</Badge></TableCell>
                         <TableCell>
                           {countdown && !countdown.expired ? (
@@ -377,7 +379,7 @@ const EInvoicePage = () => {
                       </TableCell>
                       <TableCell className="font-medium">{inv.invoice_number}</TableCell>
                       <TableCell>{(inv.contacts as any)?.name || '—'}</TableCell>
-                      <TableCell>RM {Number(inv.total_amount).toFixed(2)}</TableCell>
+                      <TableCell>{fmt(Number(inv.total_amount))}</TableCell>
                       <TableCell>
                         {inv.einvoice_status ? (
                           <Badge variant={statusBadge(inv.einvoice_status)}>{inv.einvoice_status}</Badge>
@@ -439,7 +441,7 @@ const EInvoicePage = () => {
                       <TableCell className="font-medium">{inv.invoice_number}</TableCell>
                       <TableCell>{(inv.contacts as any)?.name || '—'}</TableCell>
                       <TableCell>{inv.invoice_date}</TableCell>
-                      <TableCell>RM {Number(inv.total_amount).toFixed(2)}</TableCell>
+                      <TableCell>{fmt(Number(inv.total_amount))}</TableCell>
                       <TableCell><span className="text-muted-foreground text-sm">Pending</span></TableCell>
                     </TableRow>
                   ))}
@@ -474,7 +476,7 @@ const EInvoicePage = () => {
                       <TableCell className="font-medium">{inv.invoice_number}</TableCell>
                       <TableCell>{(inv.contacts as any)?.name || '—'}</TableCell>
                       <TableCell>{inv.invoice_date}</TableCell>
-                      <TableCell>RM {Number(inv.total_amount).toFixed(2)}</TableCell>
+                      <TableCell>{fmt(Number(inv.total_amount))}</TableCell>
                       <TableCell>
                         {inv.einvoice_status ? (
                           <Badge variant={statusBadge(inv.einvoice_status)}>{inv.einvoice_status}</Badge>

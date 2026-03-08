@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
+import { useCurrency } from '@/hooks/useCurrency';
 import { useCompany } from '@/contexts/CompanyContext';
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
@@ -16,6 +17,7 @@ import { toast } from 'sonner';
 
 const KnockOffPage = () => {
   const { selectedCompany } = useCompany();
+  const { fmt } = useCurrency();
   const { user } = useAuth();
   const [entries, setEntries] = useState<any[]>([]);
   const [contacts, setContacts] = useState<any[]>([]);
@@ -107,7 +109,7 @@ const KnockOffPage = () => {
                 <TableRow key={e.id}>
                   <TableCell>{e.knock_off_date}</TableCell>
                   <TableCell>{e.contacts?.name || '—'}</TableCell>
-                  <TableCell className="text-right font-medium">RM {(+e.total_applied).toFixed(2)}</TableCell>
+                  <TableCell className="text-right font-medium">{fmt(+e.total_applied)}</TableCell>
                   <TableCell>{e.knock_off_lines?.length || 0}</TableCell>
                   <TableCell><Badge variant={e.status === 'active' ? 'default' : 'secondary'}>{e.status}</Badge></TableCell>
                 </TableRow>

@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
+import { useCurrency } from '@/hooks/useCurrency';
 import { useCompany } from '@/contexts/CompanyContext';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -16,6 +17,7 @@ import { useCustomFields, saveCustomFieldValues } from '@/components/CustomField
 
 const StockItemsPage = () => {
   const { selectedCompany } = useCompany();
+  const { fmt } = useCurrency();
   const [items, setItems] = useState<any[]>([]);
   const [categories, setCategories] = useState<any[]>([]);
   const [warehouses, setWarehouses] = useState<any[]>([]);
@@ -226,8 +228,8 @@ const StockItemsPage = () => {
                       <TableCell className="font-medium">{i.name}</TableCell>
                       <TableCell>{i.stock_categories?.name || '—'}</TableCell>
                       <TableCell>{i.base_uom}</TableCell>
-                      <TableCell className="text-right">RM {Number(i.purchase_price).toFixed(2)}</TableCell>
-                      <TableCell className="text-right">RM {Number(i.selling_price).toFixed(2)}</TableCell>
+                      <TableCell className="text-right">{fmt(Number(i.purchase_price))}</TableCell>
+                      <TableCell className="text-right">{fmt(Number(i.selling_price))}</TableCell>
                       <TableCell className="text-right font-medium">{getBalance(i.id)}</TableCell>
                       <TableCell>{i.is_active ? <Badge>Active</Badge> : <Badge variant="secondary">Inactive</Badge>}</TableCell>
                     </TableRow>

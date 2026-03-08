@@ -1,5 +1,6 @@
 import { useEffect, useState, useRef } from 'react';
 import { supabase } from '@/integrations/supabase/client';
+import { useCurrency } from '@/hooks/useCurrency';
 import { useCompany } from '@/contexts/CompanyContext';
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
@@ -18,6 +19,7 @@ const DOC_TYPES = ['invoice', 'receipt', 'voucher', 'bill'];
 
 const AIScannerPage = () => {
   const { selectedCompany } = useCompany();
+  const { fmt } = useCurrency();
   const { user } = useAuth();
   const [documents, setDocuments] = useState<any[]>([]);
   const [selectedDoc, setSelectedDoc] = useState<any>(null);
@@ -169,7 +171,7 @@ const AIScannerPage = () => {
                   <TableCell>{d.document_type ? <Badge variant="outline">{d.document_type}</Badge> : '-'}</TableCell>
                   <TableCell>{d.supplier_name || '-'}</TableCell>
                   <TableCell>{d.document_date || '-'}</TableCell>
-                  <TableCell>{d.total_amount ? `RM ${Number(d.total_amount).toFixed(2)}` : '-'}</TableCell>
+                  <TableCell>{d.total_amount ? fmt(Number(d.total_amount)) : '-'}</TableCell>
                   <TableCell><Badge variant={d.scan_status === 'completed' ? 'default' : d.scan_status === 'failed' ? 'destructive' : 'secondary'}>{d.scan_status}</Badge></TableCell>
                   <TableCell>
                     <div className="flex gap-1">
@@ -218,8 +220,8 @@ const AIScannerPage = () => {
                 <div><Label className="text-muted-foreground">Document #</Label><p className="font-medium">{selectedDoc.document_number || '-'}</p></div>
                 <div><Label className="text-muted-foreground">Supplier</Label><p className="font-medium">{selectedDoc.supplier_name || '-'}</p></div>
                 <div><Label className="text-muted-foreground">Date</Label><p className="font-medium">{selectedDoc.document_date || '-'}</p></div>
-                <div><Label className="text-muted-foreground">Total Amount</Label><p className="font-medium">{selectedDoc.total_amount ? `RM ${Number(selectedDoc.total_amount).toFixed(2)}` : '-'}</p></div>
-                <div><Label className="text-muted-foreground">Tax</Label><p className="font-medium">{selectedDoc.tax_amount ? `RM ${Number(selectedDoc.tax_amount).toFixed(2)}` : '-'}</p></div>
+                <div><Label className="text-muted-foreground">Total Amount</Label><p className="font-medium">{selectedDoc.total_amount ? fmt(Number(selectedDoc.total_amount)) : '-'}</p></div>
+                <div><Label className="text-muted-foreground">Tax</Label><p className="font-medium">{selectedDoc.tax_amount ? fmt(Number(selectedDoc.tax_amount)) : '-'}</p></div>
                 <div className="col-span-2"><Label className="text-muted-foreground">Description</Label><p className="font-medium">{selectedDoc.description || '-'}</p></div>
                 <div className="col-span-2"><Label className="text-muted-foreground">Category</Label><p className="font-medium">{selectedDoc.category || '-'}</p></div>
               </div>

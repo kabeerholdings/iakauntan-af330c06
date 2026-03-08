@@ -1,4 +1,5 @@
 import { useEffect, useState, useMemo } from 'react';
+import { useCurrency } from '@/hooks/useCurrency';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow, TableFooter } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
@@ -37,7 +38,7 @@ const MRPReportsPage = () => {
     });
   }, [selectedCompany]);
 
-  const fmt = (n: number) => `RM ${Number(n).toLocaleString('en-MY', { minimumFractionDigits: 2 })}`;
+  const { fmt } = useCurrency();
 
   // Material shortage for open JOs
   const materialShortage = useMemo(() => {

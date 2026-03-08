@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
+import { useCurrency } from '@/hooks/useCurrency';
 import { useCompany } from '@/contexts/CompanyContext';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -24,6 +25,7 @@ const emptyForm = {
 
 const ContactsPage = () => {
   const { selectedCompany } = useCompany();
+  const { fmt } = useCurrency();
   const [contacts, setContacts] = useState<any[]>([]);
   const [search, setSearch] = useState('');
   const [activeTab, setActiveTab] = useState('all');
@@ -226,7 +228,7 @@ const ContactsPage = () => {
                       <TableCell>{c.email || '—'}</TableCell>
                       <TableCell>{c.phone || '—'}</TableCell>
                       <TableCell>{c.tax_id || '—'}</TableCell>
-                      <TableCell className="text-right">{c.credit_limit ? `RM ${Number(c.credit_limit).toFixed(2)}` : '—'}</TableCell>
+                      <TableCell className="text-right">{c.credit_limit ? fmt(Number(c.credit_limit)) : '—'}</TableCell>
                       <TableCell>{c.credit_terms ? `${c.credit_terms}d` : '—'}</TableCell>
                       <TableCell className="text-right">
                         <div className="flex justify-end gap-1">

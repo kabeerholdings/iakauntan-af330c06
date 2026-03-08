@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useCurrency } from '@/hooks/useCurrency';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -149,7 +150,7 @@ const BOMPage = () => {
     fetchBoms();
   };
 
-  const fmt = (n: number) => `RM ${Number(n).toLocaleString('en-MY', { minimumFractionDigits: 2 })}`;
+  const { fmt } = useCurrency();
 
   if (!selectedCompany) return <p className="text-muted-foreground">Select a company first.</p>;
 

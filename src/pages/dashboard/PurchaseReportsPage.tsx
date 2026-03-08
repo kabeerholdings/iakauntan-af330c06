@@ -1,6 +1,7 @@
 import { useEffect, useState, useMemo } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useCompany } from '@/contexts/CompanyContext';
+import { useCurrency } from '@/hooks/useCurrency';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Input } from '@/components/ui/input';
@@ -11,6 +12,7 @@ import { Printer } from 'lucide-react';
 
 const PurchaseReportsPage = () => {
   const { selectedCompany } = useCompany();
+  const { fmt } = useCurrency();
   const [docs, setDocs] = useState<any[]>([]);
   const [dateFrom, setDateFrom] = useState(() => {
     const d = new Date(); d.setMonth(0, 1);
@@ -124,7 +126,7 @@ const PurchaseReportsPage = () => {
                 <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
                 <XAxis dataKey="month" className="text-xs" />
                 <YAxis className="text-xs" />
-                <Tooltip formatter={(value: number) => `RM ${value.toFixed(2)}`} />
+                <Tooltip formatter={(value: number) => fmt(value)} />
                 <Legend />
                 <Bar dataKey="purchases" fill="hsl(var(--primary))" name="Purchases" radius={[4, 4, 0, 0]} />
                 <Bar dataKey="tax" fill="hsl(var(--muted-foreground))" name="Tax" radius={[4, 4, 0, 0]} />

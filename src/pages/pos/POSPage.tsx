@@ -1,5 +1,6 @@
 import { useEffect, useState, useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
+import { useCurrency } from '@/hooks/useCurrency';
 import { useCompany } from '@/contexts/CompanyContext';
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
@@ -26,6 +27,7 @@ interface CartItem {
 
 const POSPage = () => {
   const { selectedCompany } = useCompany();
+  const { fmt, symbol } = useCurrency();
   const { user } = useAuth();
   const [items, setItems] = useState<any[]>([]);
   const [cart, setCart] = useState<CartItem[]>([]);
@@ -186,7 +188,7 @@ const POSPage = () => {
                 <CardContent className="p-3">
                   <p className="font-medium text-sm truncate">{item.name}</p>
                   <p className="text-xs text-muted-foreground">{item.code}</p>
-                  <p className="text-primary font-bold mt-1">RM {(item.selling_price || 0).toFixed(2)}</p>
+                  <p className="text-primary font-bold mt-1">{fmt(item.selling_price || 0)}</p>
                   {item.barcode && <p className="text-xs text-muted-foreground truncate">{item.barcode}</p>}
                 </CardContent>
               </Card>
@@ -213,7 +215,7 @@ const POSPage = () => {
             <div key={c.stock_item_id} className="flex items-center gap-2 py-2 border-b">
               <div className="flex-1 min-w-0">
                 <p className="text-sm font-medium truncate">{c.name}</p>
-                <p className="text-xs text-muted-foreground">RM {c.unit_price.toFixed(2)} × {c.quantity}</p>
+                <p className="text-xs text-muted-foreground">{fmt(c.unit_price)} × {c.quantity}</p>
               </div>
               <div className="flex items-center gap-1">
                 <Button size="icon" variant="ghost" className="h-6 w-6" onClick={() => updateQty(c.stock_item_id, -1)}><Minus className="h-3 w-3" /></Button>
@@ -221,16 +223,16 @@ const POSPage = () => {
                 <Button size="icon" variant="ghost" className="h-6 w-6" onClick={() => updateQty(c.stock_item_id, 1)}><Plus className="h-3 w-3" /></Button>
                 <Button size="icon" variant="ghost" className="h-6 w-6 text-destructive" onClick={() => removeFromCart(c.stock_item_id)}><Trash2 className="h-3 w-3" /></Button>
               </div>
-              <p className="text-sm font-semibold w-20 text-right">RM {c.line_total.toFixed(2)}</p>
+              <p className="text-sm font-semibold w-20 text-right">{fmt(c.line_total)}</p>
             </div>
           ))}
           {cart.length === 0 && <p className="text-center text-muted-foreground py-8">Cart is empty</p>}
         </ScrollArea>
         <div className="p-4 border-t space-y-2">
-          <div className="flex justify-between text-sm"><span>Subtotal</span><span>RM {subtotal.toFixed(2)}</span></div>
-          <div className="flex justify-between text-sm"><span>Tax</span><span>RM {taxTotal.toFixed(2)}</span></div>
+          <div className="flex justify-between text-sm"><span>Subtotal</span><span>{fmt(subtotal)}</span></div>
+          <div className="flex justify-between text-sm"><span>Tax</span><span>{fmt(taxTotal)}</span></div>
           <Separator />
-          <div className="flex justify-between text-lg font-bold"><span>Total</span><span>RM {grandTotal.toFixed(2)}</span></div>
+          <div className="flex justify-between text-lg font-bold"><span>Total</span><span>{fmt(grandTotal)}</span></div>
           <div className="grid grid-cols-2 gap-2">
             <Button variant="outline" onClick={holdBill} disabled={cart.length === 0}><Pause className="mr-1 h-4 w-4" />Hold</Button>
             <Button onClick={() => setPaymentOpen(true)} disabled={cart.length === 0}><CreditCard className="mr-1 h-4 w-4" />Pay</Button>
@@ -241,18 +243,18 @@ const POSPage = () => {
       {/* Payment Dialog */}
       <Dialog open={paymentOpen} onOpenChange={setPaymentOpen}>
         <DialogContent>
-          <DialogHeader><DialogTitle>Payment - RM {grandTotal.toFixed(2)}</DialogTitle></DialogHeader>
+          <DialogHeader><DialogTitle>Payment - {fmt(grandTotal)}</DialogTitle></DialogHeader>
           <div className="space-y-4">
             <div className="flex items-center gap-3"><Banknote className="h-5 w-5 text-muted-foreground" /><div className="flex-1"><Label>Cash</Label><Input type="number" value={paymentAmounts.cash} onChange={e => setPaymentAmounts({ ...paymentAmounts, cash: e.target.value })} placeholder="0.00" /></div></div>
             <div className="flex items-center gap-3"><CreditCard className="h-5 w-5 text-muted-foreground" /><div className="flex-1"><Label>Card</Label><Input type="number" value={paymentAmounts.card} onChange={e => setPaymentAmounts({ ...paymentAmounts, card: e.target.value })} placeholder="0.00" /></div></div>
             <div className="flex items-center gap-3"><Smartphone className="h-5 w-5 text-muted-foreground" /><div className="flex-1"><Label>E-Wallet</Label><Input type="number" value={paymentAmounts.ewallet} onChange={e => setPaymentAmounts({ ...paymentAmounts, ewallet: e.target.value })} placeholder="0.00" /></div></div>
             <Separator />
-            <div className="flex justify-between"><span>Paid</span><span className="font-bold">RM {totalPaid.toFixed(2)}</span></div>
-            <div className="flex justify-between"><span>Change</span><span className="font-bold text-primary">RM {changeAmount.toFixed(2)}</span></div>
+            <div className="flex justify-between"><span>Paid</span><span className="font-bold">{fmt(totalPaid)}</span></div>
+            <div className="flex justify-between"><span>Change</span><span className="font-bold text-primary">{fmt(changeAmount)}</span></div>
             <div className="grid grid-cols-4 gap-2">
               {[grandTotal, 10, 20, 50, 100, 200].map(amt => (
                 <Button key={amt} variant="outline" size="sm" onClick={() => setPaymentAmounts({ ...paymentAmounts, cash: String(amt) })}>
-                  {amt === grandTotal ? 'Exact' : `RM ${amt}`}
+                  {amt === grandTotal ? 'Exact' : fmt(amt)}
                 </Button>
               ))}
             </div>
@@ -275,7 +277,7 @@ const POSPage = () => {
                     <p className="font-medium">{b.transaction_number}</p>
                     <p className="text-sm text-muted-foreground">{b.customer_name || 'Walk-in'} • {b.held_at ? new Date(b.held_at).toLocaleTimeString() : ''}</p>
                   </div>
-                  <p className="font-bold">RM {(b.total_amount || 0).toFixed(2)}</p>
+                  <p className="font-bold">{fmt(b.total_amount || 0)}</p>
                 </CardContent>
               </Card>
             ))}
