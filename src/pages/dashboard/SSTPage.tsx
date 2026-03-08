@@ -289,9 +289,9 @@ const SSTPage = () => {
                     <TableHead>Doc #</TableHead>
                     <TableHead>Type</TableHead>
                     <TableHead>Date</TableHead>
-                    <TableHead className="text-right">Subtotal (RM)</TableHead>
-                    <TableHead className="text-right">Tax (RM)</TableHead>
-                    <TableHead className="text-right">Total (RM)</TableHead>
+                    <TableHead className="text-right">Subtotal ({symbol})</TableHead>
+                    <TableHead className="text-right">Tax ({symbol})</TableHead>
+                    <TableHead className="text-right">Total ({symbol})</TableHead>
                     <TableHead>Status</TableHead>
                   </TableRow>
                 </TableHeader>
