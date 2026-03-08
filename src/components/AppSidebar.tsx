@@ -75,6 +75,9 @@ const managementItems = [
 const otherItems = [
   { title: 'AI Cloud Backup', url: '/dashboard/ai-cloud', icon: Cloud },
   { title: 'Customization', url: '/dashboard/customization', icon: Puzzle },
+  { title: 'Doc Templates', url: '/dashboard/document-templates', icon: Palette },
+  { title: 'Batch Messages', url: '/dashboard/batch-messages', icon: Mail },
+  { title: 'Security Lock', url: '/dashboard/security-lock', icon: Shield },
   { title: 'e-Invoice', url: '/dashboard/einvoice', icon: Globe },
   { title: 'Settings', url: '/dashboard/settings', icon: Settings },
 ];

@@ -101,6 +101,12 @@ const App = () => (
               <Route path="wellness-pos" element={<WellnessPOSPage />} />
               <Route path="ai-cloud" element={<AICloudPage />} />
               <Route path="customization" element={<CustomizationPage />} />
+              <Route path="commission" element={<CommissionPage />} />
+              <Route path="batch-messages" element={<BatchMessagesPage />} />
+              <Route path="security-lock" element={<SecurityLockPage />} />
+              <Route path="inventory-reports" element={<InventoryReportsPage />} />
+              <Route path="advanced-reports" element={<AdvancedReportsPage />} />
+              <Route path="document-templates" element={<DocumentTemplatesPage />} />
             </Route>
             <Route path="/admin" element={<DashboardLayout />}>
               <Route index element={<AdminPage />} />
