@@ -128,6 +128,7 @@ const CustomizationPage = () => {
   const [editingFieldId, setEditingFieldId] = useState<string | null>(null);
   const [fieldForm, setFieldForm] = useState({
     entity_type: 'customer', field_name: '', field_label: '', field_type: 'text', is_required: false, field_options: '[]',
+    position_reference: '' as string, position_placement: 'after' as string,
   });
 
   // Custom Reports
