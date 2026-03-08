@@ -133,6 +133,8 @@ const InventoryReportsPage = () => {
       <Tabs defaultValue="stock-card">
         <TabsList className="flex-wrap">
           <TabsTrigger value="stock-card">Stock Card</TabsTrigger>
+          <TabsTrigger value="stock-balance">Stock Balance</TabsTrigger>
+          <TabsTrigger value="profit-margin">Product Profit Margin</TabsTrigger>
           <TabsTrigger value="month-end">Month End Balance</TabsTrigger>
           <TabsTrigger value="aging">Stock Aging</TabsTrigger>
           <TabsTrigger value="physical">Physical Worksheet</TabsTrigger>
