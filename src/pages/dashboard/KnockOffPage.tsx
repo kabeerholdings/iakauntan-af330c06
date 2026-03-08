@@ -159,7 +159,7 @@ const KnockOffPage = () => {
                       <Checkbox checked={!!selectedTargets[inv.id]} onCheckedChange={checked => setSelectedTargets(s => ({ ...s, [inv.id]: checked ? +inv.total_amount : 0 }))} />
                       <span className="text-sm flex-1">{inv.invoice_number} — {inv.invoice_date}</span>
                       <Input type="number" className="w-32" value={selectedTargets[inv.id] || ''} onChange={e => setSelectedTargets(s => ({ ...s, [inv.id]: +e.target.value }))} max={+inv.total_amount} />
-                      <span className="text-sm text-muted-foreground">/ RM {(+inv.total_amount).toFixed(2)}</span>
+                      <span className="text-sm text-muted-foreground">/ {fmt(+inv.total_amount)}</span>
                     </div>
                   ))}
                 </div>
