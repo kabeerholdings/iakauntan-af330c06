@@ -116,6 +116,13 @@ const App = () => (
               <Route path="advanced-reports" element={<AdvancedReportsPage />} />
               <Route path="document-templates" element={<DocumentTemplatesPage />} />
               <Route path="payment-methods" element={<PaymentMethodsPage />} />
+              <Route path="cash-book" element={<CashBookPage />} />
+              <Route path="quotations" element={<QuotationsPage />} />
+              <Route path="credit-notes" element={<CreditNotesPage />} />
+              <Route path="stock-adjustment" element={<StockAdjustmentPage />} />
+              <Route path="stock-transfer" element={<StockTransferPage />} />
+              <Route path="financial-reports" element={<FinancialReportsPage />} />
+              <Route path="knock-off" element={<KnockOffPage />} />
             </Route>
             <Route path="/admin" element={<DashboardLayout />}>
               <Route index element={<AdminPage />} />
