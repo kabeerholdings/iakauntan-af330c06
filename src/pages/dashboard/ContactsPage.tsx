@@ -30,6 +30,7 @@ const ContactsPage = () => {
   const [open, setOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [form, setForm] = useState({ ...emptyForm });
+  const [customValues, setCustomValues] = useState<Record<string, string>>({});
 
   const fetchData = async () => {
     if (!selectedCompany) return;
