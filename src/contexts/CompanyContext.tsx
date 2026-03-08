@@ -49,8 +49,13 @@ export const CompanyProvider: React.FC<{ children: React.ReactNode }> = ({ child
       .order('name');
     const companyList = (data || []) as Company[];
     setCompanies(companyList);
-    if (!selectedCompany && companyList.length > 0) {
-      setSelectedCompany(companyList[0]);
+    if (companyList.length > 0) {
+      // Update selectedCompany with fresh data, or pick first if none selected
+      const currentId = selectedCompany?.id;
+      const updated = currentId ? companyList.find(c => c.id === currentId) : companyList[0];
+      setSelectedCompany(updated || companyList[0]);
+    } else {
+      setSelectedCompany(null);
     }
     setLoading(false);
   };
