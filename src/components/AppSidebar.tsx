@@ -1,6 +1,7 @@
 import {
   LayoutDashboard, FileText, Receipt, BookOpen, Users, Globe, Settings, Building2, LogOut,
-  ChevronDown, BarChart3, CreditCard, Package, ShoppingCart, Truck, Wallet, FolderKanban, DollarSign
+  ChevronDown, BarChart3, CreditCard, Package, ShoppingCart, Truck, Wallet, FolderKanban, DollarSign,
+  UserCheck, Calculator, CalendarDays, ClipboardList
 } from 'lucide-react';
 import { NavLink } from '@/components/NavLink';
 import { useAuth } from '@/contexts/AuthContext';
@@ -33,6 +34,13 @@ const accountingItems = [
   { title: 'Chart of Accounts', url: '/dashboard/chart-of-accounts', icon: BookOpen },
   { title: 'Journal Entries', url: '/dashboard/journal-entries', icon: Receipt },
   { title: 'Reports', url: '/dashboard/reports', icon: BarChart3 },
+];
+
+const payrollItems = [
+  { title: 'Employees', url: '/dashboard/employees', icon: UserCheck },
+  { title: 'Payroll', url: '/dashboard/payroll', icon: Calculator },
+  { title: 'Leave', url: '/dashboard/leave', icon: CalendarDays },
+  { title: 'Payroll Reports', url: '/dashboard/payroll-reports', icon: ClipboardList },
 ];
 
 const managementItems = [
@@ -110,6 +118,10 @@ export function AppSidebar() {
         <SidebarGroup>
           <SidebarGroupLabel>Accounting</SidebarGroupLabel>
           <SidebarGroupContent>{renderItems(accountingItems)}</SidebarGroupContent>
+        </SidebarGroup>
+        <SidebarGroup>
+          <SidebarGroupLabel>Payroll & HR</SidebarGroupLabel>
+          <SidebarGroupContent>{renderItems(payrollItems)}</SidebarGroupContent>
         </SidebarGroup>
         <SidebarGroup>
           <SidebarGroupLabel>Management</SidebarGroupLabel>
