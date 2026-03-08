@@ -163,6 +163,13 @@ const ContactsPage = () => {
                 </div>
               </div>
 
+              <CustomFieldsSection
+                entityType={form.type === 'supplier' ? 'supplier' : 'customer'}
+                entityId={editingId}
+                values={customValues}
+                onChange={setCustomValues}
+              />
+
               <Button onClick={handleCreate} className="w-full">{editingId ? 'Update Contact' : 'Add Contact'}</Button>
             </div>
           </DialogContent>
