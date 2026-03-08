@@ -215,7 +215,7 @@ const CustomizationPage = () => {
                     <Switch checked={fieldForm.is_required} onCheckedChange={v => setFieldForm({ ...fieldForm, is_required: v })} />
                     <Label>Required field</Label>
                   </div>
-                  <Button onClick={createField} className="w-full">Create Field</Button>
+                  <Button onClick={saveField} className="w-full">{editingFieldId ? 'Update Field' : 'Create Field'}</Button>
                 </div>
               </DialogContent>
             </Dialog>
