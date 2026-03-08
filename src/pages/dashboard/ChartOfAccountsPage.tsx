@@ -21,7 +21,7 @@ const ChartOfAccountsPage = () => {
   const [accounts, setAccounts] = useState<any[]>([]);
   const [open, setOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
-  const [form, setForm] = useState({ code: '', name: '', account_type: 'asset', description: '' });
+  const [form, setForm] = useState({ code: '', name: '', account_type: 'asset', description: '', is_active: true });
   const [customType, setCustomType] = useState('');
   const [showCustomType, setShowCustomType] = useState(false);
 
