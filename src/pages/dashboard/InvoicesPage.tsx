@@ -238,7 +238,7 @@ const InvoicesPage = () => {
                   <TableCell className="font-medium">{inv.invoice_number}</TableCell>
                   <TableCell>{inv.contacts?.name || '—'}</TableCell>
                   <TableCell>{inv.invoice_date}</TableCell>
-                  <TableCell className="text-right">RM {Number(inv.total_amount).toFixed(2)}</TableCell>
+                  <TableCell className="text-right">{fmt(Number(inv.total_amount))}</TableCell>
                   <TableCell><Badge variant={statusColor(inv.status)}>{inv.status}</Badge></TableCell>
                   <TableCell>
                     {inv.einvoice_status ? (

@@ -89,7 +89,7 @@ const ExpensesPage = () => {
                   <TableCell>{e.expense_date}</TableCell>
                   <TableCell className="font-medium">{e.description}</TableCell>
                   <TableCell>{e.category || '—'}</TableCell>
-                  <TableCell>RM {Number(e.amount).toFixed(2)}</TableCell>
+                  <TableCell>{fmt(Number(e.amount))}</TableCell>
                   <TableCell><Badge variant="secondary">{e.status}</Badge></TableCell>
                 </TableRow>
               ))}

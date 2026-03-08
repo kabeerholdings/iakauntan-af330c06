@@ -230,9 +230,9 @@ const CashBookPage = () => {
 
       {/* Totals Row */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-        <Card><CardHeader className="pb-2"><CardTitle className="text-sm text-muted-foreground">Total Receipts</CardTitle></CardHeader><CardContent><p className="text-2xl font-bold text-primary">RM {totalReceipts.toFixed(2)}</p></CardContent></Card>
-        <Card><CardHeader className="pb-2"><CardTitle className="text-sm text-muted-foreground">Total Payments</CardTitle></CardHeader><CardContent><p className="text-2xl font-bold text-destructive">RM {totalPayments.toFixed(2)}</p></CardContent></Card>
-        <Card><CardHeader className="pb-2"><CardTitle className="text-sm text-muted-foreground">Net Cash Flow</CardTitle></CardHeader><CardContent><p className={`text-2xl font-bold ${totalReceipts - totalPayments >= 0 ? 'text-primary' : 'text-destructive'}`}>RM {(totalReceipts - totalPayments).toFixed(2)}</p></CardContent></Card>
+        <Card><CardHeader className="pb-2"><CardTitle className="text-sm text-muted-foreground">Total Receipts</CardTitle></CardHeader><CardContent><p className="text-2xl font-bold text-primary">{fmt(totalReceipts)}</p></CardContent></Card>
+        <Card><CardHeader className="pb-2"><CardTitle className="text-sm text-muted-foreground">Total Payments</CardTitle></CardHeader><CardContent><p className="text-2xl font-bold text-destructive">{fmt(totalPayments)}</p></CardContent></Card>
+        <Card><CardHeader className="pb-2"><CardTitle className="text-sm text-muted-foreground">Net Cash Flow</CardTitle></CardHeader><CardContent><p className={`text-2xl font-bold ${totalReceipts - totalPayments >= 0 ? 'text-primary' : 'text-destructive'}`}>{fmt(totalReceipts - totalPayments)}</p></CardContent></Card>
       </div>
 
       {/* Listing */}
