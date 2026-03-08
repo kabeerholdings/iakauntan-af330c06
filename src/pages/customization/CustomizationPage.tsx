@@ -203,6 +203,8 @@ const CustomizationPage = () => {
       field_type: f.field_type,
       is_required: f.is_required || false,
       field_options: JSON.stringify(f.field_options || []),
+      position_reference: f.position_reference || '',
+      position_placement: f.position_placement || 'after',
     });
     setFieldOpen(true);
   };
