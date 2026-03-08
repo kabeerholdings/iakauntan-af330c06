@@ -61,6 +61,8 @@ import FinancialReportsPage from "./pages/dashboard/FinancialReportsPage";
 import KnockOffPage from "./pages/dashboard/KnockOffPage";
 import ApiIntegrationPage from "./pages/dashboard/ApiIntegrationPage";
 import PurchaseReportsPage from "./pages/dashboard/PurchaseReportsPage";
+import SSTPage from "./pages/dashboard/SSTPage";
+import RecurringTransactionsPage from "./pages/dashboard/RecurringTransactionsPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -129,6 +131,8 @@ const App = () => (
               <Route path="sales-reports" element={<SalesReportsPage />} />
               <Route path="api-integration" element={<ApiIntegrationPage />} />
               <Route path="purchase-reports" element={<PurchaseReportsPage />} />
+              <Route path="sst" element={<SSTPage />} />
+              <Route path="recurring" element={<RecurringTransactionsPage />} />
             </Route>
             <Route path="/admin" element={<DashboardLayout />}>
               <Route index element={<AdminPage />} />

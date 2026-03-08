@@ -4,7 +4,7 @@ import {
   ChevronDown, BarChart3, CreditCard, Package, ShoppingCart, Truck, Wallet, FolderKanban, DollarSign,
   UserCheck, Calculator, CalendarDays, ClipboardList, Zap, Landmark, Paperclip, Factory, Layers, Hammer, PieChart,
   Store, ScanBarcode, Brain, Sparkles, Heart, Cloud, Puzzle, Mail, Shield, Palette, TrendingUp, Plus, Pencil,
-  ArrowDownLeft, FileCheck, FileX, ArrowLeftRight, BarChart, Link2
+  ArrowDownLeft, FileCheck, FileX, ArrowLeftRight, BarChart, Link2, RefreshCw, Percent
 } from 'lucide-react';
 import { NavLink } from '@/components/NavLink';
 import { useAuth } from '@/contexts/AuthContext';
@@ -68,7 +68,9 @@ const accountingEntryItems = [
   { title: 'Journal Entry', url: '/dashboard/journal-entries', icon: Receipt },
   { title: 'Knock Off Entry', url: '/dashboard/knock-off', icon: Link2 },
   { title: 'Bank Reconciliation', url: '/dashboard/bank-reconciliation', icon: Landmark },
+  { title: 'Recurring', url: '/dashboard/recurring', icon: RefreshCw },
   { title: 'Fast Entry', url: '/dashboard/fast-entry', icon: Zap },
+  { title: 'SST', url: '/dashboard/sst', icon: Percent },
   { title: 'Chart of Accounts', url: '/dashboard/chart-of-accounts', icon: BookOpen },
   { title: 'Payment Methods', url: '/dashboard/payment-methods', icon: CreditCard },
 ];
