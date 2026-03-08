@@ -141,7 +141,7 @@ const SSTPage = () => {
         <Card>
           <CardContent className="p-4">
             <p className="text-xs text-muted-foreground">Outstanding Service Tax</p>
-            <p className="text-2xl font-bold text-destructive">RM {outstandingServiceTax.toFixed(2)}</p>
+            <p className="text-2xl font-bold text-destructive">{fmt(outstandingServiceTax)}</p>
           </CardContent>
         </Card>
         <Card>

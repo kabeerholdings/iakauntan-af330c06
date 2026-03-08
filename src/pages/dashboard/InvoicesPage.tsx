@@ -342,7 +342,7 @@ const InvoicesPage = () => {
                     <p className="text-sm text-muted-foreground">{q.contacts?.name || 'No contact'} · {q.doc_date}</p>
                   </div>
                   <div className="text-right">
-                    <p className="font-medium">RM {Number(q.total_amount).toFixed(2)}</p>
+                    <p className="font-medium">{fmt(Number(q.total_amount))}</p>
                     <Button variant="ghost" size="sm"><Copy className="h-3 w-3 mr-1" />Copy</Button>
                   </div>
                 </div>

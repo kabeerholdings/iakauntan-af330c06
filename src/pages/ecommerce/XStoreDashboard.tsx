@@ -297,10 +297,10 @@ const XStoreDashboard = () => {
                 <p>{selectedOrder.shipping_address || 'N/A'}</p>
               </div>
               <div className="border-t pt-2 space-y-1">
-                <div className="flex justify-between"><span>Subtotal</span><span>RM {(selectedOrder.subtotal || 0).toFixed(2)}</span></div>
-                <div className="flex justify-between"><span>Shipping</span><span>RM {(selectedOrder.shipping_fee || 0).toFixed(2)}</span></div>
-                <div className="flex justify-between text-destructive"><span>Fees</span><span>-RM {((selectedOrder.platform_fee || 0) + (selectedOrder.commission_fee || 0) + (selectedOrder.payment_fee || 0)).toFixed(2)}</span></div>
-                <div className="flex justify-between font-bold border-t pt-1"><span>Payout</span><span>RM {(selectedOrder.seller_payout || 0).toFixed(2)}</span></div>
+                <div className="flex justify-between"><span>Subtotal</span><span>{fmt(selectedOrder.subtotal || 0)}</span></div>
+                <div className="flex justify-between"><span>Shipping</span><span>{fmt(selectedOrder.shipping_fee || 0)}</span></div>
+                <div className="flex justify-between text-destructive"><span>Fees</span><span>-{fmt((selectedOrder.platform_fee || 0) + (selectedOrder.commission_fee || 0) + (selectedOrder.payment_fee || 0))}</span></div>
+                <div className="flex justify-between font-bold border-t pt-1"><span>Payout</span><span>{fmt(selectedOrder.seller_payout || 0)}</span></div>
               </div>
             </div>
           )}
