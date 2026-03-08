@@ -165,12 +165,19 @@ const ContactsPage = () => {
                 <h3 className="font-medium text-foreground mb-3">Credit Control</h3>
                 <div className="grid grid-cols-3 gap-4">
                   <div><Label>Credit Limit (RM)</Label><Input type="number" value={form.credit_limit} onChange={e => setForm(f => ({ ...f, credit_limit: e.target.value }))} /></div>
+                </div>
+                {renderFieldsFor('credit_limit', 'after')}
+                <div className="grid grid-cols-3 gap-4 mt-4">
+                  {renderFieldsFor('credit_terms', 'before')}
                   <div><Label>Credit Terms (days)</Label><Input type="number" value={form.credit_terms} onChange={e => setForm(f => ({ ...f, credit_terms: e.target.value }))} /></div>
+                </div>
+                {renderFieldsFor('credit_terms', 'after')}
+                {renderFieldsFor('overdue_limit', 'before')}
+                <div className="grid grid-cols-3 gap-4 mt-4">
                   <div><Label>Overdue Limit (RM)</Label><Input type="number" value={form.overdue_limit} onChange={e => setForm(f => ({ ...f, overdue_limit: e.target.value }))} /></div>
                 </div>
+                {renderFieldsFor('overdue_limit', 'after')}
               </div>
-              {renderFieldsFor('credit_limit', 'after')}
-              {renderFieldsFor('credit_terms', 'after')}
 
               <div className="border-t border-border pt-4">
                 <h3 className="font-medium text-foreground mb-3">Bank Details</h3>
