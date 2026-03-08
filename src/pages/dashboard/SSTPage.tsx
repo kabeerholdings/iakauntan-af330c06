@@ -248,9 +248,9 @@ const SSTPage = () => {
                     <TableHead>Period</TableHead>
                     <TableHead>From</TableHead>
                     <TableHead>To</TableHead>
-                    <TableHead className="text-right">Sales Tax (RM)</TableHead>
-                    <TableHead className="text-right">Service Tax (RM)</TableHead>
-                    <TableHead className="text-right">Total Tax (RM)</TableHead>
+                    <TableHead className="text-right">Sales Tax ({symbol})</TableHead>
+                    <TableHead className="text-right">Service Tax ({symbol})</TableHead>
+                    <TableHead className="text-right">Total Tax ({symbol})</TableHead>
                     <TableHead>Status</TableHead>
                   </TableRow>
                 </TableHeader>
