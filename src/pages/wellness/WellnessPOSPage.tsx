@@ -263,7 +263,7 @@ const WellnessPOSPage = () => {
                   <TableCell className="font-medium">{s.name}</TableCell>
                   <TableCell>{s.category || '-'}</TableCell>
                   <TableCell>{s.duration_minutes} min</TableCell>
-                  <TableCell>RM {(s.price || 0).toFixed(2)}</TableCell>
+                  <TableCell>{fmt(s.price || 0)}</TableCell>
                   <TableCell>{s.commission_rate}%</TableCell>
                   <TableCell><Badge variant={s.is_active ? 'default' : 'secondary'}>{s.is_active ? 'Active' : 'Inactive'}</Badge></TableCell>
                 </TableRow>
