@@ -30,6 +30,13 @@ const stockItems = [
   { title: 'Stock / Inventory', url: '/dashboard/stock', icon: Package },
 ];
 
+const manufacturingItems = [
+  { title: 'Bill of Materials', url: '/dashboard/bom', icon: Layers },
+  { title: 'Job Orders', url: '/dashboard/job-orders', icon: Hammer },
+  { title: 'Assembly', url: '/dashboard/assembly', icon: Factory },
+  { title: 'MRP Reports', url: '/dashboard/mrp-reports', icon: PieChart },
+];
+
 const accountingItems = [
   { title: 'Fast Entry', url: '/dashboard/fast-entry', icon: Zap },
   { title: 'Chart of Accounts', url: '/dashboard/chart-of-accounts', icon: BookOpen },

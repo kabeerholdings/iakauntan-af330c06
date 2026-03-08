@@ -77,6 +77,10 @@ const App = () => (
               <Route path="fast-entry" element={<FastEntryPage />} />
               <Route path="bank-reconciliation" element={<BankReconciliationPage />} />
               <Route path="documents" element={<DocumentsPage />} />
+              <Route path="bom" element={<BOMPage />} />
+              <Route path="job-orders" element={<JobOrdersPage />} />
+              <Route path="assembly" element={<AssemblyPage />} />
+              <Route path="mrp-reports" element={<MRPReportsPage />} />
             </Route>
             <Route path="/admin" element={<DashboardLayout />}>
               <Route index element={<AdminPage />} />
