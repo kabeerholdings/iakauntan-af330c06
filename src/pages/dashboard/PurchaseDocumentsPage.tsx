@@ -25,6 +25,7 @@ const docTypes = [
 
 const PurchaseDocumentsPage = () => {
   const { selectedCompany } = useCompany();
+  const { fmt, symbol } = useCurrency();
   const { user } = useAuth();
   const [docs, setDocs] = useState<any[]>([]);
   const [contacts, setContacts] = useState<any[]>([]);

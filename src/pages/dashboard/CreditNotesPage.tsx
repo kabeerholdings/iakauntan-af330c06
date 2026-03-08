@@ -18,6 +18,7 @@ import DocumentPrintPreview from '@/components/DocumentPrintPreview';
 
 const CreditNotesPage = () => {
   const { selectedCompany } = useCompany();
+  const { fmt } = useCurrency();
   const { user } = useAuth();
   const [notes, setNotes] = useState<any[]>([]);
   const [contacts, setContacts] = useState<any[]>([]);

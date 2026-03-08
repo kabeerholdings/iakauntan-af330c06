@@ -17,6 +17,7 @@ import { useCustomFields, saveCustomFieldValues } from '@/components/CustomField
 
 const StockItemsPage = () => {
   const { selectedCompany } = useCompany();
+  const { fmt } = useCurrency();
   const [items, setItems] = useState<any[]>([]);
   const [categories, setCategories] = useState<any[]>([]);
   const [warehouses, setWarehouses] = useState<any[]>([]);

@@ -43,7 +43,7 @@ const OpeningBalancePage = () => {
 
   useEffect(() => { fetchData(); }, [selectedCompany]);
 
-  const fmt = (n: number) => `RM ${Number(n).toLocaleString('en-MY', { minimumFractionDigits: 2 })}`;
+  const { fmt } = useCurrency();
 
   const addEntry = () => setEntries(e => [...e, { account_id: '', debit: '', credit: '' }]);
   const updateEntry = (i: number, field: string, value: string) => setEntries(e => e.map((en, idx) => idx === i ? { ...en, [field]: value } : en));

@@ -17,6 +17,7 @@ import { toast } from 'sonner';
 
 const KnockOffPage = () => {
   const { selectedCompany } = useCompany();
+  const { fmt } = useCurrency();
   const { user } = useAuth();
   const [entries, setEntries] = useState<any[]>([]);
   const [contacts, setContacts] = useState<any[]>([]);

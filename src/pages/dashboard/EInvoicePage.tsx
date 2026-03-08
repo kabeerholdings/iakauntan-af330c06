@@ -23,6 +23,7 @@ import { differenceInHours, differenceInMinutes, format } from 'date-fns';
 
 const EInvoicePage = () => {
   const { selectedCompany } = useCompany();
+  const { fmt } = useCurrency();
   const [invoices, setInvoices] = useState<any[]>([]);
   const [purchaseInvoices, setPurchaseInvoices] = useState<any[]>([]);
   const [loading, setLoading] = useState<string | null>(null);
