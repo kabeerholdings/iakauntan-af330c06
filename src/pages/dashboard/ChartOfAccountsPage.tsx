@@ -37,7 +37,7 @@ const ChartOfAccountsPage = () => {
   useEffect(() => { fetchData(); }, [selectedCompany]);
 
   const resetForm = () => {
-    setForm({ code: '', name: '', account_type: 'asset', description: '' });
+    setForm({ code: '', name: '', account_type: 'asset', description: '', is_active: true });
     setCustomType('');
     setShowCustomType(false);
     setEditingId(null);
