@@ -229,27 +229,11 @@ export function AppSidebar() {
     </Sidebar>
 
     <Dialog open={showCreateCompany} onOpenChange={setShowCreateCompany}>
-      <DialogContent>
+      <DialogContent className="max-w-lg max-h-[85vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="font-display">Add New Company</DialogTitle>
         </DialogHeader>
-        <div className="space-y-4">
-          <div>
-            <Label>Company Name *</Label>
-            <Input value={newCompany.name} onChange={e => setNewCompany(f => ({ ...f, name: e.target.value }))} placeholder="My Business Sdn Bhd" />
-          </div>
-          <div>
-            <Label>SSM Registration No.</Label>
-            <Input value={newCompany.registration_no} onChange={e => setNewCompany(f => ({ ...f, registration_no: e.target.value }))} placeholder="202301012345" />
-          </div>
-          <div>
-            <Label>Tax Identification No. (TIN)</Label>
-            <Input value={newCompany.tax_id} onChange={e => setNewCompany(f => ({ ...f, tax_id: e.target.value }))} placeholder="C12345678" />
-          </div>
-          <Button onClick={handleCreateCompany} disabled={creating} className="w-full">
-            {creating ? 'Creating...' : 'Create Company'}
-          </Button>
-        </div>
+        <CreateCompanyForm onSubmit={handleCreateCompany} loading={creating} />
       </DialogContent>
     </Dialog>
 
