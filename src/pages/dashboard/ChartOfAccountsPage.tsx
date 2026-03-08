@@ -164,6 +164,7 @@ const ChartOfAccountsPage = () => {
             </div>
           </DialogContent>
         </Dialog>
+        </div>
       </div>
       <Card className="shadow-card">
         <CardContent className="p-0">
