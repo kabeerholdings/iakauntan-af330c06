@@ -33,6 +33,7 @@ const salesItems = [
   { title: 'Sales', url: '/dashboard/sales', icon: ShoppingCart },
   { title: 'Invoices', url: '/dashboard/invoices', icon: FileText },
   { title: 'Credit Notes', url: '/dashboard/credit-notes', icon: FileX },
+  { title: 'Debit Notes', url: '/dashboard/debit-notes', icon: FileText },
   { title: 'Payments', url: '/dashboard/payments', icon: Wallet },
   { title: 'Sales Reports', url: '/dashboard/sales-reports', icon: BarChart3 },
 ];
@@ -68,9 +69,11 @@ const accountingEntryItems = [
   { title: 'Journal Entry', url: '/dashboard/journal-entries', icon: Receipt },
   { title: 'Knock Off Entry', url: '/dashboard/knock-off', icon: Link2 },
   { title: 'Bank Reconciliation', url: '/dashboard/bank-reconciliation', icon: Landmark },
+  { title: 'Opening Balance', url: '/dashboard/opening-balance', icon: BookOpen },
   { title: 'Recurring', url: '/dashboard/recurring', icon: RefreshCw },
   { title: 'Fast Entry', url: '/dashboard/fast-entry', icon: Zap },
   { title: 'SST', url: '/dashboard/sst', icon: Percent },
+  { title: 'Fixed Assets', url: '/dashboard/fixed-assets', icon: Building2 },
   { title: 'Chart of Accounts', url: '/dashboard/chart-of-accounts', icon: BookOpen },
   { title: 'Payment Methods', url: '/dashboard/payment-methods', icon: CreditCard },
 ];
