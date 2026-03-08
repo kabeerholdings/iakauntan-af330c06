@@ -60,7 +60,7 @@ const StockAdjustmentPage = () => {
     }
     toast.success('Stock adjustment created');
     setOpen(false);
-    setForm({ adjustment_no: '', adjustment_date: new Date().toISOString().split('T')[0], description: '', lines: [{ stock_item_id: '', quantity: 0, unit_cost: 0, reason: '' }] });
+    setForm({ adjustment_no: '', adjustment_date: new Date().toISOString().split('T')[0], description: '', lines: [{ stock_item_id: '', warehouse_id: '', quantity: 0, unit_cost: 0, description: '' }] });
     fetchData();
   };
 
