@@ -55,6 +55,7 @@ const ChartOfAccountsPage = () => {
       name: account.name,
       account_type: account.account_type,
       description: account.description || '',
+      is_active: account.is_active ?? true,
     });
     if (isCustom) {
       setShowCustomType(true);
