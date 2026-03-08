@@ -157,6 +157,12 @@ export function AppSidebar() {
                 </DropdownMenuItem>
               ))}
               <DropdownMenuSeparator />
+              {selectedCompany && (
+                <DropdownMenuItem onClick={() => setShowEditCompany(true)}>
+                  <Pencil className="h-4 w-4 mr-2" />
+                  Edit Company
+                </DropdownMenuItem>
+              )}
               <DropdownMenuItem onClick={() => setShowCreateCompany(true)}>
                 <Plus className="h-4 w-4 mr-2" />
                 Add New Company
