@@ -31,7 +31,7 @@ const StockItemsPage = () => {
   });
   const [catForm, setCatForm] = useState({ name: '', description: '' });
   const [whForm, setWhForm] = useState({ code: '', name: '', address: '' });
-  const [customValues, setCustomValues] = useState<Record<string, string>>({});
+  const { values: customValues, setValues: setCustomValues, renderFieldsFor, renderUnpositionedFields } = useCustomFields('stock_item');
 
   const fetchData = async () => {
     if (!selectedCompany) return;
