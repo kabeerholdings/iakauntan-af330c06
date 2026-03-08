@@ -132,7 +132,7 @@ const StockTakePage = () => {
       const { data: adj, error: adjErr } = await supabase.from('stock_adjustments').insert({
         company_id: selectedCompany.id,
         reference: adjRef,
-        description: `Auto-generated from stock take ${selectedTake.take_number}. Total variance: RM ${totalVariance.toFixed(2)}`,
+        description: `Auto-generated from stock take ${selectedTake.take_number}. Total variance: ${fmt(totalVariance)}`,
         status: 'posted',
         created_by: user?.id,
       }).select().single();
