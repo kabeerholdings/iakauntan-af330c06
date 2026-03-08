@@ -17,27 +17,21 @@ const LoginPage = () => {
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
+    const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+    setLoading(false);
     if (error) {
       toast.error(error.message);
-    } else {
-      // Check if admin
-      const { data: { user } } = await supabase.auth.getUser();
-      if (user) {
-        const { data: roleData } = await supabase
-          .from('user_roles')
-          .select('role')
-          .eq('user_id', user.id)
-          .eq('role', 'admin')
-          .maybeSingle();
-        if (roleData) {
-          navigate('/admin');
-        } else {
-          navigate('/dashboard');
-        }
-      }
+      return;
     }
-    setLoading(false);
+    if (data?.user) {
+      const { data: roleData } = await supabase
+        .from('user_roles')
+        .select('role')
+        .eq('user_id', data.user.id)
+        .eq('role', 'admin')
+        .maybeSingle();
+      navigate(roleData ? '/admin' : '/dashboard', { replace: true });
+    }
   };
 
   return (
