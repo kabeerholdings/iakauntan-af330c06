@@ -21,6 +21,7 @@ const SettingsPage = () => {
   const { user } = useAuth();
   const [newCompany, setNewCompany] = useState({ name: '', registration_no: '', tax_id: '', einvoice_tin: '' });
   const [openNew, setOpenNew] = useState(false);
+  const [editCompany, setEditCompany] = useState<any>(null);
 
   // LHDN credentials state
   const [lhdnCreds, setLhdnCreds] = useState({ client_id: '', client_secret: '', environment: 'sandbox' });
