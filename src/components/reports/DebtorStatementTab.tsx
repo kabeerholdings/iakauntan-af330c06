@@ -98,7 +98,7 @@ const DebtorStatementTab = ({ invoices, contacts, payments, dateFrom, dateTo }: 
                 ))}
                 <TableRow className="font-bold border-t-2">
                   <TableCell colSpan={5} className="text-right">Closing Balance</TableCell>
-                  <TableCell className="text-right font-mono">RM {closingBalance.toFixed(2)}</TableCell>
+                  <TableCell className="text-right font-mono">{fmt(closingBalance)}</TableCell>
                 </TableRow>
               </TableBody>
             </Table>
