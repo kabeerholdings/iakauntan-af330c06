@@ -342,7 +342,7 @@ const WellnessPOSPage = () => {
                   <TableCell>{m.member_email || '-'}</TableCell>
                   <TableCell><Badge variant="outline">{m.membership_type}</Badge></TableCell>
                   <TableCell>{m.points_balance}</TableCell>
-                  <TableCell>RM {(m.credit_balance || 0).toFixed(2)}</TableCell>
+                  <TableCell>{fmt(m.credit_balance || 0)}</TableCell>
                   <TableCell><Badge variant={m.status === 'active' ? 'default' : 'secondary'}>{m.status}</Badge></TableCell>
                 </TableRow>
               ))}
