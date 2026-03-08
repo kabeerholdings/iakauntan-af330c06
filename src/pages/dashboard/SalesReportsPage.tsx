@@ -121,7 +121,7 @@ const SalesReportsPage = () => {
         <Card>
           <CardContent className="p-4">
             <p className="text-sm text-muted-foreground">Tax Collected</p>
-            <p className="text-2xl font-bold font-mono text-foreground">RM {totalTax.toFixed(2)}</p>
+            <p className="text-2xl font-bold font-mono text-foreground">{fmt(totalTax)}</p>
           </CardContent>
         </Card>
         <Card>
