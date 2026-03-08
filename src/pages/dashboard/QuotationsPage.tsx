@@ -143,7 +143,7 @@ const QuotationsPage = () => {
                   <TableCell className="font-mono font-medium">{q.quotation_number}</TableCell>
                   <TableCell>{q.contacts?.name || '—'}</TableCell>
                   <TableCell>{q.valid_until || '—'}</TableCell>
-                  <TableCell className="text-right font-medium">RM {(+q.total_amount).toFixed(2)}</TableCell>
+                  <TableCell className="text-right font-medium">{fmt(+q.total_amount)}</TableCell>
                   <TableCell><Badge variant={(statusColors[q.status] || 'secondary') as any}>{q.status}</Badge></TableCell>
                   <TableCell className="flex gap-1">
                     <Button variant="ghost" size="sm" onClick={() => handlePrintPreview(q)}>
