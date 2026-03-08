@@ -131,6 +131,8 @@ const App = () => (
               <Route path="sales-reports" element={<SalesReportsPage />} />
               <Route path="api-integration" element={<ApiIntegrationPage />} />
               <Route path="purchase-reports" element={<PurchaseReportsPage />} />
+              <Route path="sst" element={<SSTPage />} />
+              <Route path="recurring" element={<RecurringTransactionsPage />} />
             </Route>
             <Route path="/admin" element={<DashboardLayout />}>
               <Route index element={<AdminPage />} />
