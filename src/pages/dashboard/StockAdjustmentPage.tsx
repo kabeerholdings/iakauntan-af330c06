@@ -26,12 +26,14 @@ const StockAdjustmentPage = () => {
 
   const fetchData = async () => {
     if (!selectedCompany) return;
-    const [a, si] = await Promise.all([
+    const [a, si, wh] = await Promise.all([
       supabase.from('stock_adjustments').select('*, stock_adjustment_lines(*, stock_items(name))').eq('company_id', selectedCompany.id).order('adjustment_date', { ascending: false }),
       supabase.from('stock_items').select('id, name, sku').eq('company_id', selectedCompany.id).eq('is_active', true),
+      supabase.from('warehouses').select('id, name').eq('company_id', selectedCompany.id).eq('is_active', true),
     ]);
     setAdjustments(a.data || []);
     setStockItems(si.data || []);
+    setWarehouses(wh.data || []);
   };
 
   useEffect(() => { fetchData(); }, [selectedCompany]);
