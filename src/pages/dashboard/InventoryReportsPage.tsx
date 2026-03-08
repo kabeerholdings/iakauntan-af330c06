@@ -305,7 +305,7 @@ const InventoryReportsPage = () => {
         <Card className="shadow-card">
           <CardContent className="pt-6">
             <p className="text-sm text-muted-foreground">Slow Stock (&gt;90d)</p>
-            <p className="text-2xl font-bold font-display text-amber-600">{stockAging.filter(s => s.daysSinceCreated > 90).length}</p>
+            <p className="text-2xl font-bold font-display text-destructive/80">{stockAging.filter(s => s.daysSinceCreated > 90).length}</p>
           </CardContent>
         </Card>
       </div>
