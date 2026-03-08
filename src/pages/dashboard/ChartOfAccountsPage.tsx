@@ -87,7 +87,6 @@ const ChartOfAccountsPage = () => {
                   <Input value={customType} onChange={e => { setCustomType(e.target.value); setForm(f => ({ ...f, account_type: e.target.value.toLowerCase().trim() })); }} placeholder="e.g. contra-asset" />
                 </div>
               )}
-              </div>
               <div><Label>Account Name</Label><Input value={form.name} onChange={e => setForm(f => ({ ...f, name: e.target.value }))} placeholder="Cash at Bank" /></div>
               <div><Label>Description</Label><Input value={form.description} onChange={e => setForm(f => ({ ...f, description: e.target.value }))} /></div>
               <Button onClick={handleCreate} className="w-full">Add Account</Button>
