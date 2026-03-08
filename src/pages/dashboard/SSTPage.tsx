@@ -303,9 +303,9 @@ const SSTPage = () => {
                       <TableCell className="font-medium">{t.number}</TableCell>
                       <TableCell><Badge variant="outline">{t.type}</Badge></TableCell>
                       <TableCell>{t.date}</TableCell>
-                      <TableCell className="text-right">{t.subtotal.toFixed(2)}</TableCell>
-                      <TableCell className="text-right">{t.tax.toFixed(2)}</TableCell>
-                      <TableCell className="text-right font-medium">{t.total.toFixed(2)}</TableCell>
+                      <TableCell className="text-right">{fmt(t.subtotal)}</TableCell>
+                      <TableCell className="text-right">{fmt(t.tax)}</TableCell>
+                      <TableCell className="text-right font-medium">{fmt(t.total)}</TableCell>
                       <TableCell><Badge variant={t.status === 'paid' ? 'default' : 'secondary'}>{t.status}</Badge></TableCell>
                     </TableRow>
                   ))}
