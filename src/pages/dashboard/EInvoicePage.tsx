@@ -441,7 +441,7 @@ const EInvoicePage = () => {
                       <TableCell className="font-medium">{inv.invoice_number}</TableCell>
                       <TableCell>{(inv.contacts as any)?.name || '—'}</TableCell>
                       <TableCell>{inv.invoice_date}</TableCell>
-                      <TableCell>RM {Number(inv.total_amount).toFixed(2)}</TableCell>
+                      <TableCell>{fmt(Number(inv.total_amount))}</TableCell>
                       <TableCell><span className="text-muted-foreground text-sm">Pending</span></TableCell>
                     </TableRow>
                   ))}
