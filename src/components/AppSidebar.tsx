@@ -1,7 +1,7 @@
 import {
   LayoutDashboard, FileText, Receipt, BookOpen, Users, Globe, Settings, Building2, LogOut,
   ChevronDown, BarChart3, CreditCard, Package, ShoppingCart, Truck, Wallet, FolderKanban, DollarSign,
-  UserCheck, Calculator, CalendarDays, ClipboardList
+  UserCheck, Calculator, CalendarDays, ClipboardList, Zap, Landmark, Paperclip
 } from 'lucide-react';
 import { NavLink } from '@/components/NavLink';
 import { useAuth } from '@/contexts/AuthContext';
@@ -31,9 +31,12 @@ const stockItems = [
 ];
 
 const accountingItems = [
+  { title: 'Fast Entry', url: '/dashboard/fast-entry', icon: Zap },
   { title: 'Chart of Accounts', url: '/dashboard/chart-of-accounts', icon: BookOpen },
   { title: 'Journal Entries', url: '/dashboard/journal-entries', icon: Receipt },
+  { title: 'Bank Reconciliation', url: '/dashboard/bank-reconciliation', icon: Landmark },
   { title: 'Reports', url: '/dashboard/reports', icon: BarChart3 },
+  { title: 'Documents', url: '/dashboard/documents', icon: Paperclip },
 ];
 
 const payrollItems = [

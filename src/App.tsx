@@ -29,6 +29,9 @@ import EmployeesPage from "./pages/payroll/EmployeesPage";
 import PayrollProcessPage from "./pages/payroll/PayrollProcessPage";
 import LeavePage from "./pages/payroll/LeavePage";
 import PayrollReportsPage from "./pages/payroll/PayrollReportsPage";
+import FastEntryPage from "./pages/dashboard/FastEntryPage";
+import BankReconciliationPage from "./pages/dashboard/BankReconciliationPage";
+import DocumentsPage from "./pages/dashboard/DocumentsPage";
 import AdminPage from "./pages/admin/AdminPage";
 import NotFound from "./pages/NotFound";
 
@@ -67,6 +70,9 @@ const App = () => (
               <Route path="payroll" element={<PayrollProcessPage />} />
               <Route path="leave" element={<LeavePage />} />
               <Route path="payroll-reports" element={<PayrollReportsPage />} />
+              <Route path="fast-entry" element={<FastEntryPage />} />
+              <Route path="bank-reconciliation" element={<BankReconciliationPage />} />
+              <Route path="documents" element={<DocumentsPage />} />
             </Route>
             <Route path="/admin" element={<DashboardLayout />}>
               <Route index element={<AdminPage />} />
