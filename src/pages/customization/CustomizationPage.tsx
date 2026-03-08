@@ -300,6 +300,36 @@ const CustomizationPage = () => {
                     <Switch checked={fieldForm.is_required} onCheckedChange={v => setFieldForm({ ...fieldForm, is_required: v })} />
                     <Label>Required field</Label>
                   </div>
+                  {/* Position placement */}
+                  <div className="border border-border rounded-md p-3 space-y-3 bg-muted/30">
+                    <Label className="text-sm font-medium">Field Position</Label>
+                    <p className="text-xs text-muted-foreground">Choose where this custom field appears relative to existing fields on the form.</p>
+                    <div className="grid grid-cols-2 gap-3">
+                      <div>
+                        <Label className="text-xs">Placement</Label>
+                        <Select value={fieldForm.position_placement} onValueChange={v => setFieldForm({ ...fieldForm, position_placement: v })}>
+                          <SelectTrigger><SelectValue /></SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="before">Before</SelectItem>
+                            <SelectItem value="after">After</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                      <div>
+                        <Label className="text-xs">Reference Field</Label>
+                        <Select value={fieldForm.position_reference} onValueChange={v => setFieldForm({ ...fieldForm, position_reference: v })}>
+                          <SelectTrigger><SelectValue placeholder="Select field..." /></SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="__start">— Start of form —</SelectItem>
+                            {(NATIVE_FIELDS[fieldForm.entity_type] || []).map(nf => (
+                              <SelectItem key={nf.value} value={nf.value}>{nf.label}</SelectItem>
+                            ))}
+                            <SelectItem value="__end">— End of form —</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                    </div>
+                  </div>
                   <Button onClick={saveField} className="w-full">{editingFieldId ? 'Update Field' : 'Create Field'}</Button>
                 </div>
               </DialogContent>
