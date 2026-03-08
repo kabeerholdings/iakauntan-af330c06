@@ -348,7 +348,7 @@ const StockTakePage = () => {
                 {priceCheckResult.barcode && <p className="text-sm text-muted-foreground">Barcode: {priceCheckResult.barcode}</p>}
                 <p className="text-2xl font-bold text-primary">RM {(priceCheckResult.selling_price || 0).toFixed(2)}</p>
                 <p className="text-sm text-muted-foreground">Cost: RM {(priceCheckResult.purchase_price || 0).toFixed(2)}</p>
-                <p className="text-sm text-muted-foreground">Stock on Hand: {priceCheckResult.quantity_on_hand || 0} {priceCheckResult.uom || 'units'}</p>
+                <p className="text-sm text-muted-foreground">UOM: {priceCheckResult.base_uom || 'units'}</p>
               </CardContent></Card>
             )}
           </div>
