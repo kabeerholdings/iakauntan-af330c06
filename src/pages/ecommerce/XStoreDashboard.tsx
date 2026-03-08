@@ -167,7 +167,7 @@ const XStoreDashboard = () => {
                   <TableCell><Badge variant="outline">{(o.marketplace_stores as any)?.marketplace}</Badge> {(o.marketplace_stores as any)?.store_name}</TableCell>
                   <TableCell>{o.customer_name || '-'}</TableCell>
                   <TableCell>{o.order_date ? new Date(o.order_date).toLocaleDateString() : '-'}</TableCell>
-                  <TableCell>RM {(o.total_amount || 0).toFixed(2)}</TableCell>
+                  <TableCell>{fmt(o.total_amount || 0)}</TableCell>
                   <TableCell><Badge variant={o.status === 'completed' ? 'default' : o.status === 'cancelled' ? 'destructive' : 'secondary'}>{o.status}</Badge></TableCell>
                   <TableCell>
                     <div className="flex gap-1">
