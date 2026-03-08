@@ -44,7 +44,8 @@ const CreditorAgingTab = ({ invoices, contacts, payments, asOfDate }: Props) => 
     current: s.current + d.current, d30: s.d30 + d.d30, d60: s.d60 + d.d60, d90: s.d90 + d.d90, over90: s.over90 + d.over90, total: s.total + d.total,
   }), { current: 0, d30: 0, d60: 0, d90: 0, over90: 0, total: 0 });
 
-  const fmt = (v: number) => v > 0 ? `RM ${v.toFixed(2)}` : '';
+  const { fmt: fmtCurrency } = useCurrency();
+  const fmt = (v: number) => v > 0 ? fmtCurrency(v) : '';
 
   return (
     <Card>
