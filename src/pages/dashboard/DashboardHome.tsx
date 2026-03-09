@@ -61,22 +61,16 @@ const DashboardHome = () => {
     const prevToStr = format(prevDateRange.to, 'yyyy-MM-dd');
 
     Promise.all([
-      // Current period sales
       supabase.from('sales_documents').select('doc_date, total_amount, contact_id, doc_type, status')
         .eq('company_id', selectedCompany.id).gte('doc_date', prevFromStr).lte('doc_date', toStr),
-      // Invoices
       supabase.from('invoices').select('invoice_date, total_amount, contact_id, status')
         .eq('company_id', selectedCompany.id).gte('invoice_date', prevFromStr).lte('invoice_date', toStr),
-      // Expenses
       supabase.from('expenses').select('expense_date, amount, category')
         .eq('company_id', selectedCompany.id).gte('expense_date', prevFromStr).lte('expense_date', toStr),
-      // Payments
       supabase.from('payments').select('payment_date, amount, payment_type')
         .eq('company_id', selectedCompany.id).gte('payment_date', fromStr).lte('payment_date', toStr),
-      // Contacts
       supabase.from('contacts').select('id, name, type, created_at, state, city')
         .eq('company_id', selectedCompany.id),
-      // Quotations
       supabase.from('sales_documents').select('doc_date, doc_type, status, total_amount')
         .eq('company_id', selectedCompany.id).eq('doc_type', 'quotation').gte('doc_date', fromStr).lte('doc_date', toStr),
     ]).then(([salesRes, invRes, expRes, payRes, conRes, quotRes]) => {
@@ -114,12 +108,10 @@ const DashboardHome = () => {
 
   const pctChange = (curr: number, prev: number) => prev === 0 ? (curr > 0 ? 100 : 0) : ((curr - prev) / prev) * 100;
 
-  // --- Monthly sales trend (this year vs last year) ---
+  // --- Monthly sales trend ---
   const monthlyTrend = useMemo(() => {
     const months = Array.from({ length: 12 }, (_, i) => {
       const monthStr = String(i + 1).padStart(2, '0');
-      const yearCurr = format(dateRange.from, 'yyyy');
-      const yearPrev = String(Number(yearCurr) - 1);
       const currMonth = currentSales.filter(s => s.doc_date.substring(5, 7) === monthStr);
       const prevMonth = prevSales.filter(s => s.doc_date.substring(5, 7) === monthStr);
       return {
@@ -131,7 +123,6 @@ const DashboardHome = () => {
     return months;
   }, [currentSales, prevSales, dateRange]);
 
-  // --- Top customers ---
   const topCustomers = useMemo(() => {
     const map = new Map<string, number>();
     currentSales.forEach(s => {
@@ -144,7 +135,6 @@ const DashboardHome = () => {
     });
   }, [currentSales, contacts]);
 
-  // --- Expense by category ---
   const expenseByCategory = useMemo(() => {
     const map = new Map<string, number>();
     currentExpenses.forEach(e => {
@@ -154,7 +144,6 @@ const DashboardHome = () => {
     return Array.from(map.entries()).map(([name, value]) => ({ name, value })).sort((a, b) => b.value - a.value).slice(0, 8);
   }, [currentExpenses]);
 
-  // --- Customer geography ---
   const customerGeo = useMemo(() => {
     const map = new Map<string, number>();
     contacts.filter(c => c.type === 'customer').forEach(c => {
@@ -164,7 +153,6 @@ const DashboardHome = () => {
     return Array.from(map.entries()).map(([name, value]) => ({ name, value })).sort((a, b) => b.value - a.value).slice(0, 10);
   }, [contacts]);
 
-  // --- New vs existing customers ---
   const customerRetention = useMemo(() => {
     const customers = contacts.filter(c => c.type === 'customer');
     const newCust = customers.filter(c => c.created_at >= fromStr).length;
@@ -175,7 +163,6 @@ const DashboardHome = () => {
     ];
   }, [contacts, fromStr]);
 
-  // --- Quotation conversion ---
   const quotationStats = useMemo(() => {
     const total = quotations.length;
     const converted = quotations.filter(q => q.status === 'confirmed' || q.status === 'converted').length;
@@ -184,7 +171,6 @@ const DashboardHome = () => {
     return { total, converted, pending, cancelled, rate: total > 0 ? (converted / total) * 100 : 0 };
   }, [quotations]);
 
-  // --- Cash flow (receipts vs payments by month) ---
   const cashFlowData = useMemo(() => {
     return Array.from({ length: 12 }, (_, i) => {
       const monthStr = String(i + 1).padStart(2, '0');
@@ -198,7 +184,6 @@ const DashboardHome = () => {
     });
   }, [payments]);
 
-  // --- Outstanding invoices ---
   const outstanding = useMemo(() => {
     return currentInvoices.filter(i => i.status !== 'paid' && i.status !== 'void')
       .reduce((s, i) => s + (Number(i.total_amount) || 0), 0);
@@ -209,26 +194,26 @@ const DashboardHome = () => {
   if (!selectedCompany) {
     return (
       <div className="text-center py-20">
-        <h2 className="font-display text-2xl font-bold text-foreground mb-2">Welcome to iAkauntan</h2>
-        <p className="text-muted-foreground">Please create a company in Settings to get started.</p>
+        <h2 className="font-display text-xl sm:text-2xl font-bold text-foreground mb-2">Welcome to iAkauntan</h2>
+        <p className="text-muted-foreground text-sm">Please create a company in Settings to get started.</p>
       </div>
     );
   }
 
   const StatCard = ({ title, value, icon: Icon, change, color }: { title: string; value: string; icon: any; change?: number; color: string }) => (
     <Card className="shadow-card">
-      <CardHeader className="flex flex-row items-center justify-between pb-2">
-        <CardTitle className="text-sm font-medium text-muted-foreground">{title}</CardTitle>
-        <div className={`p-2 rounded-lg bg-${color}/10`}>
-          <Icon className={`h-5 w-5 text-${color}`} />
+      <CardHeader className="flex flex-row items-center justify-between pb-1 sm:pb-2 p-3 sm:p-6">
+        <CardTitle className="text-xs sm:text-sm font-medium text-muted-foreground leading-tight">{title}</CardTitle>
+        <div className={`p-1.5 sm:p-2 rounded-lg bg-${color}/10`}>
+          <Icon className={`h-4 w-4 sm:h-5 sm:w-5 text-${color}`} />
         </div>
       </CardHeader>
-      <CardContent>
-        <p className="text-2xl font-bold font-display text-card-foreground">{value}</p>
+      <CardContent className="p-3 pt-0 sm:p-6 sm:pt-0">
+        <p className="text-lg sm:text-2xl font-bold font-display text-card-foreground truncate">{value}</p>
         {change !== undefined && (
-          <div className={`flex items-center gap-1 mt-1 text-sm ${change >= 0 ? 'text-emerald-600' : 'text-red-500'}`}>
-            {change >= 0 ? <ArrowUpRight className="h-4 w-4" /> : <ArrowDownRight className="h-4 w-4" />}
-            <span>{Math.abs(change).toFixed(1)}% vs prev period</span>
+          <div className={`flex items-center gap-1 mt-1 text-xs ${change >= 0 ? 'text-emerald-600' : 'text-red-500'}`}>
+            {change >= 0 ? <ArrowUpRight className="h-3 w-3" /> : <ArrowDownRight className="h-3 w-3" />}
+            <span className="truncate">{Math.abs(change).toFixed(1)}% vs prev</span>
           </div>
         )}
       </CardContent>
@@ -236,11 +221,12 @@ const DashboardHome = () => {
   );
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <h1 className="font-display text-2xl font-bold text-foreground">Business Intelligence Dashboard</h1>
+    <div className="space-y-4 sm:space-y-6">
+      {/* Header */}
+      <div className="page-header">
+        <h1 className="page-title">Dashboard</h1>
         <Select value={period} onValueChange={setPeriod}>
-          <SelectTrigger className="w-[180px]"><SelectValue /></SelectTrigger>
+          <SelectTrigger className="w-[150px] sm:w-[180px]"><SelectValue /></SelectTrigger>
           <SelectContent>
             <SelectItem value="this_month">This Month</SelectItem>
             <SelectItem value="last_month">Last Month</SelectItem>
@@ -251,94 +237,94 @@ const DashboardHome = () => {
       </div>
 
       {/* KPI Cards */}
-      <div className="grid sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+      <div className="stats-grid-5">
         <StatCard title="Total Sales" value={fmt(totalSales)} icon={TrendingUp} change={pctChange(totalSales, prevTotalSales)} color="primary" />
         <StatCard title="Total Invoiced" value={fmt(totalInvoiced)} icon={FileText} change={pctChange(totalInvoiced, prevTotalInvoiced)} color="primary" />
-        <StatCard title="Total Expenses" value={fmt(totalExpense)} icon={CreditCard} change={pctChange(totalExpense, prevTotalExpense)} color="destructive" />
+        <StatCard title="Expenses" value={fmt(totalExpense)} icon={CreditCard} change={pctChange(totalExpense, prevTotalExpense)} color="destructive" />
         <StatCard title="Net Profit" value={fmt(profit)} icon={DollarSign} change={pctChange(profit, prevProfit)} color="accent" />
         <StatCard title="Collections" value={fmt(totalCollected)} icon={ShoppingCart} color="accent" />
       </div>
 
       {/* Secondary KPIs */}
-      <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="stats-grid">
         <Card className="shadow-card">
-          <CardContent className="pt-6">
+          <CardContent className="p-3 sm:pt-6 sm:p-6">
             <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-muted-foreground">Outstanding Invoices</p>
-                <p className="text-xl font-bold font-display text-destructive">{fmt(outstanding)}</p>
+              <div className="min-w-0">
+                <p className="text-xs sm:text-sm text-muted-foreground">Outstanding</p>
+                <p className="text-lg sm:text-xl font-bold font-display text-destructive truncate">{fmt(outstanding)}</p>
               </div>
-              <FileText className="h-8 w-8 text-muted-foreground/30" />
+              <FileText className="h-6 w-6 sm:h-8 sm:w-8 text-muted-foreground/30 shrink-0" />
             </div>
           </CardContent>
         </Card>
         <Card className="shadow-card">
-          <CardContent className="pt-6">
+          <CardContent className="p-3 sm:pt-6 sm:p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-muted-foreground">Quotations Issued</p>
-                <p className="text-xl font-bold font-display">{quotationStats.total}</p>
+                <p className="text-xs sm:text-sm text-muted-foreground">Quotations</p>
+                <p className="text-lg sm:text-xl font-bold font-display">{quotationStats.total}</p>
               </div>
-              <BarChart3 className="h-8 w-8 text-muted-foreground/30" />
+              <BarChart3 className="h-6 w-6 sm:h-8 sm:w-8 text-muted-foreground/30 shrink-0" />
             </div>
           </CardContent>
         </Card>
         <Card className="shadow-card">
-          <CardContent className="pt-6">
+          <CardContent className="p-3 sm:pt-6 sm:p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-muted-foreground">Quotation Conversion</p>
-                <p className="text-xl font-bold font-display text-primary">{quotationStats.rate.toFixed(1)}%</p>
+                <p className="text-xs sm:text-sm text-muted-foreground">Conversion</p>
+                <p className="text-lg sm:text-xl font-bold font-display text-primary">{quotationStats.rate.toFixed(1)}%</p>
               </div>
-              <TrendingUp className="h-8 w-8 text-muted-foreground/30" />
+              <TrendingUp className="h-6 w-6 sm:h-8 sm:w-8 text-muted-foreground/30 shrink-0" />
             </div>
-            <div className="flex gap-3 mt-2 text-xs text-muted-foreground">
-              <span className="text-emerald-600">✓ {quotationStats.converted} converted</span>
-              <span className="text-amber-500">⏳ {quotationStats.pending} pending</span>
+            <div className="flex gap-2 mt-1 text-[10px] sm:text-xs text-muted-foreground">
+              <span className="text-emerald-600">✓ {quotationStats.converted}</span>
+              <span className="text-amber-500">⏳ {quotationStats.pending}</span>
             </div>
           </CardContent>
         </Card>
         <Card className="shadow-card">
-          <CardContent className="pt-6">
+          <CardContent className="p-3 sm:pt-6 sm:p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-muted-foreground">Total Contacts</p>
-                <p className="text-xl font-bold font-display">{contacts.length}</p>
+                <p className="text-xs sm:text-sm text-muted-foreground">Contacts</p>
+                <p className="text-lg sm:text-xl font-bold font-display">{contacts.length}</p>
               </div>
-              <Users className="h-8 w-8 text-muted-foreground/30" />
+              <Users className="h-6 w-6 sm:h-8 sm:w-8 text-muted-foreground/30 shrink-0" />
             </div>
-            <div className="flex gap-3 mt-2 text-xs text-muted-foreground">
-              <span>{contacts.filter(c => c.type === 'customer').length} customers</span>
-              <span>{contacts.filter(c => c.type === 'supplier').length} suppliers</span>
+            <div className="flex gap-2 mt-1 text-[10px] sm:text-xs text-muted-foreground">
+              <span>{contacts.filter(c => c.type === 'customer').length} cust</span>
+              <span>{contacts.filter(c => c.type === 'supplier').length} supp</span>
             </div>
           </CardContent>
         </Card>
       </div>
 
-      <Tabs defaultValue="sales" className="space-y-4">
-        <TabsList>
-          <TabsTrigger value="sales">Sales Analysis</TabsTrigger>
-          <TabsTrigger value="cashflow">Cash Flow</TabsTrigger>
-          <TabsTrigger value="customers">Customer Analysis</TabsTrigger>
-          <TabsTrigger value="expenses">Expense Breakdown</TabsTrigger>
+      <Tabs defaultValue="sales" className="space-y-4 tabs-scroll">
+        <TabsList className="w-full sm:w-auto overflow-x-auto">
+          <TabsTrigger value="sales" className="text-xs sm:text-sm">Sales</TabsTrigger>
+          <TabsTrigger value="cashflow" className="text-xs sm:text-sm">Cash Flow</TabsTrigger>
+          <TabsTrigger value="customers" className="text-xs sm:text-sm">Customers</TabsTrigger>
+          <TabsTrigger value="expenses" className="text-xs sm:text-sm">Expenses</TabsTrigger>
         </TabsList>
 
         {/* Sales Analysis Tab */}
         <TabsContent value="sales" className="space-y-4">
           <div className="grid lg:grid-cols-2 gap-4">
             <Card className="shadow-card">
-              <CardHeader>
-                <CardTitle className="font-display text-lg">Monthly Sales Trend — This Year vs Last Year</CardTitle>
-                <CardDescription>Comparison of sales performance year over year</CardDescription>
+              <CardHeader className="p-3 sm:p-6">
+                <CardTitle className="font-display text-sm sm:text-lg">Monthly Sales Trend</CardTitle>
+                <CardDescription className="text-xs sm:text-sm">This year vs last year</CardDescription>
               </CardHeader>
-              <CardContent>
-                <ResponsiveContainer width="100%" height={300}>
+              <CardContent className="p-2 sm:p-6 pt-0">
+                <ResponsiveContainer width="100%" height={250}>
                   <ComposedChart data={monthlyTrend}>
                     <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
-                    <XAxis dataKey="month" className="text-xs" />
-                    <YAxis className="text-xs" tickFormatter={(v) => `${(v / 1000).toFixed(0)}k`} />
+                    <XAxis dataKey="month" tick={{ fontSize: 10 }} />
+                    <YAxis tick={{ fontSize: 10 }} tickFormatter={(v) => `${(v / 1000).toFixed(0)}k`} width={40} />
                     <Tooltip formatter={(v: number) => fmt(v)} />
-                    <Legend />
+                    <Legend wrapperStyle={{ fontSize: 11 }} />
                     <Bar dataKey="current" name="This Year" fill="hsl(215, 90%, 42%)" radius={[4, 4, 0, 0]} />
                     <Line dataKey="previous" name="Last Year" stroke="hsl(168, 72%, 40%)" strokeWidth={2} dot={false} strokeDasharray="5 5" />
                   </ComposedChart>
@@ -347,19 +333,19 @@ const DashboardHome = () => {
             </Card>
 
             <Card className="shadow-card">
-              <CardHeader>
-                <CardTitle className="font-display text-lg">Top Customers by Sales</CardTitle>
-                <CardDescription>Highest revenue-generating customers</CardDescription>
+              <CardHeader className="p-3 sm:p-6">
+                <CardTitle className="font-display text-sm sm:text-lg">Top Customers</CardTitle>
+                <CardDescription className="text-xs sm:text-sm">Highest revenue</CardDescription>
               </CardHeader>
-              <CardContent>
+              <CardContent className="p-2 sm:p-6 pt-0">
                 {topCustomers.length === 0 ? (
-                  <p className="text-muted-foreground text-center py-12">No sales data yet</p>
+                  <p className="text-muted-foreground text-center py-12 text-sm">No sales data yet</p>
                 ) : (
-                  <ResponsiveContainer width="100%" height={300}>
+                  <ResponsiveContainer width="100%" height={250}>
                     <BarChart data={topCustomers} layout="vertical">
                       <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
-                      <XAxis type="number" tickFormatter={(v) => `${(v / 1000).toFixed(0)}k`} className="text-xs" />
-                      <YAxis type="category" dataKey="name" width={120} className="text-xs" />
+                      <XAxis type="number" tickFormatter={(v) => `${(v / 1000).toFixed(0)}k`} tick={{ fontSize: 10 }} />
+                      <YAxis type="category" dataKey="name" width={80} tick={{ fontSize: 10 }} />
                       <Tooltip formatter={(v: number) => fmt(v)} />
                       <Bar dataKey="amount" fill="hsl(215, 90%, 42%)" radius={[0, 4, 4, 0]} />
                     </BarChart>
@@ -369,24 +355,22 @@ const DashboardHome = () => {
             </Card>
           </div>
 
-          {/* Cumulative sales */}
           <Card className="shadow-card">
-            <CardHeader>
-              <CardTitle className="font-display text-lg">Cumulative Sales Growth</CardTitle>
-              <CardDescription>Running total of sales throughout the period</CardDescription>
+            <CardHeader className="p-3 sm:p-6">
+              <CardTitle className="font-display text-sm sm:text-lg">Cumulative Sales Growth</CardTitle>
             </CardHeader>
-            <CardContent>
-              <ResponsiveContainer width="100%" height={280}>
+            <CardContent className="p-2 sm:p-6 pt-0">
+              <ResponsiveContainer width="100%" height={250}>
                 <AreaChart data={monthlyTrend.map((m, i, arr) => ({
                   ...m,
                   cumulative: arr.slice(0, i + 1).reduce((s, x) => s + x.current, 0),
                   prevCumulative: arr.slice(0, i + 1).reduce((s, x) => s + x.previous, 0),
                 }))}>
                   <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
-                  <XAxis dataKey="month" className="text-xs" />
-                  <YAxis className="text-xs" tickFormatter={(v) => `${(v / 1000).toFixed(0)}k`} />
+                  <XAxis dataKey="month" tick={{ fontSize: 10 }} />
+                  <YAxis tick={{ fontSize: 10 }} tickFormatter={(v) => `${(v / 1000).toFixed(0)}k`} width={40} />
                   <Tooltip formatter={(v: number) => fmt(v)} />
-                  <Legend />
+                  <Legend wrapperStyle={{ fontSize: 11 }} />
                   <Area dataKey="cumulative" name="This Year" fill="hsl(215, 90%, 42%)" fillOpacity={0.15} stroke="hsl(215, 90%, 42%)" strokeWidth={2} />
                   <Area dataKey="prevCumulative" name="Last Year" fill="hsl(168, 72%, 40%)" fillOpacity={0.1} stroke="hsl(168, 72%, 40%)" strokeWidth={2} strokeDasharray="5 5" />
                 </AreaChart>
@@ -398,18 +382,18 @@ const DashboardHome = () => {
         {/* Cash Flow Tab */}
         <TabsContent value="cashflow" className="space-y-4">
           <Card className="shadow-card">
-            <CardHeader>
-              <CardTitle className="font-display text-lg">Monthly Cash Flow</CardTitle>
-              <CardDescription>Inflows (customer receipts) vs Outflows (supplier payments)</CardDescription>
+            <CardHeader className="p-3 sm:p-6">
+              <CardTitle className="font-display text-sm sm:text-lg">Monthly Cash Flow</CardTitle>
+              <CardDescription className="text-xs sm:text-sm">Inflows vs Outflows</CardDescription>
             </CardHeader>
-            <CardContent>
-              <ResponsiveContainer width="100%" height={350}>
+            <CardContent className="p-2 sm:p-6 pt-0">
+              <ResponsiveContainer width="100%" height={280}>
                 <BarChart data={cashFlowData}>
                   <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
-                  <XAxis dataKey="month" className="text-xs" />
-                  <YAxis className="text-xs" tickFormatter={(v) => `${(v / 1000).toFixed(0)}k`} />
+                  <XAxis dataKey="month" tick={{ fontSize: 10 }} />
+                  <YAxis tick={{ fontSize: 10 }} tickFormatter={(v) => `${(v / 1000).toFixed(0)}k`} width={40} />
                   <Tooltip formatter={(v: number) => fmt(v)} />
-                  <Legend />
+                  <Legend wrapperStyle={{ fontSize: 11 }} />
                   <Bar dataKey="inflow" name="Cash In" fill="hsl(168, 72%, 40%)" radius={[4, 4, 0, 0]} />
                   <Bar dataKey="outflow" name="Cash Out" fill="hsl(0, 72%, 51%)" radius={[4, 4, 0, 0]} />
                 </BarChart>
@@ -418,15 +402,15 @@ const DashboardHome = () => {
           </Card>
 
           <Card className="shadow-card">
-            <CardHeader>
-              <CardTitle className="font-display text-lg">Net Cash Flow Trend</CardTitle>
+            <CardHeader className="p-3 sm:p-6">
+              <CardTitle className="font-display text-sm sm:text-lg">Net Cash Flow Trend</CardTitle>
             </CardHeader>
-            <CardContent>
-              <ResponsiveContainer width="100%" height={280}>
+            <CardContent className="p-2 sm:p-6 pt-0">
+              <ResponsiveContainer width="100%" height={250}>
                 <AreaChart data={cashFlowData.map(d => ({ ...d, net: d.inflow - d.outflow }))}>
                   <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
-                  <XAxis dataKey="month" className="text-xs" />
-                  <YAxis className="text-xs" tickFormatter={(v) => `${(v / 1000).toFixed(0)}k`} />
+                  <XAxis dataKey="month" tick={{ fontSize: 10 }} />
+                  <YAxis tick={{ fontSize: 10 }} tickFormatter={(v) => `${(v / 1000).toFixed(0)}k`} width={40} />
                   <Tooltip formatter={(v: number) => fmt(v)} />
                   <Area dataKey="net" name="Net Cash Flow" fill="hsl(215, 90%, 42%)" fillOpacity={0.15} stroke="hsl(215, 90%, 42%)" strokeWidth={2} />
                 </AreaChart>
@@ -439,14 +423,13 @@ const DashboardHome = () => {
         <TabsContent value="customers" className="space-y-4">
           <div className="grid lg:grid-cols-2 gap-4">
             <Card className="shadow-card">
-              <CardHeader>
-                <CardTitle className="font-display text-lg">Customer Retention</CardTitle>
-                <CardDescription>New vs existing customers in this period</CardDescription>
+              <CardHeader className="p-3 sm:p-6">
+                <CardTitle className="font-display text-sm sm:text-lg">Customer Retention</CardTitle>
               </CardHeader>
-              <CardContent>
-                <ResponsiveContainer width="100%" height={280}>
+              <CardContent className="p-2 sm:p-6 pt-0">
+                <ResponsiveContainer width="100%" height={250}>
                   <RePieChart>
-                    <Pie data={customerRetention} cx="50%" cy="50%" innerRadius={60} outerRadius={100} dataKey="value" label={({ name, percent }) => `${name} (${(percent * 100).toFixed(0)}%)`}>
+                    <Pie data={customerRetention} cx="50%" cy="50%" innerRadius={50} outerRadius={80} dataKey="value" label={({ name, percent }) => `${name} (${(percent * 100).toFixed(0)}%)`}>
                       {customerRetention.map((_, i) => <Cell key={i} fill={CHART_COLORS[i]} />)}
                     </Pie>
                     <Tooltip />
@@ -456,19 +439,18 @@ const DashboardHome = () => {
             </Card>
 
             <Card className="shadow-card">
-              <CardHeader>
-                <CardTitle className="font-display text-lg">Customer Location</CardTitle>
-                <CardDescription>Geographical distribution of your customers</CardDescription>
+              <CardHeader className="p-3 sm:p-6">
+                <CardTitle className="font-display text-sm sm:text-lg">Customer Location</CardTitle>
               </CardHeader>
-              <CardContent>
+              <CardContent className="p-2 sm:p-6 pt-0">
                 {customerGeo.length === 0 ? (
-                  <p className="text-muted-foreground text-center py-12">No customer location data</p>
+                  <p className="text-muted-foreground text-center py-12 text-sm">No location data</p>
                 ) : (
-                  <ResponsiveContainer width="100%" height={280}>
+                  <ResponsiveContainer width="100%" height={250}>
                     <BarChart data={customerGeo} layout="vertical">
                       <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
-                      <XAxis type="number" className="text-xs" />
-                      <YAxis type="category" dataKey="name" width={100} className="text-xs" />
+                      <XAxis type="number" tick={{ fontSize: 10 }} />
+                      <YAxis type="category" dataKey="name" width={80} tick={{ fontSize: 10 }} />
                       <Tooltip />
                       <Bar dataKey="value" name="Customers" fill="hsl(168, 72%, 40%)" radius={[0, 4, 4, 0]} />
                     </BarChart>
@@ -478,23 +460,21 @@ const DashboardHome = () => {
             </Card>
           </div>
 
-          {/* Quotation funnel */}
           <Card className="shadow-card">
-            <CardHeader>
-              <CardTitle className="font-display text-lg">Quotation Conversion Funnel</CardTitle>
-              <CardDescription>Track quotation pipeline from issued to converted</CardDescription>
+            <CardHeader className="p-3 sm:p-6">
+              <CardTitle className="font-display text-sm sm:text-lg">Quotation Funnel</CardTitle>
             </CardHeader>
-            <CardContent>
-              <div className="grid grid-cols-4 gap-4 text-center">
+            <CardContent className="p-3 sm:p-6 pt-0">
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-4 text-center">
                 {[
-                  { label: 'Total Issued', value: quotationStats.total, color: 'bg-primary/10 text-primary' },
+                  { label: 'Issued', value: quotationStats.total, color: 'bg-primary/10 text-primary' },
                   { label: 'Pending', value: quotationStats.pending, color: 'bg-amber-100 text-amber-700' },
                   { label: 'Converted', value: quotationStats.converted, color: 'bg-emerald-100 text-emerald-700' },
                   { label: 'Cancelled', value: quotationStats.cancelled, color: 'bg-red-100 text-red-600' },
                 ].map(item => (
-                  <div key={item.label} className={`rounded-lg p-4 ${item.color}`}>
-                    <p className="text-3xl font-bold font-display">{item.value}</p>
-                    <p className="text-sm mt-1">{item.label}</p>
+                  <div key={item.label} className={`rounded-lg p-3 sm:p-4 ${item.color}`}>
+                    <p className="text-xl sm:text-3xl font-bold font-display">{item.value}</p>
+                    <p className="text-xs sm:text-sm mt-1">{item.label}</p>
                   </div>
                 ))}
               </div>
@@ -506,16 +486,16 @@ const DashboardHome = () => {
         <TabsContent value="expenses" className="space-y-4">
           <div className="grid lg:grid-cols-2 gap-4">
             <Card className="shadow-card">
-              <CardHeader>
-                <CardTitle className="font-display text-lg">Expenses by Category</CardTitle>
+              <CardHeader className="p-3 sm:p-6">
+                <CardTitle className="font-display text-sm sm:text-lg">By Category</CardTitle>
               </CardHeader>
-              <CardContent>
+              <CardContent className="p-2 sm:p-6 pt-0">
                 {expenseByCategory.length === 0 ? (
-                  <p className="text-muted-foreground text-center py-12">No expense data</p>
+                  <p className="text-muted-foreground text-center py-12 text-sm">No expense data</p>
                 ) : (
-                  <ResponsiveContainer width="100%" height={300}>
+                  <ResponsiveContainer width="100%" height={250}>
                     <RePieChart>
-                      <Pie data={expenseByCategory} cx="50%" cy="50%" outerRadius={100} dataKey="value" label={({ name, percent }) => `${name} (${(percent * 100).toFixed(0)}%)`}>
+                      <Pie data={expenseByCategory} cx="50%" cy="50%" outerRadius={80} dataKey="value" label={({ name, percent }) => `${name} (${(percent * 100).toFixed(0)}%)`}>
                         {expenseByCategory.map((_, i) => <Cell key={i} fill={CHART_COLORS[i % CHART_COLORS.length]} />)}
                       </Pie>
                       <Tooltip formatter={(v: number) => fmt(v)} />
@@ -526,12 +506,11 @@ const DashboardHome = () => {
             </Card>
 
             <Card className="shadow-card">
-              <CardHeader>
-                <CardTitle className="font-display text-lg">Monthly Profit Margin</CardTitle>
-                <CardDescription>Sales vs Expenses comparison by month</CardDescription>
+              <CardHeader className="p-3 sm:p-6">
+                <CardTitle className="font-display text-sm sm:text-lg">Monthly Profit Margin</CardTitle>
               </CardHeader>
-              <CardContent>
-                <ResponsiveContainer width="100%" height={300}>
+              <CardContent className="p-2 sm:p-6 pt-0">
+                <ResponsiveContainer width="100%" height={250}>
                   <ComposedChart data={monthlyTrend.map((m, i) => {
                     const monthStr = String(i + 1).padStart(2, '0');
                     const monthExp = currentExpenses.filter(e => e.expense_date.substring(5, 7) === monthStr)
@@ -539,10 +518,10 @@ const DashboardHome = () => {
                     return { month: m.month, sales: m.current, expenses: monthExp, profit: m.current - monthExp };
                   })}>
                     <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
-                    <XAxis dataKey="month" className="text-xs" />
-                    <YAxis className="text-xs" tickFormatter={(v) => `${(v / 1000).toFixed(0)}k`} />
+                    <XAxis dataKey="month" tick={{ fontSize: 10 }} />
+                    <YAxis tick={{ fontSize: 10 }} tickFormatter={(v) => `${(v / 1000).toFixed(0)}k`} width={40} />
                     <Tooltip formatter={(v: number) => fmt(v)} />
-                    <Legend />
+                    <Legend wrapperStyle={{ fontSize: 11 }} />
                     <Bar dataKey="sales" name="Sales" fill="hsl(215, 90%, 42%)" radius={[4, 4, 0, 0]} />
                     <Bar dataKey="expenses" name="Expenses" fill="hsl(0, 72%, 51%)" radius={[4, 4, 0, 0]} />
                     <Line dataKey="profit" name="Profit" stroke="hsl(168, 72%, 40%)" strokeWidth={2} />

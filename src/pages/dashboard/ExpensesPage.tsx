@@ -47,20 +47,20 @@ const ExpensesPage = () => {
   if (!selectedCompany) return <p className="text-muted-foreground">Select a company first.</p>;
 
   return (
-    <div>
-      <div className="flex items-center justify-between mb-6">
-        <h1 className="font-display text-2xl font-bold text-foreground">Expenses</h1>
+    <div className="space-y-4 sm:space-y-6">
+      <div className="page-header">
+        <h1 className="page-title">Expenses</h1>
         <Dialog open={open} onOpenChange={setOpen}>
-          <DialogTrigger asChild><Button><Plus className="h-4 w-4 mr-2" />Add Expense</Button></DialogTrigger>
-          <DialogContent>
+          <DialogTrigger asChild><Button size="sm"><Plus className="h-4 w-4 mr-1 sm:mr-2" />Add Expense</Button></DialogTrigger>
+          <DialogContent className="max-h-[90vh] overflow-y-auto">
             <DialogHeader><DialogTitle className="font-display">Add Expense</DialogTitle></DialogHeader>
             <div className="space-y-4">
               <div><Label>Description</Label><Input value={form.description} onChange={e => setForm(f => ({ ...f, description: e.target.value }))} /></div>
-              <div className="grid grid-cols-2 gap-4">
+              <div className="form-grid-2">
                 <div><Label>Amount ({symbol})</Label><Input type="number" value={form.amount} onChange={e => setForm(f => ({ ...f, amount: e.target.value }))} /></div>
                 <div><Label>Tax Amount</Label><Input type="number" value={form.tax_amount} onChange={e => setForm(f => ({ ...f, tax_amount: e.target.value }))} /></div>
               </div>
-              <div className="grid grid-cols-2 gap-4">
+              <div className="form-grid-2">
                 <div><Label>Date</Label><Input type="date" value={form.expense_date} onChange={e => setForm(f => ({ ...f, expense_date: e.target.value }))} /></div>
                 <div><Label>Category</Label><Input value={form.category} onChange={e => setForm(f => ({ ...f, category: e.target.value }))} placeholder="e.g. Office Supplies" /></div>
               </div>
@@ -69,32 +69,40 @@ const ExpensesPage = () => {
           </DialogContent>
         </Dialog>
       </div>
+
       <Card className="shadow-card">
         <CardContent className="p-0">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Date</TableHead>
-                <TableHead>Description</TableHead>
-                <TableHead>Category</TableHead>
-                <TableHead>Amount</TableHead>
-                <TableHead>Status</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {expenses.length === 0 ? (
-                <TableRow><TableCell colSpan={5} className="text-center text-muted-foreground py-8">No expenses yet</TableCell></TableRow>
-              ) : expenses.map(e => (
-                <TableRow key={e.id}>
-                  <TableCell>{e.expense_date}</TableCell>
-                  <TableCell className="font-medium">{e.description}</TableCell>
-                  <TableCell>{e.category || '—'}</TableCell>
-                  <TableCell>{fmt(Number(e.amount))}</TableCell>
-                  <TableCell><Badge variant="secondary">{e.status}</Badge></TableCell>
+          <div className="table-wrapper">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Date</TableHead>
+                  <TableHead>Description</TableHead>
+                  <TableHead className="hidden sm:table-cell">Category</TableHead>
+                  <TableHead className="text-right">Amount</TableHead>
+                  <TableHead>Status</TableHead>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+              </TableHeader>
+              <TableBody>
+                {expenses.length === 0 ? (
+                  <TableRow><TableCell colSpan={5} className="text-center text-muted-foreground py-8 text-sm">No expenses yet</TableCell></TableRow>
+                ) : expenses.map(e => (
+                  <TableRow key={e.id}>
+                    <TableCell className="text-sm">{e.expense_date}</TableCell>
+                    <TableCell>
+                      <div>
+                        <span className="font-medium text-sm">{e.description}</span>
+                        <span className="block sm:hidden text-xs text-muted-foreground">{e.category || ''}</span>
+                      </div>
+                    </TableCell>
+                    <TableCell className="hidden sm:table-cell text-sm">{e.category || '—'}</TableCell>
+                    <TableCell className="text-right text-sm">{fmt(Number(e.amount))}</TableCell>
+                    <TableCell><Badge variant="secondary" className="text-xs">{e.status}</Badge></TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
         </CardContent>
       </Card>
     </div>
