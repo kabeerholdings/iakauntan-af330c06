@@ -22,10 +22,10 @@ type CompositeItem = {
   auto_assemble: boolean;
   is_active: boolean;
   notes: string | null;
-  stock_items?: { item_code: string; name: string };
+  stock_items?: { code: string; name: string } | null;
 };
 
-type StockItem = { id: string; item_code: string; name: string; unit_price: number };
+type StockItem = { id: string; code: string; name: string; selling_price: number | null };
 
 const CompositeItemsPage = () => {
   const { selectedCompany } = useCompany();
