@@ -5,7 +5,7 @@ import {
   UserCheck, Calculator, CalendarDays, ClipboardList, Zap, Landmark, Paperclip, Factory, Layers, Hammer, PieChart,
   Store, ScanBarcode, Brain, Sparkles, Heart, Cloud, Puzzle, Mail, Shield, Palette, TrendingUp, Plus, Pencil,
   ArrowDownLeft, FileCheck, FileX, ArrowLeftRight, BarChart, Link2, RefreshCw, Percent, Target,
-  Barcode, Activity, CheckSquare, FileSignature, Calendar, Clock, StickyNote, Tag, ShieldCheck
+  Barcode, Activity, CheckSquare, FileSignature, Calendar, Clock, StickyNote, Tag, ShieldCheck, ChevronRight
 } from 'lucide-react';
 import { NavLink } from '@/components/NavLink';
 import { useAuth } from '@/contexts/AuthContext';
@@ -19,6 +19,7 @@ import {
 import {
   DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
