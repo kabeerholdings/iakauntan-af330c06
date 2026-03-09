@@ -64,7 +64,7 @@ const SerialNumbersPage = () => {
     fetchData();
   };
 
-  const filtered = serials.filter(s => s.serial_number.toLowerCase().includes(search.toLowerCase()) || s.stock_items?.name.toLowerCase().includes(search.toLowerCase()));
+  const filtered = serials.filter(s => s.serial_number.toLowerCase().includes(search.toLowerCase()) || s.stock_items?.name?.toLowerCase().includes(search.toLowerCase()));
 
   const statusColor = (status: string) => {
     switch (status) {
