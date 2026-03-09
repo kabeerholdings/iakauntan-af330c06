@@ -23,7 +23,7 @@ import { useCurrency } from '@/hooks/useCurrency';
 
 export default function CRMPage() {
   const { selectedCompany } = useCompany();
-  const { formatAmount } = useCurrency();
+  const { fmt: formatAmount } = useCurrency();
   const companyId = selectedCompany?.id;
 
   const [deals, setDeals] = useState<any[]>([]);
