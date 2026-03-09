@@ -19,7 +19,7 @@ type ScheduledReport = {
   report_name: string;
   report_type: string;
   frequency: string;
-  recipients: string[];
+  recipients: any;
   is_active: boolean;
   last_sent_at: string | null;
   next_send_at: string | null;
