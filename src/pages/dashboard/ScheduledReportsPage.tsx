@@ -103,7 +103,8 @@ const ScheduledReportsPage = () => {
   };
 
   const handleRunNow = async (report: ScheduledReport) => {
-    toast.success(`Report "${report.report_name}" would be generated and sent to ${(report.recipients as string[]).length} recipients`);
+    const recipientList = Array.isArray(report.recipients) ? report.recipients : [];
+    toast.success(`Report "${report.report_name}" would be generated and sent to ${recipientList.length} recipients`);
     await supabase.from('scheduled_reports').update({ last_sent_at: new Date().toISOString(), next_send_at: getNextSendDate(report.frequency).toISOString() }).eq('id', report.id);
     fetchReports();
   };
