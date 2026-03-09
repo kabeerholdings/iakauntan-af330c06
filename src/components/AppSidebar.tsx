@@ -117,7 +117,7 @@ const managementItems = [
   { title: 'Contracts', url: '/dashboard/contracts', icon: FileSignature },
   { title: 'Expenses', url: '/dashboard/expenses', icon: CreditCard },
   { title: 'Projects', url: '/dashboard/projects', icon: FolderKanban },
-  { title: 'Appointments', url: '/dashboard/appointments', icon: CalIcon },
+  { title: 'Appointments', url: '/dashboard/appointments', icon: CalendarDays },
   { title: 'Calendar', url: '/dashboard/calendar', icon: Calendar },
   { title: 'To-Do', url: '/dashboard/todos', icon: CheckSquare },
   { title: 'Currency Rates', url: '/dashboard/currency-rates', icon: DollarSign },
