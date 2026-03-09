@@ -91,7 +91,7 @@ const SerialNumbersPage = () => {
               <div><Label>Product</Label>
                 <Select value={form.stock_item_id} onValueChange={(v) => setForm({ ...form, stock_item_id: v })}>
                   <SelectTrigger><SelectValue placeholder="Select product" /></SelectTrigger>
-                  <SelectContent>{stockItems.map((s) => <SelectItem key={s.id} value={s.id}>{s.item_code} - {s.name}</SelectItem>)}</SelectContent>
+                  <SelectContent>{stockItems.map((s) => <SelectItem key={s.id} value={s.id}>{s.code} - {s.name}</SelectItem>)}</SelectContent>
                 </Select>
               </div>
               <div><Label>Serial Number</Label><Input value={form.serial_number} onChange={(e) => setForm({ ...form, serial_number: e.target.value })} /></div>
