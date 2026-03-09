@@ -29,6 +29,7 @@ const mainItems = [
 ];
 
 const salesItems = [
+  { title: 'Proposals', url: '/dashboard/proposals', icon: FileText },
   { title: 'Quotations', url: '/dashboard/quotations', icon: FileCheck },
   { title: 'Sales', url: '/dashboard/sales', icon: ShoppingCart },
   { title: 'Invoices', url: '/dashboard/invoices', icon: FileText },
