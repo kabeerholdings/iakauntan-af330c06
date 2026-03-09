@@ -250,50 +250,17 @@ export function AppSidebar() {
           <SidebarGroupLabel>Main</SidebarGroupLabel>
           <SidebarGroupContent>{renderItems(mainItems)}</SidebarGroupContent>
         </SidebarGroup>
-        <SidebarGroup>
-          <SidebarGroupLabel>Sales</SidebarGroupLabel>
-          <SidebarGroupContent>{renderItems(salesItems)}</SidebarGroupContent>
-        </SidebarGroup>
-        <SidebarGroup>
-          <SidebarGroupLabel>Purchase</SidebarGroupLabel>
-          <SidebarGroupContent>{renderItems(purchaseItems)}</SidebarGroupContent>
-        </SidebarGroup>
-        <SidebarGroup>
-          <SidebarGroupLabel>Stock</SidebarGroupLabel>
-          <SidebarGroupContent>{renderItems(stockItems)}</SidebarGroupContent>
-        </SidebarGroup>
-        <SidebarGroup>
-          <SidebarGroupLabel>E-Commerce & POS</SidebarGroupLabel>
-          <SidebarGroupContent>{renderItems(ecommerceItems)}</SidebarGroupContent>
-        </SidebarGroup>
-        <SidebarGroup>
-          <SidebarGroupLabel>Manufacturing</SidebarGroupLabel>
-          <SidebarGroupContent>{renderItems(manufacturingItems)}</SidebarGroupContent>
-        </SidebarGroup>
-        <SidebarGroup>
-          <SidebarGroupLabel>Accounting — Entries</SidebarGroupLabel>
-          <SidebarGroupContent>{renderItems(accountingEntryItems)}</SidebarGroupContent>
-        </SidebarGroup>
-        <SidebarGroup>
-          <SidebarGroupLabel>Accounting — Reports</SidebarGroupLabel>
-          <SidebarGroupContent>{renderItems(accountingReportItems)}</SidebarGroupContent>
-        </SidebarGroup>
-        <SidebarGroup>
-          <SidebarGroupLabel>Accounting — Tools</SidebarGroupLabel>
-          <SidebarGroupContent>{renderItems(accountingOtherItems)}</SidebarGroupContent>
-        </SidebarGroup>
-        <SidebarGroup>
-          <SidebarGroupLabel>Payroll & HR</SidebarGroupLabel>
-          <SidebarGroupContent>{renderItems(payrollItems)}</SidebarGroupContent>
-        </SidebarGroup>
-        <SidebarGroup>
-          <SidebarGroupLabel>Management</SidebarGroupLabel>
-          <SidebarGroupContent>{renderItems(managementItems)}</SidebarGroupContent>
-        </SidebarGroup>
-        <SidebarGroup>
-          <SidebarGroupLabel>More</SidebarGroupLabel>
-          <SidebarGroupContent>{renderItems(otherItems)}</SidebarGroupContent>
-        </SidebarGroup>
+        {renderCollapsibleGroup('Sales', salesItems, true)}
+        {renderCollapsibleGroup('Purchase', purchaseItems)}
+        {renderCollapsibleGroup('Stock', stockItems)}
+        {renderCollapsibleGroup('E-Commerce & POS', ecommerceItems)}
+        {renderCollapsibleGroup('Manufacturing', manufacturingItems)}
+        {renderCollapsibleGroup('Accounting — Entries', accountingEntryItems)}
+        {renderCollapsibleGroup('Accounting — Reports', accountingReportItems)}
+        {renderCollapsibleGroup('Accounting — Tools', accountingOtherItems)}
+        {renderCollapsibleGroup('Payroll & HR', payrollItems)}
+        {renderCollapsibleGroup('Management', managementItems)}
+        {renderCollapsibleGroup('More', otherItems)}
       </SidebarContent>
 
       <SidebarFooter className="p-3">
