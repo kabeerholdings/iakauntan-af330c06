@@ -136,7 +136,7 @@ const CompositeItemsPage = () => {
                     <Select value={c.stock_item_id} onValueChange={(v) => updateComponent(idx, 'stock_item_id', v)}>
                       <SelectTrigger className="flex-1"><SelectValue placeholder="Component" /></SelectTrigger>
                       <SelectContent>
-                        {stockItems.map((s) => <SelectItem key={s.id} value={s.id}>{s.item_code} - {s.name}</SelectItem>)}
+                        {stockItems.map((s) => <SelectItem key={s.id} value={s.id}>{s.code} - {s.name}</SelectItem>)}
                       </SelectContent>
                     </Select>
                     <Input type="number" className="w-24" value={c.quantity} onChange={(e) => updateComponent(idx, 'quantity', +e.target.value)} placeholder="Qty" />
