@@ -174,19 +174,37 @@ export function AppSidebar() {
     await refetchCompanies();
   };
 
+  const handleNavClick = () => {
+    if (isMobile) setOpenMobile(false);
+  };
+
   const renderItems = (items: { title: string; url: string; icon: any }[]) => (
     <SidebarMenu>
       {items.map((item) => (
         <SidebarMenuItem key={item.title}>
           <SidebarMenuButton asChild>
-            <NavLink to={item.url} end={item.url === '/dashboard'} className="hover:bg-sidebar-accent/50" activeClassName="bg-sidebar-accent text-sidebar-primary font-medium">
-              <item.icon className="mr-2 h-4 w-4" />
-              {!collapsed && <span>{item.title}</span>}
+            <NavLink to={item.url} end={item.url === '/dashboard'} className="hover:bg-sidebar-accent/50" activeClassName="bg-sidebar-accent text-sidebar-primary font-medium" onClick={handleNavClick}>
+              <item.icon className="mr-2 h-4 w-4 shrink-0" />
+              {!collapsed && <span className="truncate">{item.title}</span>}
             </NavLink>
           </SidebarMenuButton>
         </SidebarMenuItem>
       ))}
     </SidebarMenu>
+  );
+
+  const renderCollapsibleGroup = (label: string, items: { title: string; url: string; icon: any }[], defaultOpen = false) => (
+    <SidebarGroup>
+      <Collapsible defaultOpen={defaultOpen}>
+        <CollapsibleTrigger className="flex w-full items-center justify-between px-2 py-1.5 text-xs font-medium text-sidebar-foreground/70 hover:text-sidebar-foreground transition-colors">
+          {label}
+          <ChevronRight className="h-3 w-3 transition-transform duration-200 [[data-state=open]>&]:rotate-90" />
+        </CollapsibleTrigger>
+        <CollapsibleContent>
+          <SidebarGroupContent>{renderItems(items)}</SidebarGroupContent>
+        </CollapsibleContent>
+      </Collapsible>
+    </SidebarGroup>
   );
 
   return (
