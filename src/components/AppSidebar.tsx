@@ -4,7 +4,9 @@ import {
   ChevronDown, BarChart3, CreditCard, Package, ShoppingCart, Truck, Wallet, FolderKanban, DollarSign,
   UserCheck, Calculator, CalendarDays, ClipboardList, Zap, Landmark, Paperclip, Factory, Layers, Hammer, PieChart,
   Store, ScanBarcode, Brain, Sparkles, Heart, Cloud, Puzzle, Mail, Shield, Palette, TrendingUp, Plus, Pencil,
-  ArrowDownLeft, FileCheck, FileX, ArrowLeftRight, BarChart, Link2, RefreshCw, Percent, Target
+  ArrowDownLeft, FileCheck, FileX, ArrowLeftRight, BarChart, Link2, RefreshCw, Percent, Target,
+  Layers, Barcode, Landmark, Activity, CalendarDays as CalIcon, CheckSquare, FileSignature, Zap as ZapIcon,
+  Calendar, Clock, StickyNote, Tag, ShieldCheck
 } from 'lucide-react';
 import { NavLink } from '@/components/NavLink';
 import { useAuth } from '@/contexts/AuthContext';
