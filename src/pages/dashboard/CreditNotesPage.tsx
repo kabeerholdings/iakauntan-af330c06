@@ -202,7 +202,6 @@ const CreditNotesPage = () => {
         tax_amount: note.tax_amount,
         total_amount: note.total_amount,
         notes: `Converted from Credit Note ${note.note_number}`,
-        created_by: user?.id,
       }]).select().single();
       if (error) { toast.error(error.message); return; }
       if (inv && lines) {
