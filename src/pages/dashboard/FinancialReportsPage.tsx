@@ -8,6 +8,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Printer, Download } from 'lucide-react';
 import TrialBalanceTab from '@/components/reports/TrialBalanceTab';
 import ProfitLossTab from '@/components/reports/ProfitLossTab';
@@ -19,6 +20,10 @@ import CreditorAgingTab from '@/components/reports/CreditorAgingTab';
 import DebtorStatementTab from '@/components/reports/DebtorStatementTab';
 import CreditorStatementTab from '@/components/reports/CreditorStatementTab';
 import CashFlowTab from '@/components/reports/CashFlowTab';
+import AssetsSummaryTab from '@/components/reports/AssetsSummaryTab';
+import LiabilitiesSummaryTab from '@/components/reports/LiabilitiesSummaryTab';
+import EquitySummaryTab from '@/components/reports/EquitySummaryTab';
+import ExpensesSummaryTab from '@/components/reports/ExpensesSummaryTab';
 
 export interface AccountBalance {
   id: string;
@@ -40,6 +45,7 @@ const FinancialReportsPage = () => {
   const [invoices, setInvoices] = useState<any[]>([]);
   const [contacts, setContacts] = useState<any[]>([]);
   const [payments, setPayments] = useState<any[]>([]);
+  const [accountingBasis, setAccountingBasis] = useState<'accrual' | 'cash'>('accrual');
   const [dateFrom, setDateFrom] = useState(() => {
     const d = new Date(); d.setMonth(0, 1);
     return d.toISOString().split('T')[0];
@@ -71,14 +77,27 @@ const FinancialReportsPage = () => {
 
   useEffect(() => { fetchData(); }, [selectedCompany]);
 
+  // For cash basis, we would filter to only include entries that have corresponding payment records
+  // This is a simplified implementation - full cash basis would require more complex logic
+  const filteredJournalLines = useMemo(() => {
+    if (accountingBasis === 'accrual') return journalLines;
+    // Cash basis: Only include cash/bank related transactions
+    const cashAccounts = accounts.filter(a => 
+      a.code.startsWith('10') || // Cash accounts
+      a.name.toLowerCase().includes('cash') ||
+      a.name.toLowerCase().includes('bank')
+    ).map(a => a.id);
+    return journalLines.filter(l => cashAccounts.includes(l.account_id));
+  }, [journalLines, accounts, accountingBasis]);
+
   const balances: AccountBalance[] = useMemo(() => accounts.map(acc => {
-    const lines = journalLines.filter(l => l.account_id === acc.id);
+    const lines = filteredJournalLines.filter(l => l.account_id === acc.id);
     const debit_total = lines.reduce((s, l) => s + (+l.debit || 0), 0);
     const credit_total = lines.reduce((s, l) => s + (+l.credit || 0), 0);
     const isDebitNormal = ['asset', 'expense'].includes(acc.account_type);
     const balance = isDebitNormal ? debit_total - credit_total : credit_total - debit_total;
     return { id: acc.id, code: acc.code, name: acc.name, account_type: acc.account_type, debit_total, credit_total, balance };
-  }).filter(b => b.debit_total > 0 || b.credit_total > 0), [accounts, journalLines]);
+  }).filter(b => b.debit_total > 0 || b.credit_total > 0), [accounts, filteredJournalLines]);
 
   const exportCSV = () => {
     let csvContent = '';
@@ -97,14 +116,14 @@ const FinancialReportsPage = () => {
           .map(b => `${b.account_type},${b.code},"${b.name}",${Math.abs(b.balance).toFixed(2)}`).join('\n');
     } else if (activeTab === 'ledger') {
       csvContent = 'Account,Date,Description,Debit,Credit\n' +
-        journalLines.map(l => {
+        filteredJournalLines.map(l => {
           const acc = accounts.find(a => a.id === l.account_id);
           return `"${acc?.code} - ${acc?.name}",${l.journal_entries?.entry_date},"${l.description || ''}",${(+l.debit || 0).toFixed(2)},${(+l.credit || 0).toFixed(2)}`;
         }).join('\n');
     } else if (activeTab === 'journal') {
       csvContent = 'Date,Reference,Description,Account,Debit,Credit\n' +
         journalEntries.flatMap(je =>
-          journalLines.filter(l => l.journal_entry_id === je.id).map(l => {
+          filteredJournalLines.filter(l => l.journal_entry_id === je.id).map(l => {
             const acc = accounts.find(a => a.id === l.account_id);
             return `${je.entry_date},${je.reference || ''},"${je.description || ''}","${acc?.code} - ${acc?.name}",${(+l.debit || 0).toFixed(2)},${(+l.credit || 0).toFixed(2)}`;
           })
@@ -116,7 +135,7 @@ const FinancialReportsPage = () => {
     const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
     const link = document.createElement('a');
     link.href = URL.createObjectURL(blob);
-    link.download = `${activeTab}-${dateFrom}-to-${dateTo}.csv`;
+    link.download = `${activeTab}-${accountingBasis}-${dateFrom}-to-${dateTo}.csv`;
     link.click();
   };
 
@@ -135,11 +154,31 @@ const FinancialReportsPage = () => {
       <div className="flex gap-4 mb-6 items-end flex-wrap">
         <div><Label>From</Label><Input type="date" value={dateFrom} onChange={e => setDateFrom(e.target.value)} /></div>
         <div><Label>To</Label><Input type="date" value={dateTo} onChange={e => setDateTo(e.target.value)} /></div>
+        <div>
+          <Label>Accounting Basis</Label>
+          <Select value={accountingBasis} onValueChange={(v: 'accrual' | 'cash') => setAccountingBasis(v)}>
+            <SelectTrigger className="w-32">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="accrual">Accrual</SelectItem>
+              <SelectItem value="cash">Cash</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
         <Button onClick={fetchData} disabled={loading}>{loading ? 'Loading...' : 'Generate'}</Button>
       </div>
 
       {/* Quick Summary Cards */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+      <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-6">
+        <Card><CardContent className="p-4">
+          <p className="text-xs text-muted-foreground">Total Assets</p>
+          <p className="text-xl font-bold text-foreground">{fmt(balances.filter(b => b.account_type === 'asset').reduce((s, b) => s + b.balance, 0))}</p>
+        </CardContent></Card>
+        <Card><CardContent className="p-4">
+          <p className="text-xs text-muted-foreground">Total Liabilities</p>
+          <p className="text-xl font-bold text-foreground">{fmt(balances.filter(b => b.account_type === 'liability').reduce((s, b) => s + b.balance, 0))}</p>
+        </CardContent></Card>
         <Card><CardContent className="p-4">
           <p className="text-xs text-muted-foreground">Total Revenue</p>
           <p className="text-xl font-bold text-foreground">{fmt(balances.filter(b => b.account_type === 'revenue').reduce((s, b) => s + b.balance, 0))}</p>
@@ -155,10 +194,6 @@ const FinancialReportsPage = () => {
             return <p className={`text-xl font-bold ${net >= 0 ? 'text-primary' : 'text-destructive'}`}>{fmt(Math.abs(net))}</p>;
           })()}
         </CardContent></Card>
-        <Card><CardContent className="p-4">
-          <p className="text-xs text-muted-foreground">Journal Entries</p>
-          <p className="text-xl font-bold text-foreground">{journalEntries.length}</p>
-        </CardContent></Card>
       </div>
 
       <Tabs value={activeTab} onValueChange={v => setSearchParams({ tab: v })}>
@@ -166,6 +201,10 @@ const FinancialReportsPage = () => {
           <TabsTrigger value="trial-balance">Trial Balance</TabsTrigger>
           <TabsTrigger value="pnl">Profit & Loss</TabsTrigger>
           <TabsTrigger value="balance-sheet">Balance Sheet</TabsTrigger>
+          <TabsTrigger value="assets-summary">Assets</TabsTrigger>
+          <TabsTrigger value="liabilities-summary">Liabilities</TabsTrigger>
+          <TabsTrigger value="equity-summary">Equity</TabsTrigger>
+          <TabsTrigger value="expenses-summary">Expenses</TabsTrigger>
           <TabsTrigger value="cash-flow">Cash Flow</TabsTrigger>
           <TabsTrigger value="ledger">Ledger</TabsTrigger>
           <TabsTrigger value="journal">Journal Listing</TabsTrigger>
@@ -178,9 +217,13 @@ const FinancialReportsPage = () => {
         <TabsContent value="trial-balance"><TrialBalanceTab balances={balances} /></TabsContent>
         <TabsContent value="pnl"><ProfitLossTab balances={balances} /></TabsContent>
         <TabsContent value="balance-sheet"><BalanceSheetTab balances={balances} /></TabsContent>
-        <TabsContent value="cash-flow"><CashFlowTab balances={balances} journalLines={journalLines} accounts={accounts} /></TabsContent>
-        <TabsContent value="ledger"><GeneralLedgerTab balances={balances} journalLines={journalLines} accounts={accounts} /></TabsContent>
-        <TabsContent value="journal"><JournalListingTab journalEntries={journalEntries} journalLines={journalLines} accounts={accounts} /></TabsContent>
+        <TabsContent value="assets-summary"><AssetsSummaryTab balances={balances} /></TabsContent>
+        <TabsContent value="liabilities-summary"><LiabilitiesSummaryTab balances={balances} /></TabsContent>
+        <TabsContent value="equity-summary"><EquitySummaryTab balances={balances} /></TabsContent>
+        <TabsContent value="expenses-summary"><ExpensesSummaryTab balances={balances} /></TabsContent>
+        <TabsContent value="cash-flow"><CashFlowTab balances={balances} journalLines={filteredJournalLines} accounts={accounts} /></TabsContent>
+        <TabsContent value="ledger"><GeneralLedgerTab balances={balances} journalLines={filteredJournalLines} accounts={accounts} /></TabsContent>
+        <TabsContent value="journal"><JournalListingTab journalEntries={journalEntries} journalLines={filteredJournalLines} accounts={accounts} /></TabsContent>
         <TabsContent value="debtor-aging"><DebtorAgingTab invoices={invoices} contacts={contacts} payments={payments} asOfDate={dateTo} /></TabsContent>
         <TabsContent value="creditor-aging"><CreditorAgingTab invoices={invoices} contacts={contacts} payments={payments} asOfDate={dateTo} /></TabsContent>
         <TabsContent value="debtor-statement"><DebtorStatementTab invoices={invoices} contacts={contacts} payments={payments} dateFrom={dateFrom} dateTo={dateTo} /></TabsContent>
