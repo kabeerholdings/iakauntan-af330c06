@@ -103,10 +103,10 @@ const CompositeItemsPage = () => {
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <Label>Product</Label>
-                  <Select value={form.stock_item_id} onValueChange={(v) => setForm({ ...form, stock_item_id: v })}>
+                <Select value={form.stock_item_id} onValueChange={(v) => setForm({ ...form, stock_item_id: v })}>
                     <SelectTrigger><SelectValue placeholder="Select product" /></SelectTrigger>
                     <SelectContent>
-                      {stockItems.map((s) => <SelectItem key={s.id} value={s.id}>{s.item_code} - {s.name}</SelectItem>)}
+                      {stockItems.map((s) => <SelectItem key={s.id} value={s.id}>{s.code} - {s.name}</SelectItem>)}
                     </SelectContent>
                   </Select>
                 </div>
