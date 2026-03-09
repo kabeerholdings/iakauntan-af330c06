@@ -193,7 +193,7 @@ const CreditNotesPage = () => {
     if (isCredit) {
       // Convert to Invoice
       const { data: inv, error } = await supabase.from('invoices').insert([{
-        company_id: selectedCompany.id,
+        company_id: selectedCompany.id, invoice_type: 'invoice',
         invoice_number: `INV-${note.note_number}`,
         invoice_date: new Date().toISOString().split('T')[0],
         due_date: new Date(Date.now() + 30 * 86400000).toISOString().split('T')[0],
