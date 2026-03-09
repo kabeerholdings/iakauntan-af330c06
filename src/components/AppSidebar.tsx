@@ -4,7 +4,8 @@ import {
   ChevronDown, BarChart3, CreditCard, Package, ShoppingCart, Truck, Wallet, FolderKanban, DollarSign,
   UserCheck, Calculator, CalendarDays, ClipboardList, Zap, Landmark, Paperclip, Factory, Layers, Hammer, PieChart,
   Store, ScanBarcode, Brain, Sparkles, Heart, Cloud, Puzzle, Mail, Shield, Palette, TrendingUp, Plus, Pencil,
-  ArrowDownLeft, FileCheck, FileX, ArrowLeftRight, BarChart, Link2, RefreshCw, Percent, Target
+  ArrowDownLeft, FileCheck, FileX, ArrowLeftRight, BarChart, Link2, RefreshCw, Percent, Target,
+  Barcode, Activity, CheckSquare, FileSignature, Calendar, Clock, StickyNote, Tag, ShieldCheck
 } from 'lucide-react';
 import { NavLink } from '@/components/NavLink';
 import { useAuth } from '@/contexts/AuthContext';
@@ -47,6 +48,8 @@ const purchaseItems = [
 
 const stockItems = [
   { title: 'Stock / Inventory', url: '/dashboard/stock', icon: Package },
+  { title: 'Composite Items', url: '/dashboard/composite-items', icon: Layers },
+  { title: 'Serial Numbers', url: '/dashboard/serial-numbers', icon: Barcode },
   { title: 'Stock Adjustment', url: '/dashboard/stock-adjustment', icon: ClipboardList },
   { title: 'Stock Transfer', url: '/dashboard/stock-transfer', icon: ArrowLeftRight },
   { title: 'Inventory Reports', url: '/dashboard/inventory-reports', icon: BarChart3 },
@@ -71,6 +74,7 @@ const accountingEntryItems = [
   { title: 'Journal Entry', url: '/dashboard/journal-entries', icon: Receipt },
   { title: 'Knock Off Entry', url: '/dashboard/knock-off', icon: Link2 },
   { title: 'Bank Reconciliation', url: '/dashboard/bank-reconciliation', icon: Landmark },
+  { title: 'Bank Feeds', url: '/dashboard/bank-feeds', icon: Landmark },
   { title: 'Opening Balance', url: '/dashboard/opening-balance', icon: BookOpen },
   { title: 'Recurring', url: '/dashboard/recurring', icon: RefreshCw },
   { title: 'Fast Entry', url: '/dashboard/fast-entry', icon: Zap },
@@ -90,11 +94,13 @@ const accountingReportItems = [
   { title: 'Creditor Aging', url: '/dashboard/financial-reports?tab=creditor-aging', icon: Users },
   { title: 'Debtor Statement', url: '/dashboard/financial-reports?tab=debtor-statement', icon: FileText },
   { title: 'Creditor Statement', url: '/dashboard/financial-reports?tab=creditor-statement', icon: FileText },
+  { title: 'Scheduled Reports', url: '/dashboard/scheduled-reports', icon: Clock },
   { title: 'Reports', url: '/dashboard/reports', icon: PieChart },
 ];
 
 const accountingOtherItems = [
   { title: 'Documents', url: '/dashboard/documents', icon: Paperclip },
+  { title: 'Document Notes', url: '/dashboard/document-notes', icon: StickyNote },
   { title: 'AI Easy Scan', url: '/dashboard/ai-scanner', icon: Brain },
 ];
 
@@ -108,19 +114,27 @@ const payrollItems = [
 const managementItems = [
   { title: 'CRM', url: '/dashboard/crm', icon: Target },
   { title: 'Contacts', url: '/dashboard/contacts', icon: Users },
+  { title: 'Contracts', url: '/dashboard/contracts', icon: FileSignature },
   { title: 'Expenses', url: '/dashboard/expenses', icon: CreditCard },
   { title: 'Projects', url: '/dashboard/projects', icon: FolderKanban },
+  { title: 'Appointments', url: '/dashboard/appointments', icon: CalendarDays },
+  { title: 'Calendar', url: '/dashboard/calendar', icon: Calendar },
+  { title: 'To-Do', url: '/dashboard/todos', icon: CheckSquare },
   { title: 'Currency Rates', url: '/dashboard/currency-rates', icon: DollarSign },
   { title: 'Commission', url: '/dashboard/commission', icon: Calculator },
   { title: 'Advanced Reports', url: '/dashboard/advanced-reports', icon: TrendingUp },
 ];
 
 const otherItems = [
+  { title: 'Automations', url: '/dashboard/automations', icon: Zap },
   { title: 'API Integration', url: '/dashboard/api-integration', icon: Link2 },
   { title: 'AI Cloud Backup', url: '/dashboard/ai-cloud', icon: Cloud },
+  { title: 'White Label', url: '/dashboard/white-label', icon: Tag },
   { title: 'Customization', url: '/dashboard/customization', icon: Puzzle },
   { title: 'Doc Templates', url: '/dashboard/document-templates', icon: Palette },
   { title: 'Batch Messages', url: '/dashboard/batch-messages', icon: Mail },
+  { title: 'Audit Log', url: '/dashboard/audit-log', icon: Activity },
+  { title: 'Two-Factor Auth', url: '/dashboard/two-factor', icon: ShieldCheck },
   { title: 'Security Lock', url: '/dashboard/security-lock', icon: Shield },
   { title: 'e-Invoice', url: '/dashboard/einvoice', icon: Globe },
   { title: 'Settings', url: '/dashboard/settings', icon: Settings },

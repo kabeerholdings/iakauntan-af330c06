@@ -69,6 +69,19 @@ import OpeningBalancePage from "./pages/dashboard/OpeningBalancePage";
 import RetainersPage from "./pages/dashboard/RetainersPage";
 import ProposalsPage from "./pages/dashboard/ProposalsPage";
 import CRMPage from "./pages/dashboard/CRMPage";
+import CompositeItemsPage from "./pages/dashboard/CompositeItemsPage";
+import SerialNumbersPage from "./pages/dashboard/SerialNumbersPage";
+import BankFeedsPage from "./pages/dashboard/BankFeedsPage";
+import AuditLogPage from "./pages/dashboard/AuditLogPage";
+import AppointmentsPage from "./pages/dashboard/AppointmentsPage";
+import TodosPage from "./pages/dashboard/TodosPage";
+import ContractsPage from "./pages/dashboard/ContractsPage";
+import AutomationsPage from "./pages/dashboard/AutomationsPage";
+import CalendarPage from "./pages/dashboard/CalendarPage";
+import ScheduledReportsPage from "./pages/dashboard/ScheduledReportsPage";
+import DocumentNotesPage from "./pages/dashboard/DocumentNotesPage";
+import WhiteLabelPage from "./pages/dashboard/WhiteLabelPage";
+import TwoFactorPage from "./pages/dashboard/TwoFactorPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -145,6 +158,19 @@ const App = () => (
               <Route path="retainers" element={<RetainersPage />} />
               <Route path="proposals" element={<ProposalsPage />} />
               <Route path="crm" element={<CRMPage />} />
+              <Route path="composite-items" element={<CompositeItemsPage />} />
+              <Route path="serial-numbers" element={<SerialNumbersPage />} />
+              <Route path="bank-feeds" element={<BankFeedsPage />} />
+              <Route path="audit-log" element={<AuditLogPage />} />
+              <Route path="appointments" element={<AppointmentsPage />} />
+              <Route path="todos" element={<TodosPage />} />
+              <Route path="contracts" element={<ContractsPage />} />
+              <Route path="automations" element={<AutomationsPage />} />
+              <Route path="calendar" element={<CalendarPage />} />
+              <Route path="scheduled-reports" element={<ScheduledReportsPage />} />
+              <Route path="document-notes" element={<DocumentNotesPage />} />
+              <Route path="white-label" element={<WhiteLabelPage />} />
+              <Route path="two-factor" element={<TwoFactorPage />} />
             </Route>
             <Route path="/admin" element={<DashboardLayout />}>
               <Route index element={<AdminPage />} />
