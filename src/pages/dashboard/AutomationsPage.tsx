@@ -20,8 +20,8 @@ type Automation = {
   description: string | null;
   trigger_event: string;
   trigger_entity: string;
-  conditions: any[];
-  actions: any[];
+  conditions: any;
+  actions: any;
   is_active: boolean;
   last_triggered_at: string | null;
   trigger_count: number;
