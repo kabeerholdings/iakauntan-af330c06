@@ -158,6 +158,19 @@ const App = () => (
               <Route path="retainers" element={<RetainersPage />} />
               <Route path="proposals" element={<ProposalsPage />} />
               <Route path="crm" element={<CRMPage />} />
+              <Route path="composite-items" element={<CompositeItemsPage />} />
+              <Route path="serial-numbers" element={<SerialNumbersPage />} />
+              <Route path="bank-feeds" element={<BankFeedsPage />} />
+              <Route path="audit-log" element={<AuditLogPage />} />
+              <Route path="appointments" element={<AppointmentsPage />} />
+              <Route path="todos" element={<TodosPage />} />
+              <Route path="contracts" element={<ContractsPage />} />
+              <Route path="automations" element={<AutomationsPage />} />
+              <Route path="calendar" element={<CalendarPage />} />
+              <Route path="scheduled-reports" element={<ScheduledReportsPage />} />
+              <Route path="document-notes" element={<DocumentNotesPage />} />
+              <Route path="white-label" element={<WhiteLabelPage />} />
+              <Route path="two-factor" element={<TwoFactorPage />} />
             </Route>
             <Route path="/admin" element={<DashboardLayout />}>
               <Route index element={<AdminPage />} />
