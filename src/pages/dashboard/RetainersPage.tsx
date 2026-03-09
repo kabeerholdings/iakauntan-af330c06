@@ -440,7 +440,7 @@ const RetainersPage = () => {
                           <TableCell>{p.payment_date}</TableCell>
                           <TableCell><Badge variant="outline">{p.payment_method}</Badge></TableCell>
                           <TableCell className="text-muted-foreground">{p.reference || '—'}</TableCell>
-                          <TableCell className="text-right font-medium text-green-600">{fmt(+p.amount)}</TableCell>
+                          <TableCell className="text-right font-medium text-primary">{fmt(+p.amount)}</TableCell>
                         </TableRow>
                       ))}
                     </TableBody>
