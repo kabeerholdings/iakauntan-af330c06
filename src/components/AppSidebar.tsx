@@ -126,7 +126,7 @@ const managementItems = [
 ];
 
 const otherItems = [
-  { title: 'Automations', url: '/dashboard/automations', icon: ZapIcon },
+  { title: 'Automations', url: '/dashboard/automations', icon: Zap },
   { title: 'API Integration', url: '/dashboard/api-integration', icon: Link2 },
   { title: 'AI Cloud Backup', url: '/dashboard/ai-cloud', icon: Cloud },
   { title: 'White Label', url: '/dashboard/white-label', icon: Tag },
