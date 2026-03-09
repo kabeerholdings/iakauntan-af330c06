@@ -138,7 +138,7 @@ const SerialNumbersPage = () => {
                 {filtered.map((s) => (
                   <TableRow key={s.id}>
                     <TableCell className="font-mono font-medium">{s.serial_number}</TableCell>
-                    <TableCell>{s.stock_items?.item_code} - {s.stock_items?.name}</TableCell>
+                    <TableCell>{s.stock_items?.code} - {s.stock_items?.name}</TableCell>
                     <TableCell><Badge variant={statusColor(s.status)}>{s.status}</Badge></TableCell>
                     <TableCell>{s.purchase_date ? format(new Date(s.purchase_date), 'dd MMM yyyy') : '-'}</TableCell>
                     <TableCell>{s.warranty_expiry ? format(new Date(s.warranty_expiry), 'dd MMM yyyy') : '-'}</TableCell>

@@ -36,7 +36,7 @@ const AuditLogPage = () => {
   const fetchLogs = async () => {
     setLoading(true);
     const { data } = await supabase.from('audit_logs').select('*').eq('company_id', selectedCompany!.id).order('created_at', { ascending: false }).limit(500);
-    setLogs(data || []);
+    setLogs((data as AuditLog[]) || []);
     setLoading(false);
   };
 

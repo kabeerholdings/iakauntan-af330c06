@@ -173,7 +173,7 @@ const CompositeItemsPage = () => {
               <TableBody>
                 {items.map((item) => (
                   <TableRow key={item.id}>
-                    <TableCell className="font-medium">{item.stock_items?.item_code} - {item.stock_items?.name}</TableCell>
+                    <TableCell className="font-medium">{item.stock_items?.code} - {item.stock_items?.name}</TableCell>
                     <TableCell><Badge variant="outline">{item.composite_type}</Badge></TableCell>
                     <TableCell className="text-right">{fmt(item.sale_price)}</TableCell>
                     <TableCell className="text-right">{fmt(item.cost_price)}</TableCell>

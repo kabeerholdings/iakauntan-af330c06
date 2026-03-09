@@ -64,7 +64,7 @@ const AutomationsPage = () => {
   const fetchAutomations = async () => {
     setLoading(true);
     const { data } = await supabase.from('automations').select('*').eq('company_id', selectedCompany!.id).order('created_at', { ascending: false });
-    setAutomations(data || []);
+    setAutomations((data as Automation[]) || []);
     setLoading(false);
   };
 

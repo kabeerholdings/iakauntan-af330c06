@@ -163,7 +163,7 @@ const ScheduledReportsPage = () => {
                     <TableCell className="font-medium">{r.report_name}</TableCell>
                     <TableCell>{reportTypes.find(t => t.value === r.report_type)?.label}</TableCell>
                     <TableCell><Badge variant="outline">{r.frequency}</Badge></TableCell>
-                    <TableCell><span className="flex items-center gap-1"><Mail className="h-3 w-3" />{(r.recipients as string[]).length}</span></TableCell>
+                    <TableCell><span className="flex items-center gap-1"><Mail className="h-3 w-3" />{Array.isArray(r.recipients) ? r.recipients.length : 0}</span></TableCell>
                     <TableCell>{r.next_send_at ? format(new Date(r.next_send_at), 'dd MMM yyyy') : '-'}</TableCell>
                     <TableCell><Switch checked={r.is_active} onCheckedChange={() => toggleActive(r.id, r.is_active)} /></TableCell>
                     <TableCell>
