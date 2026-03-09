@@ -95,6 +95,7 @@ const accountingReportItems = [
   { title: 'Creditor Aging', url: '/dashboard/financial-reports?tab=creditor-aging', icon: Users },
   { title: 'Debtor Statement', url: '/dashboard/financial-reports?tab=debtor-statement', icon: FileText },
   { title: 'Creditor Statement', url: '/dashboard/financial-reports?tab=creditor-statement', icon: FileText },
+  { title: 'Scheduled Reports', url: '/dashboard/scheduled-reports', icon: Clock },
   { title: 'Reports', url: '/dashboard/reports', icon: PieChart },
 ];
 
