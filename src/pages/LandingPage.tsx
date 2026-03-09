@@ -17,16 +17,16 @@ const LandingPage = () => {
     <div className="min-h-screen bg-background">
       {/* Nav */}
       <nav className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-md border-b border-border">
-        <div className="container mx-auto px-6 h-16 flex items-center justify-between">
+        <div className="container mx-auto px-4 sm:px-6 h-14 sm:h-16 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <img src={logoImg} alt="iAkauntan" className="h-8 w-8" />
-            <span className="font-display text-xl font-bold text-foreground">iAkauntan</span>
+            <img src={logoImg} alt="iAkauntan" className="h-7 w-7 sm:h-8 sm:w-8" />
+            <span className="font-display text-lg sm:text-xl font-bold text-foreground">iAkauntan</span>
           </div>
-          <div className="flex items-center gap-3">
-            <Button variant="ghost" asChild>
+          <div className="flex items-center gap-2 sm:gap-3">
+            <Button variant="ghost" size="sm" asChild className="text-xs sm:text-sm">
               <Link to="/login">Log In</Link>
             </Button>
-            <Button variant="hero" asChild>
+            <Button variant="hero" size="sm" asChild className="text-xs sm:text-sm">
               <Link to="/register">Get Started</Link>
             </Button>
           </div>
@@ -34,34 +34,34 @@ const LandingPage = () => {
       </nav>
 
       {/* Hero */}
-      <section className="pt-32 pb-20 gradient-hero relative overflow-hidden">
-        <div className="container mx-auto px-6">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
+      <section className="pt-24 sm:pt-32 pb-12 sm:pb-20 gradient-hero relative overflow-hidden">
+        <div className="container mx-auto px-4 sm:px-6">
+          <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
             >
-              <h1 className="font-display text-4xl md:text-5xl lg:text-6xl font-extrabold text-primary-foreground leading-tight mb-6">
+              <h1 className="font-display text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold text-primary-foreground leading-tight mb-4 sm:mb-6">
                 Cloud Accounting
                 <span className="block text-accent">Made Simple</span>
               </h1>
-              <p className="text-lg text-primary-foreground/70 mb-8 max-w-lg">
+              <p className="text-base sm:text-lg text-primary-foreground/70 mb-6 sm:mb-8 max-w-lg">
                 Full-featured multi-company accounting with Malaysian e-Invoice (LHDN) support. 
                 Manage your finances from anywhere.
               </p>
-              <div className="flex gap-4">
-                <Button variant="hero" size="lg" asChild>
+              <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
+                <Button variant="hero" size="lg" asChild className="w-full sm:w-auto">
                   <Link to="/register">Start Free Trial</Link>
                 </Button>
-                <Button variant="hero-outline" size="lg" asChild>
+                <Button variant="hero-outline" size="lg" asChild className="w-full sm:w-auto">
                   <Link to="/login">Sign In</Link>
                 </Button>
               </div>
-              <div className="mt-8 flex flex-wrap gap-4">
+              <div className="mt-6 sm:mt-8 flex flex-wrap gap-3 sm:gap-4">
                 {['SST Ready', 'LHDN e-Invoice', 'Multi-Currency', 'Bank Reconciliation'].map((item) => (
-                  <div key={item} className="flex items-center gap-1.5 text-primary-foreground/60 text-sm">
-                    <CheckCircle2 className="h-4 w-4 text-accent" />
+                  <div key={item} className="flex items-center gap-1.5 text-primary-foreground/60 text-xs sm:text-sm">
+                    <CheckCircle2 className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-accent" />
                     {item}
                   </div>
                 ))}
@@ -80,17 +80,17 @@ const LandingPage = () => {
       </section>
 
       {/* Features */}
-      <section className="py-20 bg-background">
-        <div className="container mx-auto px-6">
-          <div className="text-center mb-16">
-            <h2 className="font-display text-3xl md:text-4xl font-bold text-foreground mb-4">
+      <section className="py-12 sm:py-20 bg-background">
+        <div className="container mx-auto px-4 sm:px-6">
+          <div className="text-center mb-10 sm:mb-16">
+            <h2 className="font-display text-2xl sm:text-3xl md:text-4xl font-bold text-foreground mb-3 sm:mb-4">
               Everything You Need
             </h2>
-            <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
+            <p className="text-muted-foreground text-base sm:text-lg max-w-2xl mx-auto">
               A complete accounting suite designed for Malaysian businesses of all sizes.
             </p>
           </div>
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-8">
             {features.map((f, i) => (
               <motion.div
                 key={f.title}
@@ -112,8 +112,8 @@ const LandingPage = () => {
       </section>
 
       {/* CTA */}
-      <section className="py-20 gradient-primary">
-        <div className="container mx-auto px-6 text-center">
+      <section className="py-12 sm:py-20 gradient-primary">
+        <div className="container mx-auto px-4 sm:px-6 text-center">
           <h2 className="font-display text-3xl md:text-4xl font-bold text-primary-foreground mb-4">
             Ready to Get Started?
           </h2>
@@ -127,8 +127,8 @@ const LandingPage = () => {
       </section>
 
       {/* Footer */}
-      <footer className="py-8 bg-foreground">
-        <div className="container mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-4">
+      <footer className="py-6 sm:py-8 bg-foreground">
+        <div className="container mx-auto px-4 sm:px-6 flex flex-col md:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-2">
             <img src={logoImg} alt="iAkauntan" className="h-6 w-6" />
             <span className="font-display font-semibold text-background">iAkauntan.com</span>

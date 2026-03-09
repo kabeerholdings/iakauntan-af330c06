@@ -102,13 +102,40 @@
     @apply border-border;
   }
 
+  html {
+    -webkit-tap-highlight-color: transparent;
+    -webkit-text-size-adjust: 100%;
+  }
+
   body {
     @apply bg-background text-foreground;
     font-family: var(--font-body);
+    overscroll-behavior-y: contain;
+    padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
   }
 
   h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-display);
+  }
+
+  /* Better touch targets */
+  button, a, [role="button"] {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  /* Sidebar menu items can be smaller */
+  [data-sidebar="menu-button"],
+  [data-sidebar="menu-sub-button"] {
+    min-height: 36px;
+    min-width: auto;
+  }
+
+  /* Inputs should not zoom on mobile */
+  @media (max-width: 767px) {
+    input, select, textarea {
+      font-size: 16px !important;
+    }
   }
 }
 
@@ -133,5 +160,19 @@
   }
   .shadow-card-hover {
     box-shadow: var(--shadow-lg);
+  }
+
+  /* Mobile table scroll wrapper */
+  .mobile-table-wrapper {
+    @apply overflow-x-auto -mx-3 px-3 sm:mx-0 sm:px-0;
+  }
+
+  /* Responsive grid helpers */
+  .grid-responsive-cards {
+    @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4 md:gap-6;
+  }
+
+  .grid-responsive-stats {
+    @apply grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-4;
   }
 }

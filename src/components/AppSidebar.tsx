@@ -5,7 +5,7 @@ import {
   UserCheck, Calculator, CalendarDays, ClipboardList, Zap, Landmark, Paperclip, Factory, Layers, Hammer, PieChart,
   Store, ScanBarcode, Brain, Sparkles, Heart, Cloud, Puzzle, Mail, Shield, Palette, TrendingUp, Plus, Pencil,
   ArrowDownLeft, FileCheck, FileX, ArrowLeftRight, BarChart, Link2, RefreshCw, Percent, Target,
-  Barcode, Activity, CheckSquare, FileSignature, Calendar, Clock, StickyNote, Tag, ShieldCheck
+  Barcode, Activity, CheckSquare, FileSignature, Calendar, Clock, StickyNote, Tag, ShieldCheck, ChevronRight
 } from 'lucide-react';
 import { NavLink } from '@/components/NavLink';
 import { useAuth } from '@/contexts/AuthContext';
@@ -19,6 +19,7 @@ import {
 import {
   DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
@@ -141,7 +142,7 @@ const otherItems = [
 ];
 
 export function AppSidebar() {
-  const { state } = useSidebar();
+  const { state, isMobile, setOpenMobile } = useSidebar();
   const collapsed = state === 'collapsed';
   const { signOut } = useAuth();
   const { companies, selectedCompany, setSelectedCompany, refetchCompanies } = useCompany();
@@ -173,19 +174,37 @@ export function AppSidebar() {
     await refetchCompanies();
   };
 
+  const handleNavClick = () => {
+    if (isMobile) setOpenMobile(false);
+  };
+
   const renderItems = (items: { title: string; url: string; icon: any }[]) => (
     <SidebarMenu>
       {items.map((item) => (
         <SidebarMenuItem key={item.title}>
           <SidebarMenuButton asChild>
-            <NavLink to={item.url} end={item.url === '/dashboard'} className="hover:bg-sidebar-accent/50" activeClassName="bg-sidebar-accent text-sidebar-primary font-medium">
-              <item.icon className="mr-2 h-4 w-4" />
-              {!collapsed && <span>{item.title}</span>}
+            <NavLink to={item.url} end={item.url === '/dashboard'} className="hover:bg-sidebar-accent/50" activeClassName="bg-sidebar-accent text-sidebar-primary font-medium" onClick={handleNavClick}>
+              <item.icon className="mr-2 h-4 w-4 shrink-0" />
+              {!collapsed && <span className="truncate">{item.title}</span>}
             </NavLink>
           </SidebarMenuButton>
         </SidebarMenuItem>
       ))}
     </SidebarMenu>
+  );
+
+  const renderCollapsibleGroup = (label: string, items: { title: string; url: string; icon: any }[], defaultOpen = false) => (
+    <SidebarGroup>
+      <Collapsible defaultOpen={defaultOpen}>
+        <CollapsibleTrigger className="flex w-full items-center justify-between px-2 py-1.5 text-xs font-medium text-sidebar-foreground/70 hover:text-sidebar-foreground transition-colors">
+          {label}
+          <ChevronRight className="h-3 w-3 transition-transform duration-200 [[data-state=open]>&]:rotate-90" />
+        </CollapsibleTrigger>
+        <CollapsibleContent>
+          <SidebarGroupContent>{renderItems(items)}</SidebarGroupContent>
+        </CollapsibleContent>
+      </Collapsible>
+    </SidebarGroup>
   );
 
   return (
@@ -231,50 +250,17 @@ export function AppSidebar() {
           <SidebarGroupLabel>Main</SidebarGroupLabel>
           <SidebarGroupContent>{renderItems(mainItems)}</SidebarGroupContent>
         </SidebarGroup>
-        <SidebarGroup>
-          <SidebarGroupLabel>Sales</SidebarGroupLabel>
-          <SidebarGroupContent>{renderItems(salesItems)}</SidebarGroupContent>
-        </SidebarGroup>
-        <SidebarGroup>
-          <SidebarGroupLabel>Purchase</SidebarGroupLabel>
-          <SidebarGroupContent>{renderItems(purchaseItems)}</SidebarGroupContent>
-        </SidebarGroup>
-        <SidebarGroup>
-          <SidebarGroupLabel>Stock</SidebarGroupLabel>
-          <SidebarGroupContent>{renderItems(stockItems)}</SidebarGroupContent>
-        </SidebarGroup>
-        <SidebarGroup>
-          <SidebarGroupLabel>E-Commerce & POS</SidebarGroupLabel>
-          <SidebarGroupContent>{renderItems(ecommerceItems)}</SidebarGroupContent>
-        </SidebarGroup>
-        <SidebarGroup>
-          <SidebarGroupLabel>Manufacturing</SidebarGroupLabel>
-          <SidebarGroupContent>{renderItems(manufacturingItems)}</SidebarGroupContent>
-        </SidebarGroup>
-        <SidebarGroup>
-          <SidebarGroupLabel>Accounting — Entries</SidebarGroupLabel>
-          <SidebarGroupContent>{renderItems(accountingEntryItems)}</SidebarGroupContent>
-        </SidebarGroup>
-        <SidebarGroup>
-          <SidebarGroupLabel>Accounting — Reports</SidebarGroupLabel>
-          <SidebarGroupContent>{renderItems(accountingReportItems)}</SidebarGroupContent>
-        </SidebarGroup>
-        <SidebarGroup>
-          <SidebarGroupLabel>Accounting — Tools</SidebarGroupLabel>
-          <SidebarGroupContent>{renderItems(accountingOtherItems)}</SidebarGroupContent>
-        </SidebarGroup>
-        <SidebarGroup>
-          <SidebarGroupLabel>Payroll & HR</SidebarGroupLabel>
-          <SidebarGroupContent>{renderItems(payrollItems)}</SidebarGroupContent>
-        </SidebarGroup>
-        <SidebarGroup>
-          <SidebarGroupLabel>Management</SidebarGroupLabel>
-          <SidebarGroupContent>{renderItems(managementItems)}</SidebarGroupContent>
-        </SidebarGroup>
-        <SidebarGroup>
-          <SidebarGroupLabel>More</SidebarGroupLabel>
-          <SidebarGroupContent>{renderItems(otherItems)}</SidebarGroupContent>
-        </SidebarGroup>
+        {renderCollapsibleGroup('Sales', salesItems, true)}
+        {renderCollapsibleGroup('Purchase', purchaseItems)}
+        {renderCollapsibleGroup('Stock', stockItems)}
+        {renderCollapsibleGroup('E-Commerce & POS', ecommerceItems)}
+        {renderCollapsibleGroup('Manufacturing', manufacturingItems)}
+        {renderCollapsibleGroup('Accounting — Entries', accountingEntryItems)}
+        {renderCollapsibleGroup('Accounting — Reports', accountingReportItems)}
+        {renderCollapsibleGroup('Accounting — Tools', accountingOtherItems)}
+        {renderCollapsibleGroup('Payroll & HR', payrollItems)}
+        {renderCollapsibleGroup('Management', managementItems)}
+        {renderCollapsibleGroup('More', otherItems)}
       </SidebarContent>
 
       <SidebarFooter className="p-3">
