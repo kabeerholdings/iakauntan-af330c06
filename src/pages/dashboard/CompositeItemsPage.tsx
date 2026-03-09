@@ -46,11 +46,11 @@ const CompositeItemsPage = () => {
   const fetchData = async () => {
     setLoading(true);
     const [{ data: ci }, { data: si }] = await Promise.all([
-      supabase.from('composite_items').select('*, stock_items(item_code, name)').eq('company_id', selectedCompany!.id),
-      supabase.from('stock_items').select('id, item_code, name, unit_price').eq('company_id', selectedCompany!.id),
+      supabase.from('composite_items').select('*, stock_items(code, name)').eq('company_id', selectedCompany!.id),
+      supabase.from('stock_items').select('id, code, name, selling_price').eq('company_id', selectedCompany!.id),
     ]);
-    setItems(ci || []);
-    setStockItems(si || []);
+    setItems((ci as CompositeItem[]) || []);
+    setStockItems((si as StockItem[]) || []);
     setLoading(false);
   };
 
