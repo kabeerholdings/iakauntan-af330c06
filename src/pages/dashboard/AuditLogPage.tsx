@@ -16,8 +16,8 @@ type AuditLog = {
   entity_type: string;
   entity_id: string | null;
   entity_name: string | null;
-  old_values: Record<string, any> | null;
-  new_values: Record<string, any> | null;
+  old_values: any;
+  new_values: any;
   ip_address: string | null;
   created_at: string;
 };
