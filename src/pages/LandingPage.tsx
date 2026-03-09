@@ -112,8 +112,8 @@ const LandingPage = () => {
       </section>
 
       {/* CTA */}
-      <section className="py-20 gradient-primary">
-        <div className="container mx-auto px-6 text-center">
+      <section className="py-12 sm:py-20 gradient-primary">
+        <div className="container mx-auto px-4 sm:px-6 text-center">
           <h2 className="font-display text-3xl md:text-4xl font-bold text-primary-foreground mb-4">
             Ready to Get Started?
           </h2>
