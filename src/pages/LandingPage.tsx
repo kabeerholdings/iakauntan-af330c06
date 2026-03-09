@@ -17,16 +17,16 @@ const LandingPage = () => {
     <div className="min-h-screen bg-background">
       {/* Nav */}
       <nav className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-md border-b border-border">
-        <div className="container mx-auto px-6 h-16 flex items-center justify-between">
+        <div className="container mx-auto px-4 sm:px-6 h-14 sm:h-16 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <img src={logoImg} alt="iAkauntan" className="h-8 w-8" />
-            <span className="font-display text-xl font-bold text-foreground">iAkauntan</span>
+            <img src={logoImg} alt="iAkauntan" className="h-7 w-7 sm:h-8 sm:w-8" />
+            <span className="font-display text-lg sm:text-xl font-bold text-foreground">iAkauntan</span>
           </div>
-          <div className="flex items-center gap-3">
-            <Button variant="ghost" asChild>
+          <div className="flex items-center gap-2 sm:gap-3">
+            <Button variant="ghost" size="sm" asChild className="text-xs sm:text-sm">
               <Link to="/login">Log In</Link>
             </Button>
-            <Button variant="hero" asChild>
+            <Button variant="hero" size="sm" asChild className="text-xs sm:text-sm">
               <Link to="/register">Get Started</Link>
             </Button>
           </div>
