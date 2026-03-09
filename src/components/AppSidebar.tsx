@@ -49,6 +49,8 @@ const purchaseItems = [
 
 const stockItems = [
   { title: 'Stock / Inventory', url: '/dashboard/stock', icon: Package },
+  { title: 'Composite Items', url: '/dashboard/composite-items', icon: Layers },
+  { title: 'Serial Numbers', url: '/dashboard/serial-numbers', icon: Barcode },
   { title: 'Stock Adjustment', url: '/dashboard/stock-adjustment', icon: ClipboardList },
   { title: 'Stock Transfer', url: '/dashboard/stock-transfer', icon: ArrowLeftRight },
   { title: 'Inventory Reports', url: '/dashboard/inventory-reports', icon: BarChart3 },
