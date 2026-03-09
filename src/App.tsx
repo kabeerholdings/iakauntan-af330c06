@@ -67,6 +67,7 @@ import FixedAssetsPage from "./pages/dashboard/FixedAssetsPage";
 import DebitNotesPage from "./pages/dashboard/DebitNotesPage";
 import OpeningBalancePage from "./pages/dashboard/OpeningBalancePage";
 import RetainersPage from "./pages/dashboard/RetainersPage";
+import ProposalsPage from "./pages/dashboard/ProposalsPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
