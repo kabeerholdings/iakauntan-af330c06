@@ -106,6 +106,7 @@ const payrollItems = [
 ];
 
 const managementItems = [
+  { title: 'CRM', url: '/dashboard/crm', icon: Target },
   { title: 'Contacts', url: '/dashboard/contacts', icon: Users },
   { title: 'Expenses', url: '/dashboard/expenses', icon: CreditCard },
   { title: 'Projects', url: '/dashboard/projects', icon: FolderKanban },

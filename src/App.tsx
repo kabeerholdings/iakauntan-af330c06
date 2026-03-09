@@ -144,6 +144,7 @@ const App = () => (
               <Route path="opening-balance" element={<OpeningBalancePage />} />
               <Route path="retainers" element={<RetainersPage />} />
               <Route path="proposals" element={<ProposalsPage />} />
+              <Route path="crm" element={<CRMPage />} />
             </Route>
             <Route path="/admin" element={<DashboardLayout />}>
               <Route index element={<AdminPage />} />
