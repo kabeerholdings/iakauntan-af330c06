@@ -34,6 +34,7 @@ const salesItems = [
   { title: 'Invoices', url: '/dashboard/invoices', icon: FileText },
   { title: 'Credit Notes', url: '/dashboard/credit-notes', icon: FileX },
   { title: 'Debit Notes', url: '/dashboard/debit-notes', icon: FileText },
+  { title: 'Retainers', url: '/dashboard/retainers', icon: Wallet },
   { title: 'Payments', url: '/dashboard/payments', icon: Wallet },
   { title: 'Sales Reports', url: '/dashboard/sales-reports', icon: BarChart3 },
 ];

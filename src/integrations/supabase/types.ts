@@ -4466,6 +4466,226 @@ export type Database = {
           },
         ]
       }
+      retainer_applications: {
+        Row: {
+          amount: number
+          applied_date: string
+          created_at: string | null
+          created_by: string | null
+          id: string
+          invoice_id: string
+          notes: string | null
+          retainer_id: string
+        }
+        Insert: {
+          amount?: number
+          applied_date?: string
+          created_at?: string | null
+          created_by?: string | null
+          id?: string
+          invoice_id: string
+          notes?: string | null
+          retainer_id: string
+        }
+        Update: {
+          amount?: number
+          applied_date?: string
+          created_at?: string | null
+          created_by?: string | null
+          id?: string
+          invoice_id?: string
+          notes?: string | null
+          retainer_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "retainer_applications_invoice_id_fkey"
+            columns: ["invoice_id"]
+            isOneToOne: false
+            referencedRelation: "invoices"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "retainer_applications_retainer_id_fkey"
+            columns: ["retainer_id"]
+            isOneToOne: false
+            referencedRelation: "retainers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      retainer_lines: {
+        Row: {
+          created_at: string | null
+          description: string
+          discount_rate: number | null
+          id: string
+          line_total: number | null
+          quantity: number | null
+          retainer_id: string
+          tax_amount: number | null
+          tax_rate: number | null
+          unit_price: number | null
+        }
+        Insert: {
+          created_at?: string | null
+          description: string
+          discount_rate?: number | null
+          id?: string
+          line_total?: number | null
+          quantity?: number | null
+          retainer_id: string
+          tax_amount?: number | null
+          tax_rate?: number | null
+          unit_price?: number | null
+        }
+        Update: {
+          created_at?: string | null
+          description?: string
+          discount_rate?: number | null
+          id?: string
+          line_total?: number | null
+          quantity?: number | null
+          retainer_id?: string
+          tax_amount?: number | null
+          tax_rate?: number | null
+          unit_price?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "retainer_lines_retainer_id_fkey"
+            columns: ["retainer_id"]
+            isOneToOne: false
+            referencedRelation: "retainers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      retainer_payments: {
+        Row: {
+          amount: number
+          created_at: string | null
+          created_by: string | null
+          id: string
+          notes: string | null
+          payment_date: string
+          payment_method: string | null
+          reference: string | null
+          retainer_id: string
+        }
+        Insert: {
+          amount?: number
+          created_at?: string | null
+          created_by?: string | null
+          id?: string
+          notes?: string | null
+          payment_date?: string
+          payment_method?: string | null
+          reference?: string | null
+          retainer_id: string
+        }
+        Update: {
+          amount?: number
+          created_at?: string | null
+          created_by?: string | null
+          id?: string
+          notes?: string | null
+          payment_date?: string
+          payment_method?: string | null
+          reference?: string | null
+          retainer_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "retainer_payments_retainer_id_fkey"
+            columns: ["retainer_id"]
+            isOneToOne: false
+            referencedRelation: "retainers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      retainers: {
+        Row: {
+          amount_applied: number | null
+          amount_collected: number | null
+          balance: number | null
+          company_id: string
+          contact_id: string | null
+          created_at: string | null
+          created_by: string | null
+          currency: string | null
+          description: string | null
+          expiry_date: string | null
+          id: string
+          notes: string | null
+          retainer_date: string
+          retainer_number: string
+          status: string
+          subtotal: number | null
+          tax_amount: number | null
+          total_amount: number | null
+          updated_at: string | null
+        }
+        Insert: {
+          amount_applied?: number | null
+          amount_collected?: number | null
+          balance?: number | null
+          company_id: string
+          contact_id?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          currency?: string | null
+          description?: string | null
+          expiry_date?: string | null
+          id?: string
+          notes?: string | null
+          retainer_date?: string
+          retainer_number: string
+          status?: string
+          subtotal?: number | null
+          tax_amount?: number | null
+          total_amount?: number | null
+          updated_at?: string | null
+        }
+        Update: {
+          amount_applied?: number | null
+          amount_collected?: number | null
+          balance?: number | null
+          company_id?: string
+          contact_id?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          currency?: string | null
+          description?: string | null
+          expiry_date?: string | null
+          id?: string
+          notes?: string | null
+          retainer_date?: string
+          retainer_number?: string
+          status?: string
+          subtotal?: number | null
+          tax_amount?: number | null
+          total_amount?: number | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "retainers_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "retainers_contact_id_fkey"
+            columns: ["contact_id"]
+            isOneToOne: false
+            referencedRelation: "contacts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       sales_document_lines: {
         Row: {
           account_id: string | null
