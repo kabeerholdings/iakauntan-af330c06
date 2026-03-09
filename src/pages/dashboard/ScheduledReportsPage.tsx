@@ -55,7 +55,7 @@ const ScheduledReportsPage = () => {
   const fetchReports = async () => {
     setLoading(true);
     const { data } = await supabase.from('scheduled_reports').select('*').eq('company_id', selectedCompany!.id).order('created_at', { ascending: false });
-    setReports(data || []);
+    setReports((data as ScheduledReport[]) || []);
     setLoading(false);
   };
 
