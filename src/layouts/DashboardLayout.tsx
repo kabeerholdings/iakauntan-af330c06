@@ -35,12 +35,12 @@ const DashboardContent = () => {
     <SidebarProvider>
       <div className="min-h-screen flex w-full">
         <AppSidebar />
-        <div className="flex-1 flex flex-col">
-          <header className="h-14 flex items-center border-b border-border bg-card px-4">
-            <SidebarTrigger className="mr-4" />
-            <h2 className="font-display font-semibold text-foreground">iAkauntan</h2>
+        <div className="flex-1 flex flex-col min-w-0">
+          <header className="h-14 flex items-center border-b border-border bg-card px-3 sm:px-4 sticky top-0 z-20">
+            <SidebarTrigger className="mr-3 h-9 w-9 sm:h-7 sm:w-7" />
+            <h2 className="font-display font-semibold text-foreground text-sm sm:text-base truncate">iAkauntan</h2>
           </header>
-          <main className="flex-1 p-6 bg-background overflow-y-auto">
+          <main className="flex-1 p-3 sm:p-4 md:p-6 bg-background overflow-y-auto overflow-x-hidden">
             <Outlet />
           </main>
         </div>

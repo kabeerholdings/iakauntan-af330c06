@@ -127,8 +127,8 @@ const LandingPage = () => {
       </section>
 
       {/* Footer */}
-      <footer className="py-8 bg-foreground">
-        <div className="container mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-4">
+      <footer className="py-6 sm:py-8 bg-foreground">
+        <div className="container mx-auto px-4 sm:px-6 flex flex-col md:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-2">
             <img src={logoImg} alt="iAkauntan" className="h-6 w-6" />
             <span className="font-display font-semibold text-background">iAkauntan.com</span>

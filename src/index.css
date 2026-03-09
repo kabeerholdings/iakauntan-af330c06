@@ -161,4 +161,18 @@
   .shadow-card-hover {
     box-shadow: var(--shadow-lg);
   }
+
+  /* Mobile table scroll wrapper */
+  .mobile-table-wrapper {
+    @apply overflow-x-auto -mx-3 px-3 sm:mx-0 sm:px-0;
+  }
+
+  /* Responsive grid helpers */
+  .grid-responsive-cards {
+    @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4 md:gap-6;
+  }
+
+  .grid-responsive-stats {
+    @apply grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-4;
+  }
 }
