@@ -68,6 +68,7 @@ import DebitNotesPage from "./pages/dashboard/DebitNotesPage";
 import OpeningBalancePage from "./pages/dashboard/OpeningBalancePage";
 import RetainersPage from "./pages/dashboard/RetainersPage";
 import ProposalsPage from "./pages/dashboard/ProposalsPage";
+import CRMPage from "./pages/dashboard/CRMPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -143,6 +144,7 @@ const App = () => (
               <Route path="opening-balance" element={<OpeningBalancePage />} />
               <Route path="retainers" element={<RetainersPage />} />
               <Route path="proposals" element={<ProposalsPage />} />
+              <Route path="crm" element={<CRMPage />} />
             </Route>
             <Route path="/admin" element={<DashboardLayout />}>
               <Route index element={<AdminPage />} />
