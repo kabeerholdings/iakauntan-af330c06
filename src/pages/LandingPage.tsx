@@ -34,34 +34,34 @@ const LandingPage = () => {
       </nav>
 
       {/* Hero */}
-      <section className="pt-32 pb-20 gradient-hero relative overflow-hidden">
-        <div className="container mx-auto px-6">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
+      <section className="pt-24 sm:pt-32 pb-12 sm:pb-20 gradient-hero relative overflow-hidden">
+        <div className="container mx-auto px-4 sm:px-6">
+          <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
             >
-              <h1 className="font-display text-4xl md:text-5xl lg:text-6xl font-extrabold text-primary-foreground leading-tight mb-6">
+              <h1 className="font-display text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold text-primary-foreground leading-tight mb-4 sm:mb-6">
                 Cloud Accounting
                 <span className="block text-accent">Made Simple</span>
               </h1>
-              <p className="text-lg text-primary-foreground/70 mb-8 max-w-lg">
+              <p className="text-base sm:text-lg text-primary-foreground/70 mb-6 sm:mb-8 max-w-lg">
                 Full-featured multi-company accounting with Malaysian e-Invoice (LHDN) support. 
                 Manage your finances from anywhere.
               </p>
-              <div className="flex gap-4">
-                <Button variant="hero" size="lg" asChild>
+              <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
+                <Button variant="hero" size="lg" asChild className="w-full sm:w-auto">
                   <Link to="/register">Start Free Trial</Link>
                 </Button>
-                <Button variant="hero-outline" size="lg" asChild>
+                <Button variant="hero-outline" size="lg" asChild className="w-full sm:w-auto">
                   <Link to="/login">Sign In</Link>
                 </Button>
               </div>
-              <div className="mt-8 flex flex-wrap gap-4">
+              <div className="mt-6 sm:mt-8 flex flex-wrap gap-3 sm:gap-4">
                 {['SST Ready', 'LHDN e-Invoice', 'Multi-Currency', 'Bank Reconciliation'].map((item) => (
-                  <div key={item} className="flex items-center gap-1.5 text-primary-foreground/60 text-sm">
-                    <CheckCircle2 className="h-4 w-4 text-accent" />
+                  <div key={item} className="flex items-center gap-1.5 text-primary-foreground/60 text-xs sm:text-sm">
+                    <CheckCircle2 className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-accent" />
                     {item}
                   </div>
                 ))}
