@@ -67,7 +67,6 @@ const ContactsPage = () => {
       toast.success('Contact added');
     }
 
-    // Save custom field values
     const cfEntityType = form.type === 'supplier' ? 'supplier' : 'customer';
     if (entityId) {
       await saveCustomFieldValues(selectedCompany.id, cfEntityType, entityId, customValues);
@@ -115,16 +114,16 @@ const ContactsPage = () => {
   if (!selectedCompany) return <p className="text-muted-foreground">Select a company first.</p>;
 
   return (
-    <div>
-      <div className="flex items-center justify-between mb-6">
-        <h1 className="font-display text-2xl font-bold text-foreground">Contacts</h1>
+    <div className="space-y-4 sm:space-y-6">
+      <div className="page-header">
+        <h1 className="page-title">Contacts</h1>
         <Dialog open={open} onOpenChange={(v) => { if (!v) closeDialog(); else setOpen(true); }}>
-          <DialogTrigger asChild><Button><Plus className="h-4 w-4 mr-2" />Add Contact</Button></DialogTrigger>
-          <DialogContent className="max-w-2xl max-h-[85vh] overflow-y-auto">
+          <DialogTrigger asChild><Button size="sm"><Plus className="h-4 w-4 mr-1 sm:mr-2" />Add Contact</Button></DialogTrigger>
+          <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
             <DialogHeader><DialogTitle className="font-display">{editingId ? 'Edit Contact' : 'Add Contact'}</DialogTitle></DialogHeader>
             <div className="space-y-4">
               {renderFieldsFor('name', 'before')}
-              <div className="grid grid-cols-2 gap-4">
+              <div className="form-grid-2">
                 <div><Label>Name</Label><Input value={form.name} onChange={e => setForm(f => ({ ...f, name: e.target.value }))} /></div>
                 <div>
                   <Label>Type</Label>
@@ -140,7 +139,7 @@ const ContactsPage = () => {
               </div>
               {renderFieldsFor('name', 'after')}
               {renderFieldsFor('email', 'before')}
-              <div className="grid grid-cols-2 gap-4">
+              <div className="form-grid-2">
                 <div><Label>Email</Label><Input value={form.email} onChange={e => setForm(f => ({ ...f, email: e.target.value }))} /></div>
                 <div><Label>Phone</Label><Input value={form.phone} onChange={e => setForm(f => ({ ...f, phone: e.target.value }))} /></div>
               </div>
@@ -153,7 +152,7 @@ const ContactsPage = () => {
               <div><Label>Address</Label><Input value={form.address} onChange={e => setForm(f => ({ ...f, address: e.target.value }))} /></div>
               {renderFieldsFor('address', 'after')}
               {renderFieldsFor('city', 'before')}
-              <div className="grid grid-cols-3 gap-4">
+              <div className="form-grid-3">
                 <div><Label>City</Label><Input value={form.city} onChange={e => setForm(f => ({ ...f, city: e.target.value }))} /></div>
                 <div><Label>State</Label><Input value={form.state} onChange={e => setForm(f => ({ ...f, state: e.target.value }))} /></div>
                 <div><Label>Postcode</Label><Input value={form.postcode} onChange={e => setForm(f => ({ ...f, postcode: e.target.value }))} /></div>
@@ -164,19 +163,19 @@ const ContactsPage = () => {
 
               {renderFieldsFor('credit_limit', 'before')}
               <div className="border-t border-border pt-4">
-                <h3 className="font-medium text-foreground mb-3">Credit Control</h3>
-                <div className="grid grid-cols-3 gap-4">
-                  <div><Label>Credit Limit (RM)</Label><Input type="number" value={form.credit_limit} onChange={e => setForm(f => ({ ...f, credit_limit: e.target.value }))} /></div>
-                  <div><Label>Credit Terms (days)</Label><Input type="number" value={form.credit_terms} onChange={e => setForm(f => ({ ...f, credit_terms: e.target.value }))} /></div>
-                  <div><Label>Overdue Limit (RM)</Label><Input type="number" value={form.overdue_limit} onChange={e => setForm(f => ({ ...f, overdue_limit: e.target.value }))} /></div>
+                <h3 className="font-medium text-foreground mb-3 text-sm">Credit Control</h3>
+                <div className="form-grid-3">
+                  <div><Label>Credit Limit</Label><Input type="number" value={form.credit_limit} onChange={e => setForm(f => ({ ...f, credit_limit: e.target.value }))} /></div>
+                  <div><Label>Terms (days)</Label><Input type="number" value={form.credit_terms} onChange={e => setForm(f => ({ ...f, credit_terms: e.target.value }))} /></div>
+                  <div><Label>Overdue Limit</Label><Input type="number" value={form.overdue_limit} onChange={e => setForm(f => ({ ...f, overdue_limit: e.target.value }))} /></div>
                 </div>
               </div>
               {renderFieldsFor('credit_limit', 'after')}
               {renderFieldsFor('credit_terms', 'after')}
 
               <div className="border-t border-border pt-4">
-                <h3 className="font-medium text-foreground mb-3">Bank Details</h3>
-                <div className="grid grid-cols-2 gap-4">
+                <h3 className="font-medium text-foreground mb-3 text-sm">Bank Details</h3>
+                <div className="form-grid-2">
                   <div><Label>Bank Name</Label><Input value={form.bank_name} onChange={e => setForm(f => ({ ...f, bank_name: e.target.value }))} /></div>
                   <div><Label>Account No.</Label><Input value={form.bank_account_no} onChange={e => setForm(f => ({ ...f, bank_account_no: e.target.value }))} /></div>
                 </div>
@@ -190,14 +189,14 @@ const ContactsPage = () => {
         </Dialog>
       </div>
 
-      <Tabs value={activeTab} onValueChange={setActiveTab}>
-        <div className="flex items-center justify-between mb-4">
-          <TabsList>
-            <TabsTrigger value="all">All ({contacts.length})</TabsTrigger>
-            <TabsTrigger value="customer">Customers ({contacts.filter(c => c.type === 'customer' || c.type === 'both').length})</TabsTrigger>
-            <TabsTrigger value="supplier">Suppliers ({contacts.filter(c => c.type === 'supplier' || c.type === 'both').length})</TabsTrigger>
+      <Tabs value={activeTab} onValueChange={setActiveTab} className="tabs-scroll">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-4">
+          <TabsList className="w-full sm:w-auto overflow-x-auto">
+            <TabsTrigger value="all" className="text-xs sm:text-sm">All ({contacts.length})</TabsTrigger>
+            <TabsTrigger value="customer" className="text-xs sm:text-sm">Customers ({contacts.filter(c => c.type === 'customer' || c.type === 'both').length})</TabsTrigger>
+            <TabsTrigger value="supplier" className="text-xs sm:text-sm">Suppliers ({contacts.filter(c => c.type === 'supplier' || c.type === 'both').length})</TabsTrigger>
           </TabsList>
-          <div className="relative max-w-xs">
+          <div className="relative w-full sm:max-w-xs">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             <Input className="pl-9" placeholder="Search..." value={search} onChange={e => setSearch(e.target.value)} />
           </div>
@@ -205,58 +204,62 @@ const ContactsPage = () => {
         <TabsContent value={activeTab}>
           <Card className="shadow-card">
             <CardContent className="p-0">
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Name</TableHead>
-                    <TableHead>Type</TableHead>
-                    <TableHead>Email</TableHead>
-                    <TableHead>Phone</TableHead>
-                    <TableHead>Tax ID</TableHead>
-                    <TableHead className="text-right">Credit Limit</TableHead>
-                    <TableHead>Terms</TableHead>
-                    <TableHead className="text-right">Actions</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {filtered.length === 0 ? (
-                    <TableRow><TableCell colSpan={8} className="text-center text-muted-foreground py-8">No contacts</TableCell></TableRow>
-                  ) : filtered.map(c => (
-                    <TableRow key={c.id}>
-                      <TableCell className="font-medium">{c.name}</TableCell>
-                      <TableCell><Badge variant="secondary">{c.type}</Badge></TableCell>
-                      <TableCell>{c.email || '—'}</TableCell>
-                      <TableCell>{c.phone || '—'}</TableCell>
-                      <TableCell>{c.tax_id || '—'}</TableCell>
-                      <TableCell className="text-right">{c.credit_limit ? fmt(Number(c.credit_limit)) : '—'}</TableCell>
-                      <TableCell>{c.credit_terms ? `${c.credit_terms}d` : '—'}</TableCell>
-                      <TableCell className="text-right">
-                        <div className="flex justify-end gap-1">
-                          <Button variant="ghost" size="icon" onClick={() => openEdit(c)}>
-                            <Pencil className="h-4 w-4" />
-                          </Button>
-                          <AlertDialog>
-                            <AlertDialogTrigger asChild>
-                              <Button variant="ghost" size="icon"><Trash2 className="h-4 w-4 text-destructive" /></Button>
-                            </AlertDialogTrigger>
-                            <AlertDialogContent>
-                              <AlertDialogHeader>
-                                <AlertDialogTitle>Delete contact?</AlertDialogTitle>
-                                <AlertDialogDescription>This will permanently delete "{c.name}". This cannot be undone.</AlertDialogDescription>
-                              </AlertDialogHeader>
-                              <AlertDialogFooter>
-                                <AlertDialogCancel>Cancel</AlertDialogCancel>
-                                <AlertDialogAction onClick={() => handleDelete(c.id)}>Delete</AlertDialogAction>
-                              </AlertDialogFooter>
-                            </AlertDialogContent>
-                          </AlertDialog>
-                        </div>
-                      </TableCell>
+              <div className="table-wrapper">
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Name</TableHead>
+                      <TableHead>Type</TableHead>
+                      <TableHead className="hidden sm:table-cell">Email</TableHead>
+                      <TableHead className="hidden md:table-cell">Phone</TableHead>
+                      <TableHead className="hidden lg:table-cell">Tax ID</TableHead>
+                      <TableHead className="hidden lg:table-cell text-right">Credit Limit</TableHead>
+                      <TableHead className="text-right">Actions</TableHead>
                     </TableRow>
-                  ))}
-
-                </TableBody>
-              </Table>
+                  </TableHeader>
+                  <TableBody>
+                    {filtered.length === 0 ? (
+                      <TableRow><TableCell colSpan={7} className="text-center text-muted-foreground py-8 text-sm">No contacts</TableCell></TableRow>
+                    ) : filtered.map(c => (
+                      <TableRow key={c.id}>
+                        <TableCell>
+                          <div>
+                            <span className="font-medium text-sm">{c.name}</span>
+                            <span className="block sm:hidden text-xs text-muted-foreground">{c.email || c.phone || ''}</span>
+                          </div>
+                        </TableCell>
+                        <TableCell><Badge variant="secondary" className="text-xs">{c.type}</Badge></TableCell>
+                        <TableCell className="hidden sm:table-cell text-sm">{c.email || '—'}</TableCell>
+                        <TableCell className="hidden md:table-cell text-sm">{c.phone || '—'}</TableCell>
+                        <TableCell className="hidden lg:table-cell text-sm">{c.tax_id || '—'}</TableCell>
+                        <TableCell className="hidden lg:table-cell text-right text-sm">{c.credit_limit ? fmt(Number(c.credit_limit)) : '—'}</TableCell>
+                        <TableCell className="text-right">
+                          <div className="flex justify-end gap-1">
+                            <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => openEdit(c)}>
+                              <Pencil className="h-4 w-4" />
+                            </Button>
+                            <AlertDialog>
+                              <AlertDialogTrigger asChild>
+                                <Button variant="ghost" size="icon" className="h-8 w-8"><Trash2 className="h-4 w-4 text-destructive" /></Button>
+                              </AlertDialogTrigger>
+                              <AlertDialogContent>
+                                <AlertDialogHeader>
+                                  <AlertDialogTitle>Delete contact?</AlertDialogTitle>
+                                  <AlertDialogDescription>This will permanently delete "{c.name}".</AlertDialogDescription>
+                                </AlertDialogHeader>
+                                <AlertDialogFooter>
+                                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                  <AlertDialogAction onClick={() => handleDelete(c.id)}>Delete</AlertDialogAction>
+                                </AlertDialogFooter>
+                              </AlertDialogContent>
+                            </AlertDialog>
+                          </div>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </div>
             </CardContent>
           </Card>
         </TabsContent>

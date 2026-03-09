@@ -57,7 +57,6 @@ const InvoicesPage = () => {
 
   useEffect(() => { fetchData(); }, [selectedCompany]);
 
-  // 12-month summary like AutoCount
   const monthlySummary = useMemo(() => {
     const months: Record<string, { month: string; unpaid: number; partial: number; paid: number; void: number }> = {};
     const now = new Date();
@@ -79,7 +78,6 @@ const InvoicesPage = () => {
     return Object.values(months);
   }, [invoices]);
 
-  // Status breakdown counts
   const statusCounts = useMemo(() => {
     const counts = { unpaid: 0, partial: 0, paid: 0, void: 0 };
     invoices.forEach(inv => {
@@ -168,16 +166,17 @@ const InvoicesPage = () => {
   if (!selectedCompany) return <p className="text-muted-foreground">Select a company first.</p>;
 
   return (
-    <div>
-      <div className="flex items-center justify-between mb-6">
-        <h1 className="font-display text-2xl font-bold text-foreground">Invoices</h1>
-        <div className="flex gap-2">
-          <Button variant="outline" onClick={() => navigate('/dashboard/document-templates')}>
-            <Palette className="h-4 w-4 mr-2" />Templates
+    <div className="space-y-4 sm:space-y-6">
+      {/* Header */}
+      <div className="page-header">
+        <h1 className="page-title">Invoices</h1>
+        <div className="page-actions">
+          <Button variant="outline" size="sm" onClick={() => navigate('/dashboard/document-templates')}>
+            <Palette className="h-4 w-4 mr-1 sm:mr-2" /><span className="hidden sm:inline">Templates</span>
           </Button>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button><Plus className="h-4 w-4 mr-2" />New Invoice</Button>
+              <Button size="sm"><Plus className="h-4 w-4 mr-1 sm:mr-2" />New Invoice</Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent>
               <DropdownMenuItem onClick={() => setOpen(true)}>New Blank Invoice</DropdownMenuItem>
@@ -189,23 +188,23 @@ const InvoicesPage = () => {
         </div>
       </div>
 
-      {/* Summary Section - AutoCount style */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-        <Card><CardContent className="p-4"><p className="text-xs text-muted-foreground">Unpaid</p><p className="text-2xl font-bold text-foreground">{statusCounts.unpaid}</p></CardContent></Card>
-        <Card><CardContent className="p-4"><p className="text-xs text-muted-foreground">Partial Payment</p><p className="text-2xl font-bold text-foreground">{statusCounts.partial}</p></CardContent></Card>
-        <Card><CardContent className="p-4"><p className="text-xs text-muted-foreground">Full Payment</p><p className="text-2xl font-bold text-primary">{statusCounts.paid}</p></CardContent></Card>
-        <Card><CardContent className="p-4"><p className="text-xs text-muted-foreground">Void</p><p className="text-2xl font-bold text-muted-foreground">{statusCounts.void}</p></CardContent></Card>
+      {/* Summary Cards */}
+      <div className="stats-grid">
+        <Card><CardContent className="p-3 sm:p-4"><p className="text-xs text-muted-foreground">Unpaid</p><p className="text-xl sm:text-2xl font-bold text-foreground">{statusCounts.unpaid}</p></CardContent></Card>
+        <Card><CardContent className="p-3 sm:p-4"><p className="text-xs text-muted-foreground">Partial</p><p className="text-xl sm:text-2xl font-bold text-foreground">{statusCounts.partial}</p></CardContent></Card>
+        <Card><CardContent className="p-3 sm:p-4"><p className="text-xs text-muted-foreground">Full Payment</p><p className="text-xl sm:text-2xl font-bold text-primary">{statusCounts.paid}</p></CardContent></Card>
+        <Card><CardContent className="p-3 sm:p-4"><p className="text-xs text-muted-foreground">Void</p><p className="text-xl sm:text-2xl font-bold text-muted-foreground">{statusCounts.void}</p></CardContent></Card>
       </div>
 
-      {/* 12-Month Summary Chart */}
-      <Card className="mb-6">
-        <CardHeader className="pb-2"><CardTitle className="text-sm">12-Month Invoice Summary</CardTitle></CardHeader>
-        <CardContent>
-          <ResponsiveContainer width="100%" height={200}>
+      {/* Chart */}
+      <Card>
+        <CardHeader className="p-3 sm:p-6 pb-2"><CardTitle className="text-xs sm:text-sm">12-Month Summary</CardTitle></CardHeader>
+        <CardContent className="p-2 sm:p-6 pt-0">
+          <ResponsiveContainer width="100%" height={180}>
             <BarChart data={monthlySummary}>
               <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
-              <XAxis dataKey="month" tick={{ fontSize: 10 }} />
-              <YAxis tick={{ fontSize: 10 }} />
+              <XAxis dataKey="month" tick={{ fontSize: 9 }} />
+              <YAxis tick={{ fontSize: 9 }} width={35} />
               <Tooltip formatter={(v: number) => fmt(v)} />
               <Bar dataKey="paid" stackId="a" fill="hsl(var(--primary))" name="Paid" />
               <Bar dataKey="unpaid" stackId="a" fill="hsl(var(--muted-foreground))" name="Unpaid" />
@@ -215,73 +214,81 @@ const InvoicesPage = () => {
         </CardContent>
       </Card>
 
-      {/* Listing */}
+      {/* Table */}
       <Card className="shadow-card">
         <CardContent className="p-0">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Invoice #</TableHead>
-                <TableHead>Customer</TableHead>
-                <TableHead>Date</TableHead>
-                <TableHead className="text-right">Amount</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead>e-Invoice</TableHead>
-                <TableHead className="w-[80px]">Actions</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {invoices.length === 0 ? (
-                <TableRow><TableCell colSpan={7} className="text-center text-muted-foreground py-8">No invoices yet</TableCell></TableRow>
-              ) : invoices.map(inv => (
-                <TableRow key={inv.id}>
-                  <TableCell className="font-medium">{inv.invoice_number}</TableCell>
-                  <TableCell>{inv.contacts?.name || '—'}</TableCell>
-                  <TableCell>{inv.invoice_date}</TableCell>
-                  <TableCell className="text-right">{fmt(Number(inv.total_amount))}</TableCell>
-                  <TableCell><Badge variant={statusColor(inv.status)}>{inv.status}</Badge></TableCell>
-                  <TableCell>
-                    {inv.einvoice_status ? (
-                      <Badge variant={inv.einvoice_status === 'valid' ? 'default' : 'secondary'}>{inv.einvoice_status}</Badge>
-                    ) : <span className="text-muted-foreground text-sm">—</span>}
-                  </TableCell>
-                  <TableCell>
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" size="icon"><MoreHorizontal className="h-4 w-4" /></Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end">
-                        <DropdownMenuItem onClick={() => openPreview(inv)}>
-                          <Eye className="h-4 w-4 mr-2" />View / Print
-                        </DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => viewKnockOff(inv)}>
-                          <Link2 className="h-4 w-4 mr-2" />View Knock Off
-                        </DropdownMenuItem>
-                        {inv.status !== 'cancelled' ? (
-                          <DropdownMenuItem onClick={() => handleVoid(inv.id)} className="text-destructive">
-                            <XCircle className="h-4 w-4 mr-2" />Void
-                          </DropdownMenuItem>
-                        ) : (
-                          <DropdownMenuItem onClick={() => handleUnvoid(inv.id)}>
-                            <XCircle className="h-4 w-4 mr-2" />Unvoid
-                          </DropdownMenuItem>
-                        )}
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-                  </TableCell>
+          <div className="table-wrapper">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Invoice #</TableHead>
+                  <TableHead className="hidden sm:table-cell">Customer</TableHead>
+                  <TableHead className="hidden md:table-cell">Date</TableHead>
+                  <TableHead className="text-right">Amount</TableHead>
+                  <TableHead>Status</TableHead>
+                  <TableHead className="hidden lg:table-cell">e-Invoice</TableHead>
+                  <TableHead className="w-[50px]"></TableHead>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+              </TableHeader>
+              <TableBody>
+                {invoices.length === 0 ? (
+                  <TableRow><TableCell colSpan={7} className="text-center text-muted-foreground py-8 text-sm">No invoices yet</TableCell></TableRow>
+                ) : invoices.map(inv => (
+                  <TableRow key={inv.id}>
+                    <TableCell>
+                      <div>
+                        <span className="font-medium text-sm">{inv.invoice_number}</span>
+                        <span className="block sm:hidden text-xs text-muted-foreground">{inv.contacts?.name || '—'}</span>
+                        <span className="block md:hidden text-xs text-muted-foreground">{inv.invoice_date}</span>
+                      </div>
+                    </TableCell>
+                    <TableCell className="hidden sm:table-cell">{inv.contacts?.name || '—'}</TableCell>
+                    <TableCell className="hidden md:table-cell text-sm">{inv.invoice_date}</TableCell>
+                    <TableCell className="text-right text-sm">{fmt(Number(inv.total_amount))}</TableCell>
+                    <TableCell><Badge variant={statusColor(inv.status)} className="text-xs">{inv.status}</Badge></TableCell>
+                    <TableCell className="hidden lg:table-cell">
+                      {inv.einvoice_status ? (
+                        <Badge variant={inv.einvoice_status === 'valid' ? 'default' : 'secondary'} className="text-xs">{inv.einvoice_status}</Badge>
+                      ) : <span className="text-muted-foreground text-xs">—</span>}
+                    </TableCell>
+                    <TableCell>
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <Button variant="ghost" size="icon" className="h-8 w-8"><MoreHorizontal className="h-4 w-4" /></Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                          <DropdownMenuItem onClick={() => openPreview(inv)}>
+                            <Eye className="h-4 w-4 mr-2" />View / Print
+                          </DropdownMenuItem>
+                          <DropdownMenuItem onClick={() => viewKnockOff(inv)}>
+                            <Link2 className="h-4 w-4 mr-2" />View Knock Off
+                          </DropdownMenuItem>
+                          {inv.status !== 'cancelled' ? (
+                            <DropdownMenuItem onClick={() => handleVoid(inv.id)} className="text-destructive">
+                              <XCircle className="h-4 w-4 mr-2" />Void
+                            </DropdownMenuItem>
+                          ) : (
+                            <DropdownMenuItem onClick={() => handleUnvoid(inv.id)}>
+                              <XCircle className="h-4 w-4 mr-2" />Unvoid
+                            </DropdownMenuItem>
+                          )}
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
         </CardContent>
       </Card>
 
       {/* Create Invoice Dialog */}
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent className="max-w-2xl max-h-[85vh] overflow-y-auto">
+        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
           <DialogHeader><DialogTitle className="font-display">Create Invoice</DialogTitle></DialogHeader>
           <div className="space-y-4">
-            <div className="grid grid-cols-2 gap-4">
+            <div className="form-grid-2">
               <div><Label>Invoice Number</Label><Input value={form.invoice_number} onChange={e => setForm(f => ({ ...f, invoice_number: e.target.value }))} placeholder="INV-001" /></div>
               <div>
                 <Label>Type</Label>
@@ -291,7 +298,7 @@ const InvoicesPage = () => {
                 </Select>
               </div>
             </div>
-            <div className="grid grid-cols-3 gap-4">
+            <div className="form-grid-3">
               <div>
                 <Label>Contact</Label>
                 <Select value={form.contact_id} onValueChange={v => setForm(f => ({ ...f, contact_id: v }))}>
@@ -305,21 +312,20 @@ const InvoicesPage = () => {
             <div>
               <Label className="mb-2 block">Line Items</Label>
               {form.lines.map((l, i) => (
-                <div key={i} className="grid grid-cols-4 gap-2 mb-2">
-                  <Input placeholder="Description" value={l.description} onChange={e => updateLine(i, 'description', e.target.value)} />
+                <div key={i} className="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-2">
+                  <Input placeholder="Description" value={l.description} onChange={e => updateLine(i, 'description', e.target.value)} className="col-span-2 sm:col-span-1" />
                   <Input type="number" placeholder="Qty" value={l.quantity} onChange={e => updateLine(i, 'quantity', +e.target.value)} />
-                  <Input type="number" placeholder="Unit Price" value={l.unit_price} onChange={e => updateLine(i, 'unit_price', +e.target.value)} />
-                  <Input type="number" placeholder="Tax %" value={l.tax_rate} onChange={e => updateLine(i, 'tax_rate', +e.target.value)} />
+                  <Input type="number" placeholder="Price" value={l.unit_price} onChange={e => updateLine(i, 'unit_price', +e.target.value)} />
                 </div>
               ))}
               <Button type="button" variant="outline" size="sm" onClick={addLine}><Plus className="h-3 w-3 mr-1" />Add Line</Button>
             </div>
             <div><Label>Notes</Label><Input value={form.notes} onChange={e => setForm(f => ({ ...f, notes: e.target.value }))} placeholder="Optional notes" /></div>
-            <div className="flex justify-between items-center pt-2 border-t border-border">
-              <div className="text-lg font-semibold font-display text-foreground">
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 pt-2 border-t border-border">
+              <div className="text-base sm:text-lg font-semibold font-display text-foreground">
                 Total: {fmt(form.lines.reduce((s, l) => s + l.quantity * l.unit_price * (1 + l.tax_rate / 100), 0))}
               </div>
-              <Button onClick={handleCreate}>Create Invoice</Button>
+              <Button onClick={handleCreate} className="w-full sm:w-auto">Create Invoice</Button>
             </div>
             {renderFieldsFor('notes', 'after')}
             {renderUnpositionedFields()}
@@ -329,20 +335,20 @@ const InvoicesPage = () => {
 
       {/* Copy from Quotation Dialog */}
       <Dialog open={copyFromQOpen} onOpenChange={setCopyFromQOpen}>
-        <DialogContent>
+        <DialogContent className="max-h-[85vh] overflow-y-auto">
           <DialogHeader><DialogTitle className="font-display">Copy from Quotation</DialogTitle></DialogHeader>
           {quotations.length === 0 ? (
-            <p className="text-muted-foreground text-center py-4">No confirmed quotations available</p>
+            <p className="text-muted-foreground text-center py-4 text-sm">No confirmed quotations available</p>
           ) : (
             <div className="space-y-2 max-h-[400px] overflow-y-auto">
               {quotations.map(q => (
                 <div key={q.id} className="flex items-center justify-between p-3 rounded-lg border hover:bg-muted/50 cursor-pointer" onClick={() => copyFromQuotation(q)}>
-                  <div>
-                    <p className="font-medium">{q.doc_number}</p>
-                    <p className="text-sm text-muted-foreground">{q.contacts?.name || 'No contact'} · {q.doc_date}</p>
+                  <div className="min-w-0 flex-1">
+                    <p className="font-medium text-sm truncate">{q.doc_number}</p>
+                    <p className="text-xs text-muted-foreground truncate">{q.contacts?.name || 'No contact'} · {q.doc_date}</p>
                   </div>
-                  <div className="text-right">
-                    <p className="font-medium">{fmt(Number(q.total_amount))}</p>
+                  <div className="text-right shrink-0 ml-3">
+                    <p className="font-medium text-sm">{fmt(Number(q.total_amount))}</p>
                     <Button variant="ghost" size="sm"><Copy className="h-3 w-3 mr-1" />Copy</Button>
                   </div>
                 </div>
@@ -352,31 +358,33 @@ const InvoicesPage = () => {
         </DialogContent>
       </Dialog>
 
-      {/* View Knock Off Details Dialog */}
+      {/* Knock Off Dialog */}
       <Dialog open={!!knockOffDetail} onOpenChange={() => setKnockOffDetail(null)}>
-        <DialogContent>
-          <DialogHeader><DialogTitle className="font-display">Knock Off Details — {knockOffDetail?.invoice_number}</DialogTitle></DialogHeader>
+        <DialogContent className="max-h-[85vh] overflow-y-auto">
+          <DialogHeader><DialogTitle className="font-display text-sm sm:text-base">Knock Off — {knockOffDetail?.invoice_number}</DialogTitle></DialogHeader>
           {knockOffLines.length === 0 ? (
-            <p className="text-muted-foreground text-center py-4">No knock off records found for this invoice</p>
+            <p className="text-muted-foreground text-center py-4 text-sm">No knock off records</p>
           ) : (
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Date</TableHead>
-                  <TableHead>Source</TableHead>
-                  <TableHead className="text-right">Applied (RM)</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {knockOffLines.map(l => (
-                  <TableRow key={l.id}>
-                    <TableCell>{l.knock_off_entries?.knock_off_date}</TableCell>
-                    <TableCell>{l.source_type} — {l.knock_off_entries?.description || l.knock_off_entries?.contacts?.name || '—'}</TableCell>
-                    <TableCell className="text-right font-medium">{Number(l.applied_amount).toFixed(2)}</TableCell>
+            <div className="table-wrapper">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Date</TableHead>
+                    <TableHead>Source</TableHead>
+                    <TableHead className="text-right">Applied</TableHead>
                   </TableRow>
-                ))}
-              </TableBody>
-            </Table>
+                </TableHeader>
+                <TableBody>
+                  {knockOffLines.map(l => (
+                    <TableRow key={l.id}>
+                      <TableCell className="text-sm">{l.knock_off_entries?.knock_off_date}</TableCell>
+                      <TableCell className="text-sm">{l.source_type} — {l.knock_off_entries?.description || '—'}</TableCell>
+                      <TableCell className="text-right font-medium text-sm">{Number(l.applied_amount).toFixed(2)}</TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
           )}
         </DialogContent>
       </Dialog>
