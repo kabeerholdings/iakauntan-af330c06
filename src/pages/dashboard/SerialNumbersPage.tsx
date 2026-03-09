@@ -39,11 +39,11 @@ const SerialNumbersPage = () => {
   const fetchData = async () => {
     setLoading(true);
     const [{ data: sn }, { data: si }] = await Promise.all([
-      supabase.from('serial_numbers').select('*, stock_items(item_code, name), contacts:customer_contact_id(name)').eq('company_id', selectedCompany!.id).order('created_at', { ascending: false }),
-      supabase.from('stock_items').select('id, item_code, name').eq('company_id', selectedCompany!.id),
+      supabase.from('serial_numbers').select('*, stock_items(code, name), contacts:customer_contact_id(name)').eq('company_id', selectedCompany!.id).order('created_at', { ascending: false }),
+      supabase.from('stock_items').select('id, code, name').eq('company_id', selectedCompany!.id),
     ]);
-    setSerials(sn || []);
-    setStockItems(si || []);
+    setSerials((sn as SerialNumber[]) || []);
+    setStockItems((si as { id: string; code: string; name: string }[]) || []);
     setLoading(false);
   };
 
