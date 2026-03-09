@@ -192,7 +192,7 @@ const CreditNotesPage = () => {
 
     if (isCredit) {
       // Convert to Invoice
-      const { data: inv, error } = await supabase.from('invoices').insert({
+      const { data: inv, error } = await supabase.from('invoices').insert([{
         company_id: selectedCompany.id,
         invoice_number: `INV-${note.note_number}`,
         invoice_date: new Date().toISOString().split('T')[0],
@@ -203,7 +203,7 @@ const CreditNotesPage = () => {
         total_amount: note.total_amount,
         notes: `Converted from Credit Note ${note.note_number}`,
         created_by: user?.id,
-      }).select().single();
+      }]).select().single();
       if (error) { toast.error(error.message); return; }
       if (inv && lines) {
         await supabase.from('invoice_lines').insert(
