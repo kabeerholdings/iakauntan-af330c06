@@ -163,56 +163,56 @@ export default function CRMPage() {
   if (!companyId) return <div className="p-8 text-center text-muted-foreground">Please select a company first.</div>;
 
   return (
-    <div className="space-y-6 p-4 md:p-6">
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+    <div className="space-y-4 sm:space-y-6">
+      <div className="page-header">
         <div>
-          <h1 className="font-display text-2xl font-bold text-foreground">CRM</h1>
-          <p className="text-muted-foreground text-sm">Track deals, manage pipeline, and log customer activities</p>
+          <h1 className="page-title">CRM</h1>
+          <p className="text-muted-foreground text-xs sm:text-sm">Track deals and activities</p>
         </div>
-        <div className="flex gap-2">
-          <Button variant="outline" onClick={() => { setShowActivity(true); }}>
-            <Activity className="h-4 w-4 mr-2" /> Log Activity
+        <div className="page-actions">
+          <Button variant="outline" size="sm" onClick={() => { setShowActivity(true); }}>
+            <Activity className="h-4 w-4 mr-1 sm:mr-2" /><span className="hidden sm:inline">Log Activity</span><span className="sm:hidden">Log</span>
           </Button>
-          <Button onClick={() => { setEditDeal(null); setDealForm({ name: '', amount: '', contact_id: '', stage_id: '', expected_close_date: '', notes: '' }); setShowDeal(true); }}>
-            <Plus className="h-4 w-4 mr-2" /> New Deal
+          <Button size="sm" onClick={() => { setEditDeal(null); setDealForm({ name: '', amount: '', contact_id: '', stage_id: '', expected_close_date: '', notes: '' }); setShowDeal(true); }}>
+            <Plus className="h-4 w-4 mr-1 sm:mr-2" />New Deal
           </Button>
         </div>
       </div>
 
       {/* KPI Cards */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <Card><CardContent className="p-4">
-          <div className="flex items-center gap-3">
-            <div className="p-2 rounded-lg bg-primary/10"><Target className="h-5 w-5 text-primary" /></div>
-            <div><p className="text-xs text-muted-foreground">Open Deals</p><p className="text-xl font-bold">{openDeals.length}</p></div>
+      <div className="stats-grid">
+        <Card><CardContent className="p-3 sm:p-4">
+          <div className="flex items-center gap-2 sm:gap-3">
+            <div className="p-1.5 sm:p-2 rounded-lg bg-primary/10"><Target className="h-4 w-4 sm:h-5 sm:w-5 text-primary" /></div>
+            <div><p className="text-[10px] sm:text-xs text-muted-foreground">Open Deals</p><p className="text-lg sm:text-xl font-bold">{openDeals.length}</p></div>
           </div>
         </CardContent></Card>
-        <Card><CardContent className="p-4">
-          <div className="flex items-center gap-3">
-            <div className="p-2 rounded-lg bg-green-500/10"><DollarSign className="h-5 w-5 text-green-600" /></div>
-            <div><p className="text-xs text-muted-foreground">Pipeline Value</p><p className="text-xl font-bold">{formatAmount(totalPipeline)}</p></div>
+        <Card><CardContent className="p-3 sm:p-4">
+          <div className="flex items-center gap-2 sm:gap-3">
+            <div className="p-1.5 sm:p-2 rounded-lg bg-green-500/10"><DollarSign className="h-4 w-4 sm:h-5 sm:w-5 text-green-600" /></div>
+            <div><p className="text-[10px] sm:text-xs text-muted-foreground">Pipeline</p><p className="text-lg sm:text-xl font-bold truncate">{formatAmount(totalPipeline)}</p></div>
           </div>
         </CardContent></Card>
-        <Card><CardContent className="p-4">
-          <div className="flex items-center gap-3">
-            <div className="p-2 rounded-lg bg-yellow-500/10"><Trophy className="h-5 w-5 text-yellow-600" /></div>
-            <div><p className="text-xs text-muted-foreground">Won</p><p className="text-xl font-bold">{formatAmount(totalWon)}</p></div>
+        <Card><CardContent className="p-3 sm:p-4">
+          <div className="flex items-center gap-2 sm:gap-3">
+            <div className="p-1.5 sm:p-2 rounded-lg bg-yellow-500/10"><Trophy className="h-4 w-4 sm:h-5 sm:w-5 text-yellow-600" /></div>
+            <div><p className="text-[10px] sm:text-xs text-muted-foreground">Won</p><p className="text-lg sm:text-xl font-bold truncate">{formatAmount(totalWon)}</p></div>
           </div>
         </CardContent></Card>
-        <Card><CardContent className="p-4">
-          <div className="flex items-center gap-3">
-            <div className="p-2 rounded-lg bg-accent/10"><TrendingUp className="h-5 w-5 text-accent-foreground" /></div>
-            <div><p className="text-xs text-muted-foreground">Win Rate</p><p className="text-xl font-bold">{winRate}%</p></div>
+        <Card><CardContent className="p-3 sm:p-4">
+          <div className="flex items-center gap-2 sm:gap-3">
+            <div className="p-1.5 sm:p-2 rounded-lg bg-accent/10"><TrendingUp className="h-4 w-4 sm:h-5 sm:w-5 text-accent-foreground" /></div>
+            <div><p className="text-[10px] sm:text-xs text-muted-foreground">Win Rate</p><p className="text-lg sm:text-xl font-bold">{winRate}%</p></div>
           </div>
         </CardContent></Card>
       </div>
 
-      <Tabs value={tab} onValueChange={setTab}>
-        <TabsList>
-          <TabsTrigger value="pipeline">Pipeline</TabsTrigger>
-          <TabsTrigger value="deals">All Deals</TabsTrigger>
-          <TabsTrigger value="activities">Activity Log</TabsTrigger>
-          <TabsTrigger value="reports">Reports</TabsTrigger>
+      <Tabs value={tab} onValueChange={setTab} className="tabs-scroll">
+        <TabsList className="w-full sm:w-auto overflow-x-auto">
+          <TabsTrigger value="pipeline" className="text-xs sm:text-sm">Pipeline</TabsTrigger>
+          <TabsTrigger value="deals" className="text-xs sm:text-sm">All Deals</TabsTrigger>
+          <TabsTrigger value="activities" className="text-xs sm:text-sm">Activities</TabsTrigger>
+          <TabsTrigger value="reports" className="text-xs sm:text-sm">Reports</TabsTrigger>
         </TabsList>
 
         {/* PIPELINE VIEW */}
