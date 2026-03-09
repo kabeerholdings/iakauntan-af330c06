@@ -115,8 +115,12 @@ const payrollItems = [
 const managementItems = [
   { title: 'CRM', url: '/dashboard/crm', icon: Target },
   { title: 'Contacts', url: '/dashboard/contacts', icon: Users },
+  { title: 'Contracts', url: '/dashboard/contracts', icon: FileSignature },
   { title: 'Expenses', url: '/dashboard/expenses', icon: CreditCard },
   { title: 'Projects', url: '/dashboard/projects', icon: FolderKanban },
+  { title: 'Appointments', url: '/dashboard/appointments', icon: CalIcon },
+  { title: 'Calendar', url: '/dashboard/calendar', icon: Calendar },
+  { title: 'To-Do', url: '/dashboard/todos', icon: CheckSquare },
   { title: 'Currency Rates', url: '/dashboard/currency-rates', icon: DollarSign },
   { title: 'Commission', url: '/dashboard/commission', icon: Calculator },
   { title: 'Advanced Reports', url: '/dashboard/advanced-reports', icon: TrendingUp },
