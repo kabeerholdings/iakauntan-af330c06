@@ -4074,6 +4074,209 @@ export type Database = {
           },
         ]
       }
+      proposal_lines: {
+        Row: {
+          created_at: string | null
+          description: string
+          discount_rate: number | null
+          id: string
+          line_total: number | null
+          proposal_id: string
+          quantity: number | null
+          sort_order: number | null
+          tax_amount: number | null
+          tax_rate: number | null
+          unit_price: number | null
+        }
+        Insert: {
+          created_at?: string | null
+          description: string
+          discount_rate?: number | null
+          id?: string
+          line_total?: number | null
+          proposal_id: string
+          quantity?: number | null
+          sort_order?: number | null
+          tax_amount?: number | null
+          tax_rate?: number | null
+          unit_price?: number | null
+        }
+        Update: {
+          created_at?: string | null
+          description?: string
+          discount_rate?: number | null
+          id?: string
+          line_total?: number | null
+          proposal_id?: string
+          quantity?: number | null
+          sort_order?: number | null
+          tax_amount?: number | null
+          tax_rate?: number | null
+          unit_price?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "proposal_lines_proposal_id_fkey"
+            columns: ["proposal_id"]
+            isOneToOne: false
+            referencedRelation: "proposals"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      proposal_sections: {
+        Row: {
+          content: string | null
+          created_at: string | null
+          id: string
+          proposal_id: string
+          section_type: string
+          sort_order: number | null
+          title: string | null
+        }
+        Insert: {
+          content?: string | null
+          created_at?: string | null
+          id?: string
+          proposal_id: string
+          section_type?: string
+          sort_order?: number | null
+          title?: string | null
+        }
+        Update: {
+          content?: string | null
+          created_at?: string | null
+          id?: string
+          proposal_id?: string
+          section_type?: string
+          sort_order?: number | null
+          title?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "proposal_sections_proposal_id_fkey"
+            columns: ["proposal_id"]
+            isOneToOne: false
+            referencedRelation: "proposals"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      proposals: {
+        Row: {
+          accepted_at: string | null
+          company_id: string
+          contact_id: string | null
+          converted_to_invoice_id: string | null
+          cover_letter: string | null
+          created_at: string | null
+          created_by: string | null
+          currency: string | null
+          declined_at: string | null
+          description: string | null
+          discount_amount: number | null
+          discount_type: string | null
+          discount_value: number | null
+          expiry_date: string | null
+          id: string
+          notes: string | null
+          proposal_date: string
+          proposal_number: string
+          public_token: string | null
+          sent_at: string | null
+          status: string
+          subtotal: number | null
+          tax_amount: number | null
+          terms_and_conditions: string | null
+          title: string | null
+          total_amount: number | null
+          updated_at: string | null
+          viewed_at: string | null
+        }
+        Insert: {
+          accepted_at?: string | null
+          company_id: string
+          contact_id?: string | null
+          converted_to_invoice_id?: string | null
+          cover_letter?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          currency?: string | null
+          declined_at?: string | null
+          description?: string | null
+          discount_amount?: number | null
+          discount_type?: string | null
+          discount_value?: number | null
+          expiry_date?: string | null
+          id?: string
+          notes?: string | null
+          proposal_date?: string
+          proposal_number: string
+          public_token?: string | null
+          sent_at?: string | null
+          status?: string
+          subtotal?: number | null
+          tax_amount?: number | null
+          terms_and_conditions?: string | null
+          title?: string | null
+          total_amount?: number | null
+          updated_at?: string | null
+          viewed_at?: string | null
+        }
+        Update: {
+          accepted_at?: string | null
+          company_id?: string
+          contact_id?: string | null
+          converted_to_invoice_id?: string | null
+          cover_letter?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          currency?: string | null
+          declined_at?: string | null
+          description?: string | null
+          discount_amount?: number | null
+          discount_type?: string | null
+          discount_value?: number | null
+          expiry_date?: string | null
+          id?: string
+          notes?: string | null
+          proposal_date?: string
+          proposal_number?: string
+          public_token?: string | null
+          sent_at?: string | null
+          status?: string
+          subtotal?: number | null
+          tax_amount?: number | null
+          terms_and_conditions?: string | null
+          title?: string | null
+          total_amount?: number | null
+          updated_at?: string | null
+          viewed_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "proposals_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "proposals_contact_id_fkey"
+            columns: ["contact_id"]
+            isOneToOne: false
+            referencedRelation: "contacts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "proposals_converted_to_invoice_id_fkey"
+            columns: ["converted_to_invoice_id"]
+            isOneToOne: false
+            referencedRelation: "invoices"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       purchase_document_lines: {
         Row: {
           account_id: string | null
