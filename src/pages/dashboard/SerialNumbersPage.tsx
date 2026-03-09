@@ -19,7 +19,7 @@ type SerialNumber = {
   status: string;
   purchase_date: string | null;
   warranty_expiry: string | null;
-  stock_items?: { item_code: string; name: string };
+  stock_items?: { code: string; name: string } | null;
   contacts?: { name: string } | null;
 };
 
