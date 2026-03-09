@@ -140,6 +140,7 @@ const App = () => (
               <Route path="fixed-assets" element={<FixedAssetsPage />} />
               <Route path="debit-notes" element={<DebitNotesPage />} />
               <Route path="opening-balance" element={<OpeningBalancePage />} />
+              <Route path="retainers" element={<RetainersPage />} />
             </Route>
             <Route path="/admin" element={<DashboardLayout />}>
               <Route index element={<AdminPage />} />

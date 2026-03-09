@@ -409,7 +409,7 @@ const RetainersPage = () => {
               {/* Financials */}
               <div className="grid grid-cols-4 gap-3 p-3 bg-muted/50 rounded-lg text-sm">
                 <div><span className="text-muted-foreground">Contract:</span><br /><strong>{fmt(+detailRetainer.total_amount)}</strong></div>
-                <div><span className="text-muted-foreground">Collected:</span><br /><strong className="text-green-600">{fmt(+detailRetainer.amount_collected)}</strong></div>
+                <div><span className="text-muted-foreground">Collected:</span><br /><strong className="text-primary">{fmt(+detailRetainer.amount_collected)}</strong></div>
                 <div><span className="text-muted-foreground">Applied:</span><br /><strong>{fmt(+detailRetainer.amount_applied)}</strong></div>
                 <div><span className="text-muted-foreground">Balance:</span><br /><strong className="text-primary">{fmt(+detailRetainer.balance)}</strong></div>
               </div>
