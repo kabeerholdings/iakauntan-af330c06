@@ -39,7 +39,7 @@ const SerialNumbersPage = () => {
   const fetchData = async () => {
     setLoading(true);
     const [{ data: sn }, { data: si }] = await Promise.all([
-      supabase.from('serial_numbers').select('*, stock_items(code, name), contacts:customer_contact_id(name)').eq('company_id', selectedCompany!.id).order('created_at', { ascending: false }),
+      supabase.from('serial_numbers').select('*, stock_items(code, name)').eq('company_id', selectedCompany!.id).order('created_at', { ascending: false }),
       supabase.from('stock_items').select('id, code, name').eq('company_id', selectedCompany!.id),
     ]);
     setSerials((sn as SerialNumber[]) || []);
