@@ -26,7 +26,7 @@ type SerialNumber = {
 const SerialNumbersPage = () => {
   const { selectedCompany } = useCompany();
   const [serials, setSerials] = useState<SerialNumber[]>([]);
-  const [stockItems, setStockItems] = useState<{ id: string; item_code: string; name: string }[]>([]);
+  const [stockItems, setStockItems] = useState<{ id: string; code: string; name: string }[]>([]);
   const [loading, setLoading] = useState(true);
   const [showDialog, setShowDialog] = useState(false);
   const [search, setSearch] = useState('');
