@@ -142,6 +142,7 @@ const App = () => (
               <Route path="debit-notes" element={<DebitNotesPage />} />
               <Route path="opening-balance" element={<OpeningBalancePage />} />
               <Route path="retainers" element={<RetainersPage />} />
+              <Route path="proposals" element={<ProposalsPage />} />
             </Route>
             <Route path="/admin" element={<DashboardLayout />}>
               <Route index element={<AdminPage />} />
