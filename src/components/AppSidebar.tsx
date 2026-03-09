@@ -101,6 +101,7 @@ const accountingReportItems = [
 
 const accountingOtherItems = [
   { title: 'Documents', url: '/dashboard/documents', icon: Paperclip },
+  { title: 'Document Notes', url: '/dashboard/document-notes', icon: StickyNote },
   { title: 'AI Easy Scan', url: '/dashboard/ai-scanner', icon: Brain },
 ];
 
