@@ -83,6 +83,7 @@ import DocumentNotesPage from "./pages/dashboard/DocumentNotesPage";
 import WhiteLabelPage from "./pages/dashboard/WhiteLabelPage";
 import TwoFactorPage from "./pages/dashboard/TwoFactorPage";
 import NotFound from "./pages/NotFound";
+import AICatAssistant from "./components/AICatAssistant";
 
 const queryClient = new QueryClient();
 
