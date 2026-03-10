@@ -5,3 +5,6 @@ verify_jwt = false
 
 [functions.ai-document-scan]
 verify_jwt = false
+
+[functions.ai-cat-chat]
+verify_jwt = false
